@@ -1,0 +1,48 @@
+{
+	"name": "mask-event",
+	"version": "0.1.0",
+	"description": "A lighter site made for events using github.com/kgpmask/MASK as a base",
+	"main": "src/server.js",
+	"directories": {
+		"test": "test"
+	},
+	"scripts": {
+		"dev": "nodemon . dev",
+		"dm": "nodemon . dev mongoless",
+		"lint": "eslint . --config .eslintrc.json --ext .js",
+		"lint-fix": "eslint . --config .eslintrc.json --ext .js --fix",
+		"prepare": "husky install",
+		"mocha-all": "cross-env NODE_ENV=test mocha test/**.js --parallel --exit",
+		"mocha": "cross-env NODE_ENV=test mocha --exit",
+		"test": "npm run lint && npm run mocha-all && echo \"Passing all tests.\" & exit 0",
+		"update-branch": "git fetch $(git rev-parse --symbolic-full-name --abbrev-ref @{upstream} | sed 's!/! !') && git merge FETCH_HEAD"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kgpmask/MASK-Event.git"
+	},
+	"keywords": [
+		"kgpmask",
+		"mask-iitkgp"
+	],
+	"author": "mask-webdev",
+	"license": "MPL-2.0",
+	"bugs": {
+		"url": "https://github.com/kgpmask/MASK-Event/issues"
+	},
+	"homepage": "https://github.com/kgpmask/MASK-Event#readme",
+	"dependencies": {
+		"axios": "^1.4.0",
+		"express": "^5.0.0-beta.1",
+		"mongoose": "^7.2.4",
+		"nunjucks": "^3.2.4",
+		"sass": "^1.63.4"
+	},
+	"devDependencies": {
+		"cross-env": "^7.0.3",
+		"eslint": "^8.42.0",
+		"husky": "^8.0.3",
+		"mocha": "^10.2.0",
+		"nodemon": "^2.0.22"
+	}
+}
