@@ -1,4 +1,6 @@
 const router = require('express').Router();
+const { error } = require('console');
+const dbh = require('../database/handler');
 
 router.get('/login', (req, res) => {
 	if (req.loggedIn) return res.redirect('/');
@@ -16,6 +18,22 @@ router.get('/signup', (req, res) => {
 });
 
 // Post requests here
+
+router.post('/login', async (req, res) => {
+	const userData = req.body;
+	try {
+		const sessionID = await dbh.createSession(await dbh.validateUser(userData));
+		res.cookie('sessionID', sessionID);
+		res.send('logged in');
+	} catch (err) {
+		if (err) res.status(400).send(err.message);
+	}
+});
+
+router.post('/signup', (req, res) => {
+	const userData = req.body.data;
+	
+});
 
 module.exports = {
 	route: '/',
