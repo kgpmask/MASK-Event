@@ -32,7 +32,6 @@ router.post('/login', async (req, res) => {
 
 router.post('/signup', (req, res) => {
 	const userData = req.body.data;
-	
 });
 
 module.exports = {
