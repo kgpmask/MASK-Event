@@ -1,11 +1,11 @@
-# MASK-Event
+# MASK-Event  
 > _The website for MASK's upcoming quiz._
 
 This repository uses the MASK Website [repository](https://github.com/kgpmask/MASK) as a reference to make a lighter version of the site for the upcoming event(s). We did not fork the base repository because, well, it's really huge. (_You know you want to say it._)
 
 ---
 
-## Dependencies
+## Dependencies  
 Most of the dependencies used are pretty much the same as the ones used in the MASK repository:
 - `axios`: An API used for sending HTTP requests and testing.
 - `express`: A lightweight framework for running the server.
@@ -24,7 +24,7 @@ Here are the development dependencies used in the server:
 
 ---
 
-## Routes and Pages
+## Routes and Pages  
 The function `router` in `./src/route.js` is responsible for all the routes and pages related to the server. The function takes in routers from the `routers` folder and uses them in the express app. The pages are generated using templates present in the `templates` folder.
 
 ### Routers
@@ -35,21 +35,21 @@ const router = require('express').Router();
 // This router is used to configure the app for a specific route
 
 // GET requests
-app.get('/some/route', (req, res, next) => {
+app.get('/some/route', (req, res, next) => { 
 	// some code
 	return res.renderFile(template, ctx);
 });
 
 // POST requests
-app.post('/some/route', (req, res, next) => {
+app.post('/some/route', (req, res, next) => { 
 	// some code
 	return res.status(statusCode).send;
 	// PS: statusCode is optional.
 });
 
-/*
+/* 
 Notes:
-	The next argument is optional in most cases.
+	The next argument is optional in most cases. 
 	The functions in the requests can be asynchronous too.
 	You can use other routers as well if needed.
 */
@@ -62,7 +62,7 @@ module.exports = {
 
 > _**Note:** If you are using another router, make sure it is in a sub-directory of the `routes` directory, or does not end with `-router.js`._
 
-### Templates
+### Templates  
 Unlike plain HTML files, we use Nunjucks, a templating engine similar to Jinja which allows us to generate pages using HTML and some context values passed from the router. Most templates used extend from the `_base.njk` template, while there may be cases when a different base template is used.
 
 Each template has the following structure
@@ -100,16 +100,16 @@ For more info on what else can be done using Nunjucks, check out the [docs](http
 
 ---
 
-## Styles
-The base style is provided by `mask.scss` in `assets/styles`. The SASS file is compiled into a CSS file and used in the server. For any addition to the style throughout the site, it is recommended to add to the SASS file. The CSS files generated are ignored by git and will be overwritten on in case of any edit to the SASS file. Therefore, it is advised not to touch the CSS files.
+## Styles  
+The base style is provided by `mask.scss` in `assets/styles`. The SASS file is compiled into a CSS file and used in the server. For any addition to the style throughout the site, it is recommended to add to the SASS file. The CSS files generated are ignored by git and will be overwritten on in case of any edit to the SASS file. Therefore, it is advised not to touch the CSS files.  
 You can also make your own SASS files for styles which will be used in multiple pages. For smaller CSS additions, you can proceed with using the custom css in the templates using customcss blocks.
 
 ---
 
-## Database Handler and Schemas
-`mongoose` uses database schemas and models to execute database queries. The server
+## Database Handler and Schemas  
+`mongoose` uses database schemas and models to execute database queries. The server 
 
-### Schemas
+### Schemas  
 Schemas are used to define the shape of the data we wish to query. The folder `database/schemas` contains all schemas present in the server. The schema files have a PascalCase name, and have the following format
 
 ```js
@@ -125,14 +125,14 @@ collectionSchema.set('collection', 'collectionName');
 module.exports = mongoose.model('ModelName', collectionSchema);
 ```
 
-### Handler
-The file `handler.js` in `database` folder uses all the schemas to make functions which we use in other handler functions as well as the server and tests.
+### Handler  
+The file `handler.js` in `database` folder uses all the schemas to make functions which we use in other handler functions as well as the server and tests. 
 
 > _**Note:** Not all functions should be exported from the module. Only export the functions which are used._
 
 ---
 
-## Running the server
+## Running the server  
 The main file of the server is `server.js` in the `src` folder. The server can be run using `npm run param`, where `param` can be any of the following:
 - `dev`: Used while developing. Runs the server using `nodemon`
 - `dm`: Short for `dev mongoless`. The server instance runs without being connected to the database.
@@ -153,20 +153,20 @@ The server needs a file `credentials.json` in the `src` folder which contains th
 
 ---
 
-## Tests
+## Tests  
 To ensure that the code you have written has not broken anything in the server (and is clean) a few tests are run before a commit is made. To run the tests manually, you can run the command `npm run test` to execute all the tests. The tests are done by two dependencies:
 - `lint`: Checks for the code formatting. This is responsible for clean code being present in the repository. Check the [ESLint Config](.eslintrc.json) file.
 - `mocha`: Runs tests from the `/test` folder. They can be either checking whether the server works properly or if the tools used are working properly.
 
 To run individual tests, you can use `npm run` with the following flags:
-- `lint`: Runs the lint test. If you want to run the test while also fixing the potentially fixable errors (like missing semicolons), use `lint-fix` instead.
+- `lint`: Runs the lint test. If you want to run the test while also fixing the potentially fixable errors (like missing semicolons), use `lint-fix` instead. 
 - `mocha`: Runs a specific test. You need to mention the file to be run as well. For instance, `npm run mocha ./test/site-maintenance.js`. In order to run all the tests parallelly, use `mocha-all` instead.
 
 ---
 
-## Contributions
-Similar to the base repository, we will be having two branches. The `main` branch will be responsible for production releases and the `dev` branch will be responsible for development of new features and working on new stuff.
-All non-trivial contributions made will be to the `dev` branch using pull requests. You can , however, directly make trivial edits and minor bug fixes directly on the `dev` branch.
+## Contributions  
+Similar to the base repository, we will be having two branches. The `main` branch will be responsible for production releases and the `dev` branch will be responsible for development of new features and working on new stuff.  
+All non-trivial contributions made will be to the `dev` branch using pull requests. You can , however, directly make trivial edits and minor bug fixes directly on the `dev` branch.  
 
 > _**Note:** PRs can be made to other branches in the repository as well. For instance, if you are working on the live quiz portal, socket integration and database integration (two separate features) can have their PRs to the live quiz portal's branch, which can further be merged to dev._
 
@@ -185,8 +185,8 @@ Your PR will be approved when two of the following conditions are met:
 
 ---
 
-## Credits
-### Team Head
+## Credits  
+### Team Head  
 - [Vidunram A R](https://github.com/Goose-Of-War)
-### Team Members
+### Team Members  
 > _will be added as they contribute_
