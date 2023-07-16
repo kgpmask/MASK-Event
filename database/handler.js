@@ -6,8 +6,9 @@ async function getUserByUsername (username) {
 }
 
 async function validateUser (userData) {
+	console.log(userData);
 	const { username, password } = userData;
-	const user = await dbh.getUserByUsername(username);
+	const user = await getUserByUsername(username);
 	if (!user) throw new Error("User could not be found");
 	if (user.password === password) return user._id;
 }
