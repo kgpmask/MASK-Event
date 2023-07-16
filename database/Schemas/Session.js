@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const sessionSchema = new mongoose.Schema({
-	userID: { type: String, required: true },
+	userID: { type: Number, required: true },
 	sessionID: { type: String, required: true, unique: true }
 }, { collection: 'event-session' });
 
