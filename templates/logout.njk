@@ -1,0 +1,40 @@
+{% extends "_base.njk" %}
+
+{% set thispage = 'login' %}
+{% set pagetitle = 'Login' %}
+
+{% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
+
+{% block pagecontent %}
+	<h1>Logged Out</h1>
+
+{% endblock %}
+
+{% block customcss %}
+	<style media="screen">
+		h1 {
+			font-size: 32px;
+			font-weight: 500;
+			line-height: 42px;
+			text-align: center;
+		}
+	</style>
+{% endblock %}
+
+{% block customjs %}
+<script>
+	function logout () {
+		axios.post('/logout')
+			.then(() => window.location.href = '/')
+			.catch(err => {
+				console.log(err);
+				return alert(err.response.data.errors[0]);
+			});
+	}
+
+	window.onload = () => {
+		logout();
+	}
+</script>
+{% endblock %}
+

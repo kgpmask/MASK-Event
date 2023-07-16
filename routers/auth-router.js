@@ -26,12 +26,16 @@ router.post('/login', async (req, res) => {
 		res.cookie('sessionID', sessionID);
 		res.send('logged in');
 	} catch (err) {
+		console.log(err);
 		if (err) res.status(400).send(err.message);
 	}
 });
 
 app.post('/logout', async (req, res, next) => {
-	await res.clearCookie('sessionId');
+	// If we may require them, then...
+	// const { sessionId } = req.cookies;
+	// await db.removeSession(sessionId);
+	await res.clearCookie('sessionID');
 	return res.send('Signed out successfully. Mata ne.');
 });
 

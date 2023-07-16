@@ -1,3 +1,4 @@
+const cookieParser = require('cookie-parser');
 const express = require('express');
 const path = require('path');
 const dbh = require('../database/handler');
@@ -5,13 +6,14 @@ const dbh = require('../database/handler');
 module.exports = function initMiddleware (app) {
 	app.use(express.json());
 	app.use(express.urlencoded({ extended: true }));
+	app.use(cookieParser());
 	app.use('/assets', express.static(path.join(__dirname, '..', 'assets')));
 
 	app.use(async (req, res, next) => {
 		try {
-			const { sessionId } = req.cookies;
-			if (!sessionId) return next();
-			req.user = await dbh.getUserFromSessionID(sessionId); // Get user from db
+			const { sessionID } = req.cookies;
+			if (!sessionID) return next();
+			req.user = await dbh.getUserFromSessionID(sessionID);
 		} catch (err) {
 			res.clearCookie('sessionId');
 		}
