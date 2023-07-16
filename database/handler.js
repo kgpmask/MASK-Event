@@ -12,6 +12,17 @@ async function validateUser (userData) {
 	if (user.password === password) return user._id;
 }
 
+/*
+To-do
+
+createSession
+getUserFromSessionID
+createUser
+
+
+removeSession (maybe)
+*/
+
 module.exports = {
 	validateUser,
 	getUserByUsername

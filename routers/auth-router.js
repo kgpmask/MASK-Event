@@ -30,6 +30,11 @@ router.post('/login', async (req, res) => {
 	}
 });
 
+app.post('/logout', async (req, res, next) => {
+	await res.clearCookie('sessionId');
+	return res.send('Signed out successfully. Mata ne.');
+});
+
 router.post('/signup', (req, res) => {
 	const userData = req.body.data;
 });

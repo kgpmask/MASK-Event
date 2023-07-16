@@ -1,12 +1,22 @@
 const express = require('express');
 const path = require('path');
+const dbh = require('../database/handler');
 
 module.exports = function initMiddleware (app) {
 	app.use(express.json());
 	app.use(express.urlencoded({ extended: true }));
 	app.use('/assets', express.static(path.join(__dirname, '..', 'assets')));
 
-	// need to add for login as well
+	app.use(async (req, res, next) => {
+		try {
+			const { sessionId } = req.cookies;
+			if (!sessionId) return next();
+			req.user = await dbh.getUserFromSessionID(sessionId); // Get user from db
+		} catch (err) {
+			res.clearCookie('sessionId');
+		}
+		next();
+	});
 
 	app.use((req, res, next) => {
 		res.renderFile = (files, ctx) => {
@@ -47,6 +57,7 @@ module.exports = function initMiddleware (app) {
 	app.use((req, res, next) => {
 		res.locals.mongoless = PARAMS.mongoless;
 		// need to add req.loggedIn once we have the login system up and running
+		req.loggedIn = res.locals.loggedIn = req.user ? true : false; // does this work ?
 		next();
 	});
 };
