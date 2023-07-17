@@ -1,6 +1,26 @@
+const bcrypt = require('bcryptjs');
+
 const mongoose = require('mongoose');
 const User = require('./Schemas/User');
 const Session = require('./Schemas/Session');
+
+async function createUser (userData) {
+	const check = await User.findOne({ "email": userData.email });
+	if (check) throw new Error("User already exists");
+	const user = new User({
+		_id: userData.userID || 6969,
+		name: userData.name,
+		roll: userData.roll,
+		phone: userData.phone,
+		email: userData.email,
+		username: userData.username,
+		image: userData.image
+	});
+	user.salt = await bcrypt.genSalt(7);
+	user.hash = await bcrypt.hash(userData.password, user.salt);
+	await user.save();
+	return 'Success';
+}
 
 async function getUserByUsername (username) {
 	return User.findOne({ 'username': `${username}` });
@@ -15,7 +35,7 @@ async function validateUser (userData) {
 	const { username, password } = userData;
 	const user = await getUserByUsername(username);
 	if (!user) throw new Error("User could not be found");
-	if (user.password === password) return user._id;
+	if (user.hash === await bcrypt.hash(password, user.salt)) return user._id;
 }
 
 async function getUserFromSessionID (sessionId) {
@@ -41,38 +61,12 @@ async function removeSession (sessionId) {
 	await Session.findOneAndDelete({ 'sessionID': sessionId });
 }
 
-/*
-To-do
-
-getUserFromSessionID
-createUser
-
-
-removeSession (maybe)
-*/
-
-async function createUser (userData) {
-	const check = await User.findOne({ "email": userData.email });
-	if (check) throw new Error("User already exists");
-	const user = new User({
-		_id: userData.userID || 6969,
-		name: userData.name,
-		roll: userData.roll,
-		phone: userData.phone,
-		email: userData.email,
-		username: userData.username,
-		password: userData.password,
-		image: userData.image
-	});
-	await user.save();
-	return 'Success';
-}
-
 module.exports = {
+	createUser,
 	validateUser,
 	getUserByUsername,
+	getUserByUserID,
 	getUserFromSessionID,
 	createSession,
-	removeSession,
-	createUser
+	removeSession
 };

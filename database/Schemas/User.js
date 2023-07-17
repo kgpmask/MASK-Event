@@ -7,7 +7,8 @@ const userSchema = new mongoose.Schema({
 	phone: { type: Number, required: true },
 	email: { type: String, required: true },
 	username: { type: String, required: true },
-	password: { type: String, required: true },
+	salt: { type: String, required: true },
+	hash: { type: String, required: true },
 	image: String
 }, { collection: 'event-users' });
 
