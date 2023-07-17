@@ -53,7 +53,7 @@ removeSession (maybe)
 
 async function createUser (userData) {
 	const check = await User.findOne({ "email": userData.email });
-	if (check) return new Error("User already exists");
+	if (check) throw new Error("User already exists");
 	const user = new User({
 		_id: userData.userID || 6969,
 		name: userData.name,
@@ -64,7 +64,8 @@ async function createUser (userData) {
 		password: userData.password,
 		image: userData.image
 	});
-	return await user.save();
+	await user.save();
+	return 'Success';
 }
 
 module.exports = {

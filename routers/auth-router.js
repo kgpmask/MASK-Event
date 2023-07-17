@@ -27,15 +27,8 @@ router.post('/login', async (req, res) => {
 });
 
 router.post('/signup', async (req, res) => {
-	try {
-		await dbh.createUser(req.body);
-	} catch (err) {
-		if (err) {
-			res.status(400).send(new Error(err.message));
-		} else {
-			res.redirect('/');
-		}
-	}
+	await dbh.createUser(req.body);
+	res.redirect('/');
 });
 
 app.post('/logout', async (req, res, next) => {
