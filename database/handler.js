@@ -7,7 +7,7 @@ async function getUserByUsername (username) {
 }
 
 async function getUserByUserID (userID) {
-	return User.findOne({ 'userID': `${userID}` });
+	return User.findOne({ '_id': `${userID}` });
 }
 
 async function validateUser (userData) {
@@ -15,7 +15,7 @@ async function validateUser (userData) {
 	const { username, password } = userData;
 	const user = await getUserByUsername(username);
 	if (!user) throw new Error("User could not be found");
-	if (user.password === password) return user.userID;
+	if (user.password === password) return user._id;
 }
 
 async function getUserFromSessionID (sessionId) {
@@ -55,14 +55,14 @@ async function createUser (userData) {
 	const check = await User.findOne({ "email": userData.email });
 	if (check) return new Error("User already exists");
 	const user = new User({
-		userID: userData.userID || 6969,
+		_id: userData.userID || 6969,
 		name: userData.name,
 		roll: userData.roll,
 		phone: userData.phone,
 		email: userData.email,
 		username: userData.username,
 		password: userData.password,
-		picture: userData.picture
+		image: userData.image
 	});
 	return await user.save();
 }

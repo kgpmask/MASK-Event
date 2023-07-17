@@ -15,7 +15,7 @@ module.exports = function initMiddleware (app) {
 			if (!sessionID) return next();
 			req.user = await dbh.getUserFromSessionID(sessionID);
 		} catch (err) {
-			res.clearCookie('sessionId');
+			res.clearCookie('sessionID');
 		}
 		next();
 	});
