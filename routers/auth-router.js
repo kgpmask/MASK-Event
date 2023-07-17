@@ -39,10 +39,6 @@ app.post('/logout', async (req, res, next) => {
 	return res.send('Signed out successfully. Mata ne.');
 });
 
-router.post('/signup', (req, res) => {
-	const userData = req.body.data;
-});
-
 module.exports = {
 	route: '/',
 	router
