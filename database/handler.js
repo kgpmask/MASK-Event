@@ -5,8 +5,8 @@ const User = require('./Schemas/User');
 const Session = require('./Schemas/Session');
 
 async function createUser (userData) {
-	const check = await User.findOne({ "email": userData.email });
-	if (check) throw new Error("User already exists");
+	const check = await User.findOne({ 'email': userData.email });
+	if (check) throw new Error('User already exists');
 	const user = new User({
 		_id: userData.userID || 6969,
 		name: userData.name,
@@ -34,8 +34,9 @@ async function validateUser (userData) {
 	console.log(userData);
 	const { username, password } = userData;
 	const user = await getUserByUsername(username);
-	if (!user) throw new Error("User could not be found");
+	if (!user) throw new Error('User could not be found');
 	if (user.hash === await bcrypt.hash(password, user.salt)) return user._id;
+	else throw new Error('Password does not match');
 }
 
 async function getUserFromSessionID (sessionId) {
