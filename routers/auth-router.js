@@ -21,14 +21,9 @@ router.get('/signup', (req, res) => {
 
 router.post('/login', async (req, res) => {
 	const userData = req.body;
-	try {
-		const sessionID = await dbh.createSession(await dbh.validateUser(userData));
-		res.cookie('sessionID', sessionID);
-		res.send('logged in');
-	} catch (err) {
-		console.log(err);
-		if (err) res.status(400).send(err.message);
-	}
+	const sessionID = await dbh.createSession(await dbh.validateUser(userData));
+	res.cookie('sessionID', sessionID);
+	res.send('logged in');
 });
 
 router.post('/signup', async (req, res) => {

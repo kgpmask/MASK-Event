@@ -102,7 +102,7 @@
 			.catch(err => {
 				console.log(err);
 				document.getElementById('login-button').disabled = false;
-				return alert(err.response.data.errors[0]);
+				return alert(err.response.data);
 			});
 	}
 
