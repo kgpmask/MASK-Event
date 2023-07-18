@@ -8,7 +8,8 @@
         {{ forms.heading('h1','Login') }}
         {{ forms.field('username','Username')}}
         {{ forms.field('password','Password')}}
-        {# {{ checkbox('remember-me','Remember Me')}} #}
+        {{ forms.singlecheck('remember-me','RememberMe','checked')}}
+		{# {{ forms.heading('h2,'Or')}} #}
 	{% endcall %}
 {% endblock %}
 
