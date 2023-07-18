@@ -57,16 +57,16 @@ label {
 	transform: 0.3s;
 }
 
-// form {
-// 	display: flex;
-// 	flex-direction: column;
-// 	border: 1px solid var(--off-white);
-// 	border-radius: 12px;
-// 	padding: 12px 10px;
-// 	width: 40%;
-// 	background-color: rgba(255, 255, 255, 0.13);
-// 	backdrop-filter: blur(5px);
-// }
+form {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid var(--off-white);
+	border-radius: 12px;
+	padding: 12px 10px;
+	width: 80%;
+	background-color: rgba(255, 255, 255, 0.13);
+	backdrop-filter: blur(5px);
+}
 
 // form * {
 // 	outline: none;
@@ -242,7 +242,7 @@ select>option {
 	justify-content: center;
 	align-items: center;
 	box-sizing: border-box;
-	padding: 3%;
+	padding: 1%;
 }
 .heading > h1{
 	font-size: 2em;
