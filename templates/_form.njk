@@ -1,9 +1,3 @@
-{% extends '_base.njk' %}
-
-{% block customcss %}
-<link rel="stylesheet" type="text/css" href="/assets/styles/form.css"/>
-{% endblock %}
-
 {% macro heading(h,label) %}
 	<div class="heading">
 		<{{h}}>{{ label }}</{{h}}>
@@ -130,10 +124,3 @@
 		}
 	</script>
 {% endmacro %}
-<div class="wrapper">
-{% block pagecontent %}
-{% block formcontent %}
-{# Stuff goes here #}
-{% endblock %}
-{% endblock %}
-</div>

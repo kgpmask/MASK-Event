@@ -1,16 +1,30 @@
-{% extends '_form.njk' %}
-
-{% set thispage = 'login' %}
-{% set pagetitle = 'Login' %}
-{% set pagedesc = 'Login to Manga and Anime Society Kharagpur’s site to explore more.' %}
+{% extends '_base.njk' %}
+{% import '_form.njk' as forms %}
 
 {% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
 
-{% block formcontent %}
-	<div class="wrapper">
-	{{ heading('h1','Login') }}
-	{{ field('username','Username')}}
-	{{ field('password','Password')}}
-	{{ checkbox('remember-me','Remember Me')}}
-	</div>
+{% block pagecontent %}
+	{% call forms.form() %}
+        {{ forms.heading('h1','Login') }}
+        {{ forms.field('username','Username')}}
+        {{ forms.field('password','Password')}}
+        {# {{ checkbox('remember-me','Remember Me')}} #}
+	{% endcall %}
+{% endblock %}
+
+{% block customcss %}
+	{{ forms.formCss() }}
+	<style>
+		{# Extra Styles #}
+	</style>
+{% endblock %}
+
+{% block customjs %}
+	{{ forms.formFunction() }}
+	<script>
+		axios.defaults.withCredentials = true;
+		axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
+
+		{# Other Functions #}
+	</script>
 {% endblock %}
