@@ -1,0 +1,16 @@
+{% extends '_form.njk' %}
+
+{% set thispage = 'login' %}
+{% set pagetitle = 'Login' %}
+{% set pagedesc = 'Login to Manga and Anime Society Kharagpur’s site to explore more.' %}
+
+{% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
+
+{% block formcontent %}
+	<div class="wrapper">
+	{{ heading('h1','Login') }}
+	{{ field('username','Username')}}
+	{{ field('password','Password')}}
+	{{ checkbox('remember-me','Remember Me')}}
+	</div>
+{% endblock %}

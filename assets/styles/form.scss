@@ -13,16 +13,20 @@
 	border-bottom-left-radius: 6px;
 	border-bottom-right-radius: 6px;
 }
+
 .error {
 	background-color: rgba(255, 51, 51, 0.85);
 }
+
 .success {
 	background-color: rgba(75, 189, 67, 0.85);
 }
+
 .hidden {
 	transform: scaleY(0);
 }
-.form-container{
+
+.form-container {
 	padding: 23px 25px;
 	display: flex;
 	flex-direction: column;
@@ -30,6 +34,7 @@
 	justify-content: center;
 	transform: 0.3s;
 }
+
 form {
 	display: flex;
 	flex-direction: column;
@@ -37,13 +42,15 @@ form {
 	border-radius: 12px;
 	padding: 12px 10px;
 	width: 40%;
-	background-color: rgba(255,255,255,0.13);
+	background-color: rgba(255, 255, 255, 0.13);
 	backdrop-filter: blur(5px);
 }
+
 form * {
 	outline: none;
 	border: none;
 }
+
 button {
 	align-self: center;
 	margin: 20px;
@@ -56,6 +63,7 @@ button {
 	border-radius: 12px;
 	cursor: pointer;
 }
+
 .item {
 	display: flex;
 	flex-direction: column;
@@ -63,10 +71,12 @@ button {
 	position: relative;
 	margin: 10px 4vw;
 }
+
 .heading {
 	margin-block-start: 0.83em;
 	margin-block-end: 0.83em;
 }
+
 label {
 	color: var(--off-white);
 	margin-inline-start: 0.3em;
@@ -75,15 +85,17 @@ label {
 	font-size: 16px;
 	pointer-events: none;
 }
-.datetime > label{
+
+.datetime>label {
 	top: -7px;
 	font-size: 16px;
 	padding: 0 2px;
 	background-color: rgba(0, 0, 0, 0);
 }
+
 input,
-select{
-	background-color: rgba(255,255,255,0.07);
+select {
+	background-color: rgba(255, 255, 255, 0.07);
 	font-weight: 300;
 	border-radius: 5px;
 	padding: 10px;
@@ -94,12 +106,15 @@ select{
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
+
 select {
 	font-weight: 600;
 }
-.datetime > input {
+
+.datetime>input {
 	color-scheme: dark;
 }
+
 .option {
 	position: relative;
 	display: flex;
@@ -110,10 +125,12 @@ select {
 	padding: 5px 10px;
 	margin: 7px;
 }
+
 .option:focus-within,
 .option:hover {
 	background: hsla(0, 0%, 80%, .14);
 }
+
 .option-input {
 	position: absolute;
 	width: 100%;
@@ -121,6 +138,7 @@ select {
 	opacity: 0;
 	z-index: 1;
 }
+
 .option-design {
 	width: 22px;
 	height: 22px;
@@ -128,9 +146,11 @@ select {
 	background: linear-gradient(to right bottom, hsl(0deg 100% 75%), hsl(0deg 100% 50%));
 	position: relative;
 }
-.checkbox > .option > .option-design {
+
+.checkbox>.option>.option-design {
 	border-radius: 2px;
 }
+
 .option-design::before {
 	content: '';
 	display: inline-block;
@@ -141,27 +161,109 @@ select {
 	transform: scale(1.1);
 	transition: 0.3s;
 }
-.option-input:checked + .option-design::before {
+
+.option-input:checked+.option-design::before {
 	transform: scale(0);
 }
+
 .option-text {
 	color: hsl(0, 0%, 60%);
 	margin-left: 14px;
 	font-weight: 900;
 	transition: 0.3s;
 }
-.option-input:checked ~ .option-text {
+
+.option-input:checked~.option-text {
 	color: hsl(184deg 58% 60%);
 }
+
 .singlecheck {
 	align-self: center;
 	flex-direction: row-reverse;
 }
-.singlecheck > .option-text {
+
+.singlecheck>.option-text {
 	margin-right: 14px;
 	margin-left: unset;
 }
-select > option {
+
+select>option {
 	background-color: var(--darker-gray);
-	padding: 10px;;
+	padding: 10px;
+	;
+}
+
+#pagecontent {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.wrapper {
+	position: relative;
+	width: 400px;
+	background: transparent;
+	border: 3px solid;
+	border-color: var(--dark-gray);
+	border-top-color: var(--red);
+	border-bottom-color: var(--red);
+	border-top-left-radius: 20px;
+	border-top-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 20px;
+	backdrop-filter: blur(10px);
+	box-shadow: 0 0 20px rgba(0, 0, 0, .5);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	box-sizing: border-box;
+	padding: 5%;
+}
+.heading > h1{
+	font-size: 2em;
+	color: #d0d0d0;
+	text-align: center;
+	padding: 0px;
+	margin: 0px;
+}
+.item-field {
+	position: relative;
+	width: 100%;
+	height: 60px;
+	border-bottom: 2px solid var(--error-red);
+	margin: 30px 20px;
+}
+input[type=email]{
+	color: var(--white);
+	font-size: 1em;
+}
+input[type=text]{
+	color: var(--white);
+	font-size: 1em;
+}
+.item-field label {
+	text-align: left;
+	position: absolute;
+	top: 35%;
+	font-size: 1em;
+	color: var(--off-white);
+	font-weight: 500;
+	pointer-events: none;
+	transition: .5s;
+	transform: translateY(-50%);
+}
+.item-field input:focus~label,
+.item-field input:valid~label{
+	color: rgba(0,0,0,0);
+	top: -5px ;
+	backdrop-filter: blur(100px);
+}
+.item-field input {
+	width: 100%;
+	height: 100%;
+	background: none;
+	outline:none;
+	border: none;
+	padding: 0 25px 0 5px;
 }

@@ -1,12 +1,17 @@
-{% extends _base.njk%}
-{% macro heading(h, label) %}
+{% extends '_base.njk' %}
+
+{% block customcss %}
+<link rel="stylesheet" type="text/css" href="/assets/styles/form.css"/>
+{% endblock %}
+
+{% macro heading(h,label) %}
 	<div class="heading">
-		<{{ h }}>{{ label }}</{{ h }}>
+		<{{h}}>{{ label }}</{{h}}>
 	</div>
 {% endmacro %}
 
 {% macro field(id, label, value) %}
-	<div class="item field">
+	<div class="item-field">
 		<label>{{ label }}</label>
 		<input type="text" required id="{{ id }}" {% if value %} value="{{ value }}" {% endif %}>
 	</div>
@@ -81,7 +86,7 @@
 {% endmacro %}
 
 {% macro formCss() %}
-	<link rel="stylesheet" type="text/scss" href="/assets/styles/forms.scss"/>
+	<link rel="stylesheet" type="text/css" href="/assets/styles/form.css"/>
 {% endmacro %}
 
 {% macro formFunction() %}
@@ -125,3 +130,10 @@
 		}
 	</script>
 {% endmacro %}
+<div class="wrapper">
+{% block pagecontent %}
+{% block formcontent %}
+{# Stuff goes here #}
+{% endblock %}
+{% endblock %}
+</div>
