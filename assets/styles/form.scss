@@ -58,14 +58,7 @@ label {
 }
 
 form {
-	display: flex;
-	flex-direction: column;
-	border: 1px solid var(--off-white);
-	border-radius: 12px;
-	padding: 12px 10px;
 	width: 80%;
-	background-color: rgba(255, 255, 255, 0.13);
-	backdrop-filter: blur(5px);
 }
 
 // form * {
@@ -82,7 +75,7 @@ button {
 	padding: 12px 0;
 	font-size: 18px;
 	font-weight: 600;
-	border-radius: 12px;
+	border-radius: 5px;
 	cursor: pointer;
 }
 
@@ -225,7 +218,7 @@ select>option {
 
 .form-container {
 	position: relative;
-	width: 400px;
+	width: 380px;
 	background: transparent;
 	border: 3px solid;
 	border-color: var(--dark-gray);
@@ -251,12 +244,12 @@ select>option {
 	padding: 0px;
 	margin: 0px;
 }
-.item-field, .item-datetime {
+.item{
 	position: relative;
 	width: 100%;
 	height: 60px;
 	border-bottom: 2px solid var(--error-red);
-	margin: 30px 0px;
+	margin: 15px 0px;
 	display: grid;
 	grid-template-columns: 1fr;
 	grid-template-areas: 'one';
@@ -269,7 +262,7 @@ input[type=text]{
 	color: var(--white);
 	font-size: 1em;
 }
-.item-field label, .item-datetime label {
+.item label{
 	text-align: left;
 	position: absolute;
 	top: 40%;
@@ -283,20 +276,17 @@ input[type=text]{
 	transform: translateX(0%);
 	grid-area: one;
 }
-.item-field input:focus~label,
-.item-field input:valid~label,
-.item-datetime input:focus~label,
-.item-datetime input:valid~label{
+.item input:focus~label,
+.item input:valid~label{
 	color: rgba(0,0,0,0);
 	left: 15px ;
 	backdrop-filter: blur(100px);
 }
-.item-field input,
-.item-datetime input {
+.item input {
 	width: 100%;
 	height: 100%;
 	background: none;
 	outline:none;
 	border: none;
-	padding: 0 25px 0 5px;
+	padding: 0 5px 0 5px;
 }
