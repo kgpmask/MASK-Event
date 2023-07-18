@@ -7,10 +7,13 @@
 	{% call forms.form() %}
         {{ forms.heading('h1','Login') }}
         {{ forms.field('username','Username')}}
+        {{ forms.field('email','Email')}}
         {{ forms.field('password','Password')}}
+        {{ forms.field('confirm-password','Confirm Password')}}
+        {{ forms.datetime('dob','DOB')}}
         {{ forms.singlecheck('remember-me','RememberMe','checked')}}
-		{{forms.button('Login-button','Login', 'function()')}}
 		{# {{ forms.heading('h2,'Or')}} #}
+        {{forms.button('register-button','Register', 'function()')}}
 	{% endcall %}
 {% endblock %}
 

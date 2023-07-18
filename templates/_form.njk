@@ -6,8 +6,8 @@
 
 {% macro field(id, label, value) %}
 	<div class="item-field">
-		<label>{{ label }}</label>
 		<input type="text" required id="{{ id }}" {% if value %} value="{{ value }}" {% endif %}>
+		<label>{{ label }}</label>
 	</div>
 {% endmacro %}
 
@@ -45,9 +45,9 @@
 {% endmacro %}
 
 {% macro datetime(id, label, value) %}
-	<div class="item datetime">
+	<div class="item-datetime">
 		<label>{{ label }}</label>
-		<input type="date" id="{{ id }}" value="{{ value }}">
+		<input type="date" id="{{ id }}" {% if value %} value="{{ value }}" {% endif %}>
 	</div>
 {% endmacro %}
 
