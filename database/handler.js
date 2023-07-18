@@ -1,6 +1,5 @@
 const bcrypt = require('bcryptjs');
 
-const mongoose = require('mongoose');
 const User = require('./Schemas/User');
 const Session = require('./Schemas/Session');
 
@@ -60,7 +59,7 @@ async function createSession (userId) {
 }
 
 async function removeSession (sessionId) {
-	// Use this if we want to remoev sessions after logout
+	// Use this if we want to remove sessions after logout
 	await Session.findOneAndDelete({ 'sessionID': sessionId });
 }
 
