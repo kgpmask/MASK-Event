@@ -10,7 +10,15 @@
         {{ forms.field('email','Email')}}
         {{ forms.field('password','Password')}}
         {{ forms.field('confirm-password','Confirm Password')}}
-        {{forms.button('register-button','Register', 'function()')}}
+		{{ forms.radio('member', 'Are you a KGPian?',[{'label': 'Yes', 'value': 'true'},{'label' : 'No', 'value' : 'false'}])}}
+		{{ forms.checkbox('mask', 'Are you a member of Mask?' ,[
+		{'label' : 'No', 'value' : 'false'},
+		{'label': 'Design', 'value': 'dna'},
+		{'label': 'AMV', 'value': 'amv'},
+        {'label': 'MN', 'value': 'mn'},
+		{'label': 'Webdev', 'value': 'webdev'},
+		{'label': 'Quiz', 'value': 'quiz'}])}}
+		{{forms.button('register-button','Register', 'function')}}
 	{% endcall %}
 {% endblock %}
 
