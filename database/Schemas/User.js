@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-	_id: { type: Number, required: true },
+	_id: { type: Number, required: true, unique: true },
 	name: { type: String, required: true },
-	roll: { type: String, required: true },
-	phone: { type: Number, required: true },
-	email: { type: String, required: true },
-	username: { type: String, required: true },
+	roll: { type: String, required: true, unique: true },
+	phone: { type: Number, required: true, unique: true },
+	email: { type: String, required: true, unique: true },
+	username: { type: String, required: true, unique: true },
 	salt: { type: String, required: true },
 	hash: { type: String, required: true },
 	image: String
