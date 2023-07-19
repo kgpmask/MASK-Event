@@ -25,9 +25,15 @@ router.post('/login', [
 		.notEmpty().withMessage('No Username Provided')
 		.trim(),
 	body('password')
-		.notEmpty().withMessage('No Username Provided')
+		.notEmpty().withMessage('No Password Provided')
 		.trim()
 ], async (req, res) => {
+	if (req.loggedIn) return res.error('You shall not pass');
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		const errorMessages = errors.array().map(error => error.msg);
+		throw new Error(errorMessages[0]);
+	}
 	const userData = req.body;
 	const sessionID = await dbh.createSession(await dbh.validateUser(userData));
 	res.cookie('sessionID', sessionID);
@@ -40,7 +46,8 @@ router.post('/signup', [
 		.notEmpty().withMessage('No Name Provided'),
 	body('roll')
 		.trim()
-		.notEmpty().withMessage('No Roll Provided'),
+		.notEmpty().withMessage('No Roll Provided')
+		.matches(/^[12][890123][A-Z]{2}[0-9][A-Z0-9]{2}\d\d$/i).withMessage('Please provide a valid roll number'),
 	body('phone')
 		.trim()
 		.notEmpty().withMessage('No Phone Number Provided')
@@ -59,6 +66,12 @@ router.post('/signup', [
 		.isLength({ min: 6, max: 32 }).withMessage('Password must be between 6 and 32 characters long.')
 		.matches(/^\S+$/).withMessage('Password cannot contain whitespaces')
 ], async (req, res) => {
+	if (req.loggedIn) return res.error('How are you signing up when you are already logged in, what is this power !');
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		const errorMessages = errors.array().map(error => error.msg);
+		throw new Error(errorMessages[0]);
+	}
 	await dbh.createUser(req.body);
 	res.redirect('/');
 });
@@ -67,7 +80,7 @@ app.post('/logout', async (req, res, next) => {
 	// If we may require them, then...
 	// const { sessionId } = req.cookies;
 	// await db.removeSession(sessionId);
-	if (req.loggedIn) return res.error('Stop trying to break the website ;-;');
+	if (!req.loggedIn) return res.error('Stop trying to break the website ;-;');
 	await res.clearCookie('sessionID');
 	return res.send('Signed out successfully. Mata ne.');
 });

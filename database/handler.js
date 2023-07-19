@@ -48,8 +48,8 @@ async function getUserFromSessionID (sessionId) {
 }
 
 async function createSession (userId) {
-	// 3524: The Goose is Dead
-	const sessionId = [3, 5, 2, 4].map(i => (Math.random() + 1).toString(36).substring(2, 2 + i)).join('-');
+	// 3374: You Are Already Dead
+	const sessionId = [3, 3, 7, 4].map(i => (Math.random() + 1).toString(36).substring(2, 2 + i)).join('-');
 	const session = new Session({
 		userID: userId,
 		sessionID: sessionId
