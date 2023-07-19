@@ -15,7 +15,7 @@ async function createUser (userData) {
 	user.salt = await bcrypt.genSalt(7);
 	user.hash = await bcrypt.hash(userData.password, user.salt);
 	await user.save();
-	return 'Success';
+	return user._id;
 }
 
 async function getUserByUsername (username) {

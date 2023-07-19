@@ -58,7 +58,8 @@ router.post('/signup', [
 	body('username')
 		.trim()
 		.notEmpty().withMessage('No Username Provided')
-		.isLength({ min: 3, max: 32 }).withMessage('Username must be between 3 and 32 characters long.'),
+		.isLength({ min: 3, max: 32 }).withMessage('Username must be between 3 and 32 characters long.')
+		.matches(/^\S+$/).withMessage('Username cannot contain whitespaces'),
 	body('password')
 		.trim()
 		.notEmpty().withMessage('No Password Provided')
@@ -71,7 +72,8 @@ router.post('/signup', [
 		const errorMessages = errors.array().map(error => error.msg);
 		throw new Error(errorMessages[0]);
 	}
-	await dbh.createUser(req.body);
+	const sessionID = await dbh.createSession(await dbh.createUser(req.body));
+	res.cookie('sessionID', sessionID);
 	res.send('Registered Successfully UwU');
 });
 
