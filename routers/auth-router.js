@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const { error } = require('console');
 const dbh = require('../database/handler');
 const { body, validationResult } = require('express-validator');
 
