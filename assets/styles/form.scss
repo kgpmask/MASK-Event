@@ -244,8 +244,7 @@ select>option {
 	padding: 0px;
 	margin: 0px;
 }
-.field,
-.datetime{
+.field{
 	position: relative;
 	width: 100%;
 	height: 60px;
@@ -255,6 +254,17 @@ select>option {
 	grid-template-columns: 1fr;
 	grid-template-areas: 'one';
 }
+.datetime{
+	position: relative;
+	width: 100%;
+	height: 60px;
+	border-bottom: 2px solid var(--error-red);
+	margin: 25px 0px;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-areas: 'one';
+	margin-top: 30px;
+}
 input[type=email]{
 	color: var(--white);
 	font-size: 1em;
@@ -263,8 +273,11 @@ input[type=text]{
 	color: var(--white);
 	font-size: 1em;
 }
-.field label,
-.datetime label {
+input[type=date]{
+	color: var(--white);
+	font-size: 1em;
+}
+.field label {
 	text-align: left;
 	position: absolute;
 	top: 40%;
@@ -278,6 +291,21 @@ input[type=text]{
 	transform: translateX(0%);
 	grid-area: one;
 }
+.datetime label {
+	text-align: left;
+	position: absolute;
+	left:0%;
+	font-size: 1em;
+	color: var(--off-white);
+	font-weight: 500;
+	pointer-events: none;
+	transition: .5s;
+	// transform: translateY(-50%);
+	transform: translateX(0%);
+	grid-area: one;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
 .field input:focus~label,
 .date time input:valid~label,
 .date input:focus~label,
@@ -286,14 +314,21 @@ input[type=text]{
 	left: 15px ;
 	backdrop-filter: blur(100px);
 }
-.field input,
-.datetime input {
+.field input {
 	width: 100%;
-	height: 100%;
 	background: none;
 	outline:none;
 	border: none;
 	padding: 0 5px 0 5px;
+}
+.datetime input {
+	width: 100%;
+	background: none;
+	outline:none;
+	border: none;
+	padding: 0 5px 0 5px;
+	margin: 0px;
+	// font-size: 120%;
 }
 .radio,
 .checkbox {

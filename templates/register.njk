@@ -10,6 +10,7 @@
         {{ forms.field('email','Email')}}
         {{ forms.field('password','Password')}}
         {{ forms.field('confirm-password','Confirm Password')}}
+		{{ forms.datetime('dob','DOB')}}
 		{{ forms.radio('member', 'Are you a KGPian?',[{'label': 'Yes', 'value': 'true'},{'label' : 'No', 'value' : 'false'}])}}
 		{{ forms.checkbox('mask', 'Are you a member of Mask?' ,[
 		{'label' : 'No', 'value' : 'false'},
