@@ -36,7 +36,7 @@ router.post('/login', [
 	const userData = req.body;
 	const sessionID = await dbh.createSession(await dbh.validateUser(userData));
 	res.cookie('sessionID', sessionID);
-	res.send('logged in');
+	res.send('logged in >w<');
 });
 
 router.post('/signup', [
@@ -72,7 +72,7 @@ router.post('/signup', [
 		throw new Error(errorMessages[0]);
 	}
 	await dbh.createUser(req.body);
-	res.redirect('/');
+	res.send('Registered Successfully UwU');
 });
 
 app.post('/logout', async (req, res, next) => {
