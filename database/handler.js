@@ -19,11 +19,7 @@ async function createUser (userData) {
 }
 
 async function getUserByUsername (username) {
-	return (await User.find({ 'username': `${username}` }))[0];
-}
-
-async function getUserByUserID (userID) {
-	return await User.findById(userID);
+	return await User.findOne({ 'username': `${username}` });
 }
 
 async function validateUser (userData) {
@@ -38,7 +34,7 @@ async function validateUser (userData) {
 
 async function getUserFromSessionID (sessionId) {
 	const session = await Session.findById(sessionId);
-	const user = await getUserByUserID(session.userID);
+	const user = await User.findById(session.userID);
 	if (!user) throw new Error('User Not Found');
 	else return user;
 }
@@ -63,7 +59,6 @@ module.exports = {
 	createUser,
 	validateUser,
 	getUserByUsername,
-	getUserByUserID,
 	getUserFromSessionID,
 	createSession,
 	removeSession
