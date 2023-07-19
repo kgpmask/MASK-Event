@@ -21,11 +21,11 @@ router.get('/signup', (req, res) => {
 
 router.post('/login', [
 	body('username')
-		.notEmpty().withMessage('No Username Provided')
-		.trim(),
-	body('password')
-		.notEmpty().withMessage('No Password Provided')
 		.trim()
+		.notEmpty().withMessage('No Username Provided'),
+	body('password')
+		.trim()
+		.notEmpty().withMessage('No Password Provided')
 ], async (req, res) => {
 	if (req.loggedIn) return res.error('You shall not pass');
 	const errors = validationResult(req);
