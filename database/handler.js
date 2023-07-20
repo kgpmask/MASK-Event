@@ -55,11 +55,17 @@ async function removeSession (sessionId) {
 	await Session.findOneAndDelete({ 'sessionID': sessionId });
 }
 
+async function removeTestUser () {
+	await User.deleteOne({ _id: 6969 });
+	return 'Test User Deleted';
+}
+
 module.exports = {
 	createUser,
 	validateUser,
 	getUserByUsername,
 	getUserFromSessionID,
 	createSession,
-	removeSession
+	removeSession,
+	removeTestUser
 };
