@@ -3,8 +3,9 @@ const User = require('./Schemas/User');
 const Session = require('./Schemas/Session');
 
 async function createUser (userData) {
+	const _id = userData.userID ?? (await User.find({ _id: { '$gt': 10000 } })).length + 10001;
 	const user = new User({
-		_id: userData.userID,
+		_id,
 		name: userData.name,
 		roll: userData.roll,
 		phone: userData.phone,
@@ -55,8 +56,8 @@ async function removeSession (sessionId) {
 	await Session.findOneAndDelete({ 'sessionID': sessionId });
 }
 
-async function removeTestUser () {
-	await User.deleteOne({ _id: 7358 });
+async function removeUser (id) {
+	await User.findByIdAndDelete(id);
 	return 'Test User Deleted';
 }
 
@@ -67,5 +68,5 @@ module.exports = {
 	getUserFromSessionID,
 	createSession,
 	removeSession,
-	removeTestUser
+	removeUser
 };
