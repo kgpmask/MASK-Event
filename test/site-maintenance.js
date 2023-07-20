@@ -20,8 +20,8 @@ describe("Server (maintenance):", () => {
 
 	it('should send a "Server Under Maintenance" response', () => {
 		axios.post(`http://localhost:${PORT}/`).then(() => Promise.resolve(false)).catch(res => {
-			assert(res.response.status === 503);
-			assert(res.response.data === 'Server Under Maintenance');
+			assert(res.response?.status === 503);
+			assert(res.response?.data === 'Server Under Maintenance');
 		});
 	});
 

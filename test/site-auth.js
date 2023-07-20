@@ -8,11 +8,6 @@ const axios = require('axios');
 const server = require('../src/server');
 const dbh = require('../database/handler');
 
-before(async () => {
-	this.timeout(10_000);
-	return await server.ready();
-});
-
 const dummyCredential = {
 	_id: 7357,
 	name: 'Dummy User',
@@ -27,6 +22,11 @@ const dummyCredential = {
 };
 
 describe('Server (auth):', () => {
+	before(async function () {
+		this.timeout(10_000);
+		return await server.ready();
+	});
+
 	it('Should have the right PARAMS object', () => assert.deepEqual(PARAMS, { test: true }));
 });
 
