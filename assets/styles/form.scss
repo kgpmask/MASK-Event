@@ -307,12 +307,16 @@ input[type=date]{
 	margin-bottom: 10px;
 }
 .field input:focus~label,
-.date time input:valid~label,
-.date input:focus~label,
-.field time input:valid~label{
+.field input:valid~label{
+	background-color: rgba(0, 0, 0, 0);
 	color: rgba(0,0,0,0);
+	opacity: 0;
 	left: 15px ;
 	backdrop-filter: blur(100px);
+}
+.datetime input:valid~label,
+.datetime input:focus~label{
+	scale:1.03;
 }
 .field input {
 	width: 100%;
@@ -328,14 +332,12 @@ input[type=date]{
 	border: none;
 	padding: 0 5px 0 5px;
 	margin: 0px;
-	// font-size: 120%;
 }
 .radio,
 .checkbox {
 	position: relative;
 	width: 100%;
 	height: fit-content;
-	// border-bottom: 1px solid var(--error-red);
 	margin: 25px 0px;
 	padding: 10px 0px;;
 	display: flex;
