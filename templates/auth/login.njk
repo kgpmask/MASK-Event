@@ -1,157 +1,70 @@
 {% extends '_base.njk' %}
+{% import '_form.njk' as forms %}
+
+{% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
 
 {% block pagecontent %}
-	<div class="login-card">
-		<form action="#">
-			<h2 style="font-size:25px">Event Login</h2>
-			<div class="box">
-				<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
-					<path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
-				</svg>
-				<div class="secondary-box">
-					<input type="text" name="" id="" class="input-area" required="required">
-					<span class="insider">Username</span>
-					<i></i>
-				</div>
-			</div>
-			<div class="box">
-				<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-unlock" viewBox="0 0 16 16">
-					<path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2zM3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H3z"/>
-				</svg>
-				<div class="secondary-box">
-					<input type="password" name="" id="" class="input-area" required="required">
-					<span class="insider">Password</span>
-					<i></i>
-				</div>
-			</div>
-			<div class="extra">
-				<span>Forgot <a href="#">password/username?</a></span>
-				<span><a href="#">Sign Up</a></span>
-			</div>
-			<div class="button-area">
-				<button class="btn">Login</button>
-			</div>
-		</form>
-	</div>
+	{% call forms.form() %}
+		{{ forms.heading('h1','Event Login') }}
+		{{ forms.field('username','Username')}}
+		{{ forms.field('password','Password')}}
+		{{ forms.button('submit', 'Login') }}
+	{% endcall %}
 {% endblock %}
 
-
 {% block customcss %}
+	{{ forms.formCss() }}
 	<style>
-		.login-card{
-			width: 300px;
-			height:0400px;
-			margin: 100px auto;
-			padding: 10px 5px;
-			text-align: center;
-			border-radius: 14px;
-			border:3px solid rgba(128, 128, 128, 0.571);
-			box-shadow: 1px  1px 10px rgb(119, 109, 116);
-			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-		}
-		.box{
-			display: flex;
-			gap:10px;
-			align-items: center;
-			text-align: left;
-			padding: 10px 5px;
-			margin: 40px auto;
-		}
-		.secondary-box{
-			width:100%;
-			display: flex;
-			flex-direction: column;
-			position: relative;
-		}
-		.button-area{
-			margin: 30px auto;
-			padding: 10px 5px;
-		}
-		.extra{
-			padding: 5px 5px;
-			font-size: x-small;
-			margin-bottom: 40px;
-			display: flex;
-			justify-content: space-between;
-		}
-		.btn{
-			padding:6px 5px;
-			width:120px;
-			border:none;
-			border-radius:16px;
-			margin:10px 0px;
-			font-size:18px;
-			color: black;
-			background-color: white ;
-		}
-		.input-area{
-			padding: 7px 7px;
-			border: none;
-			border-radius: 5px;
-			background: transparent;
-			outline: none;
-			color:black;
-			transition: 0.5s;
-			z-index: 10;
-		}
-		.insider{
-			position: absolute;
-			top: 7px;
-			left: 5px;
-			pointer-events: none;
-			transition: 0.5s;
-			color: lightgray;
-			font-size: large;
-		}
-		.input-area:valid ~ span,
-		.input-area:focus ~ span{
-			color: red;
-			transform: translateY(-28px) translateX(-3px);
-			font-size: small;
-		}
-		i{
-			width: 100%;
-			position: absolute;
-			left:0;
-			bottom: 0;
-			height:2px;
-			background: red;
-			border-radius: 4px;
-			overflow: hidden;
-			transition: 0.5s;
-			pointer-events: none;
-		}
-		.input-area:valid ~ i,
-		.input-area:focus ~ i{
-			height:30px;
-			background: white;
-		}
-		a{
-			text-decoration: none;
-			color:red;
-		}
-		a:hover{
-			font-size: small;
-			transition: 0.3s;
-			text-decoration: underline;
-		}
-		.btn:hover{
-			width:140px;
-			padding: 9px 7.5px;
-			transition: .5s;
-			background-color: rgba(255, 0, 0, 0.632);
-			color: white;
-		}
-		.login-card:hover{
-			box-shadow: 10px 10px 150px rgba(208, 39, 59, 0.678) ;
-			width: 320px;
-			height: 420px;
-			margin:80px auto;
-			transition: .5s ease-in;
-		}
-		.input-area:focus{
-			box-shadow: 5px 5px 17px rgb(119, 109, 116);
-			transition: 1.2s;
-		}
+			form{
+				box-shadow: 2px 2px 80px rgba(208, 39, 59, 0.378) ;
+				font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+			}
+			.item{
+				margin-bottom:20px;
+			}
+			input{
+				border:none;
+				border-bottom:2px solid var(--light-gray);
+				background:transparent;
+				outline:none;
+				transition:0.5s;
+			}
+			label{
+				color:gray;
+				position:absolute;
+				bottom:0;
+				left:10px;
+			}
+			input:valid ~ label,
+			input:focus ~ label{
+				color: rgb(239,74,74);
+				transform: translateY(-35px);
+				transition:0.5s;
+			}
+			input:valid,
+			input:focus{
+				border: 2px solid var(--light-gray);
+				transition:0.5s;
+				box-shadow: 5px 5px 17px rgb(119, 109, 116);
+			}
+			button:hover{
+				width:50%;
+				padding: 12px 7.5px;
+				transition: .5s;
+				background-color: rgba(255, 0, 0, 0.632);
+				color: white;
+				border-radius:14px;
+				font-size:20px;
+			}
 	</style>
+{% endblock %}
+
+{% block customjs %}
+	{{ forms.formFunction() }}
+	<script>
+		axios.defaults.withCredentials = true;
+		axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
+
+		{# Other Functions #}
+	</script>
 {% endblock %}
