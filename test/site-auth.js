@@ -27,6 +27,33 @@ describe('Server (auth):', () => {
 	it('Should have the right PARAMS object', () => assert.deepEqual(PARAMS, { test: true }));
 });
 
+describe('Should prevent signup in case of invalid data', () => {
+	const invalidData = [
+		{ name: '   ' },
+		{ roll: '   ' },
+		{ roll: 'someRollNumber' },
+		{ roll: '23im10099' },
+		{ phone: '   ' },
+		{ phone: '101-2023-301' },
+		{ email: '   ' },
+		{ email: 'email-address' },
+		{ username: '   ' },
+		{ username: 'XD' },
+		{ username: 'Hokuto No Ken' },
+		{ username: 'JugemuJugemuGokoNoSurikureKaijarisuigyo...' },
+		{ password: '   ' },
+		{ password: '@deku' },
+		{ password: 'Tanjiro Kamado' },
+		{ password: 'JugemuJugemuGokoNoSurikureKaijarisuigyo...' }
+	];
+	invalidData.forEach(data => it(`${Object.values(data).pop().trim() ? 'Invalid' : 'Missing' } ${Object.keys(data).pop()}`,
+		() => axios.post(`http://localhost:${PORT}/signup`, { ...dummyCredential, ...data })
+			.then(() => Promise.resolve(false))
+			.catch(({ response }) => assert(response.status === 500))
+	).timeout(process.platform === 'win32' ? 5_000 : 3_000)
+	);
+});
+
 describe('Should prevent signup for already existing unique fields', () => {
 	const overlapCreds = [
 		{ username: 'testuser' },
@@ -53,6 +80,7 @@ describe('Should signup for a set of fresh credentials', () => {
 		assert(res.status === 200);
 		const sessionID = res.headers['set-cookie'].pop().split(';').filter(i => i.includes('sessionID=')).pop().slice(10);
 		await dbh.removeUser((await dbh.getUserFromSessionID(sessionID))._id);
+		await dbh.removeSession(sessionID);
 	})).timeout(process.platform === 'win32' ? 5_000 : 3_000);
 });
 
@@ -83,7 +111,7 @@ describe('Should not login for invalid credentials', () => {
 	})
 	).timeout(process.platform === 'win32' ? 5_000 : 3_000);
 
-	it('Blank Username', () => axios.post(`http://localhost:${PORT}/login`,
+	it('Incorrect Password', () => axios.post(`http://localhost:${PORT}/login`,
 		{ username: 'testuser', password: 'random' }
 	).then(() => Promise.resolve(false)).catch(({ response }) => {
 		assert(response.status === 500);
@@ -99,6 +127,7 @@ describe('Should login to test user successfully', () => it('With test user cred
 		assert(res.status === 200);
 		const sessionID = res.headers['set-cookie'].pop().split(';').filter(i => i.includes('sessionID=')).pop().slice(10);
 		assert.deepEqual(await dbh.getUserFromSessionID(sessionID), await dbh.getUserByUsername('testuser'));
+		await dbh.removeSession(sessionID);
 	})
 ).timeout(process.platform === 'win32' ? 5_000 : 3_000)
 );
