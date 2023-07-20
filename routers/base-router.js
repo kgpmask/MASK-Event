@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-router.use('/', (req, res) => res.renderFile('home.njk'));
+router.use('/', (req, res) => res.renderFile('auth/signup.njk'));
 
 module.exports = {
 	route: ['/home', '/'],
