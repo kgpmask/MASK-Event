@@ -10,7 +10,7 @@ const dbh = require('../database/handler');
 
 before(async () => {
 	this.timeout(10_000);
-	return await server.ready()
+	return await server.ready();
 });
 
 const dummyCredential = {
