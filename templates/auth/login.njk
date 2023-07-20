@@ -7,7 +7,7 @@
 	{% call forms.form() %}
 		{{ forms.heading('h1','Event Login') }}
 		{{ forms.field('username','Username')}}
-		{{ forms.field('password','Password')}}
+		{{ forms.field('password','Password',type='password')}}
 		{{ forms.button('submit', 'Login') }}
 	{% endcall %}
 {% endblock %}
