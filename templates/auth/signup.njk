@@ -7,11 +7,10 @@
 	{% call forms.form() %}
 		{{ forms.heading('h1','Register') }}
 		{{ forms.field('name','Name')}}
+		{{ forms.field('rollno','Roll No')}}
 		{{ forms.field('email','Email', type'email')}}
 		{{ forms.field('phonenumber','Phone number')}}
-		{{ forms.field('rollno','Roll No')}}
 		{{ forms.field('username','Username')}}
-		{{ forms.field('username','Name')}}
 		{{ forms.field('password','Password', type='password')}}
 		{{ forms.field('confirmpassword', 'Confirm Password', type='password')}}
 		{{ forms.button('submit', 'Register') }}
