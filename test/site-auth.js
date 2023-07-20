@@ -37,6 +37,7 @@ describe('Should prevent signup in case of invalid data', () => {
 		{ roll: 'someRollNumber' },
 		{ roll: '23im10099' },
 		{ phone: '   ' },
+		{ phone: '7357' },
 		{ phone: '101-2023-301' },
 		{ email: '   ' },
 		{ email: 'email-address' },
