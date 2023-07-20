@@ -1,6 +1,10 @@
 {% extends '_base.njk' %}
 {% import '_form.njk' as forms %}
 
+{% set thispage = 'register' %}
+{% set pagetitle = 'Register' %}
+{% set pagedesc = 'Register now and join us at Manga & Anime Society Kharagpur [MASK]! site' %}
+
 {% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
 
 {% block pagecontent %}
@@ -14,6 +18,7 @@
 		{{ forms.field('password','Password', type='password')}}
 		{{ forms.field('confirmpassword', 'Confirm Password', type='password')}}
 		{{ forms.button('submit', 'Register') }}
+		{{ forms.link('loginlink', 'Already have an acount? ', 'Login here')}}
 	{% endcall %}
 {% endblock %}
 

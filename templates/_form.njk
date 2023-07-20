@@ -78,7 +78,13 @@
 {% macro button(id, label, onclick) %}
 	<button id="{{ id }}" {% if onclick %} type="button" onclick="{{ onclick }}()" {% else %} type="submit" {% endif %}>{{ label }}</button>
 {% endmacro %}
-
+{% macro link(id, label, anchor, link = "#") %}
+	<div id ="{{ id }}" class="link">
+        <p>
+			{{label}}<a href="{{link}}" class="link-class">{{anchor}}</a>
+		</p>
+    </div>
+{% endmacro %}
 {% macro formCss() %}
 	<link rel="stylesheet" type="text/css" href="/assets/styles/form.css"/>
 {% endmacro %}
