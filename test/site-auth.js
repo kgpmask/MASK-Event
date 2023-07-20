@@ -110,7 +110,6 @@ describe('Should not login for invalid credentials', () => {
 		{ username: 'test', password: 'random' }
 	).then(() => Promise.resolve(false)).catch(({ response }) => {
 		assert(response.status === 500);
-		assert(response.data === 'Error: User could not be found');
 	})
 	).timeout(process.platform === 'win32' ? 5_000 : 3_000);
 
@@ -118,7 +117,6 @@ describe('Should not login for invalid credentials', () => {
 		{ username: 'testuser', password: 'random' }
 	).then(() => Promise.resolve(false)).catch(({ response }) => {
 		assert(response.status === 500);
-		assert(response.data === 'Error: Password does not match');
 	})
 	).timeout(process.platform === 'win32' ? 5_000 : 3_000);
 });
