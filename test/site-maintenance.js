@@ -6,7 +6,7 @@ const assert = require('assert');
 const axios = require('axios');
 const server = require('../src/server');
 
-describe("Server (mongoless):", () => {
+describe("Server (maintenance):", () => {
 	before(async () => await server.ready());
 
 	it('should have the right PARAMS object', () => assert.deepEqual(PARAMS, { maintenance: true, mongoless: true, test: true }));
