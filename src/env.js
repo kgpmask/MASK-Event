@@ -40,7 +40,7 @@ exports.init = () => {
 		process.exit(1);
 	} else if (PARAMS.maintenance) PARAMS.mongoless = true;
 
-	if (!PARAMS.mongoless ) {
+	if (!PARAMS.mongoless) {
 		try {
 			const file = fs.readFileSync(path.join(
 				__dirname,
