@@ -6,7 +6,7 @@
 
 {% macro field(id, label, value, type = "text") %}
 	<div class="item field">
-		<input type="text" required id="{{ id }}" {% if value %} value="{{ value }}" {% endif %}>
+		<input type="{{type}}" required id="{{ id }}" {% if value %} value="{{ value }}" {% endif %}>
 		<label>{{ label }}</label>
 	</div>
 {% endmacro %}

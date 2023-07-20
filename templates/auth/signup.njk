@@ -7,12 +7,12 @@
 	{% call forms.form() %}
 		{{ forms.heading('h1','Register') }}
 		{{ forms.field('username','Name')}}
-		{{ forms.field('password','Email')}}
-		{{ forms.field('password','Phone number')}}
-		{{ forms.field('password','Roll No')}}
-		{{ forms.field('password','Username')}}
+		{{ forms.field('email','Email')}}
+		{{ forms.field('phonenumber','Phone number')}}
+		{{ forms.field('rollno','Roll No')}}
+		{{ forms.field('username','Username')}}
 		{{ forms.field('password','Password', type='password')}}
-		{{ forms.field('password', 'Confirm Password', type='password')}}
+		{{ forms.field('confirmpassword', 'Confirm Password', type='password')}}
 		{{ forms.button('submit', 'Register') }}
 	{% endcall %}
 {% endblock %}
