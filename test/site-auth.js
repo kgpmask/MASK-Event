@@ -8,7 +8,10 @@ const axios = require('axios');
 const server = require('../src/server');
 const dbh = require('../database/handler');
 
-before(async () => await server.ready()).timeout(10_000);
+before(async () => {
+	this.timeout(10_000);
+	return await server.ready()
+});
 
 const dummyCredential = {
 	_id: 7357,
