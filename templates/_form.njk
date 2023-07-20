@@ -1,12 +1,12 @@
-{% macro heading(h,label) %}
+{% macro heading(h, label) %}
 	<div class="heading">
 		<{{h}}>{{ label }}</{{h}}>
 	</div>
 {% endmacro %}
 
-{% macro field(id, label, value) %}
+{% macro field(id, label, value, type = "text") %}
 	<div class="item field">
-		<input type="text" required id="{{ id }}" {% if value %} value="{{ value }}" {% endif %}>
+		<input type="{{type}}" required id="{{ id }}" {% if value %} value="{{ value }}" {% endif %}>
 		<label>{{ label }}</label>
 	</div>
 {% endmacro %}
@@ -78,7 +78,13 @@
 {% macro button(id, label, onclick) %}
 	<button id="{{ id }}" {% if onclick %} type="button" onclick="{{ onclick }}()" {% else %} type="submit" {% endif %}>{{ label }}</button>
 {% endmacro %}
-
+{% macro link(id, label, anchor, postanchor='', link = '#') %}
+	<div id ="{{ id }}" class="link">
+        <p>
+			{{label}} <a href="{{link}}" class="link-class">{{anchor}}</a> {{ postanchor }}
+		</p>
+    </div>
+{% endmacro %}
 {% macro formCss() %}
 	<link rel="stylesheet" type="text/css" href="/assets/styles/form.css"/>
 {% endmacro %}
