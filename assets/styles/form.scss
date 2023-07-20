@@ -68,7 +68,7 @@ form {
 
 button {
 	align-self: center;
-	margin: 30px 0px;
+	margin: 30px 0px 0px 0px;
 	width: 100%;
 	background-color: var(--red);
 	color: white;
@@ -351,4 +351,19 @@ input[type=date]{
 .radio option label,
 .checkbox option label{
 	color: #b69292;
+}
+.link {
+	font-size: 0.9em;
+	color: var(--off-white);
+	text-align: center;
+	font-weight: 500;
+	margin: 25px 0 10px;
+}
+.link p a {
+	color: var(--white);
+	text-decoration:none;
+	font-weight: 600;
+}
+.link p a:hover {
+	text-decoration: underline;
 }
