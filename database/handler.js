@@ -53,7 +53,7 @@ async function createSession (userId) {
 
 async function removeSession (sessionId) {
 	// Use this if we want to remove sessions after logout
-	await Session.findOneAndDelete({ 'sessionID': sessionId });
+	await Session.findByIdAndDelete(sessionId);
 }
 
 async function removeUser (id) {
