@@ -14,6 +14,32 @@ describe('Server (auth):', () => {
 	it('Should have the right PARAMS object', () => assert.deepEqual(PARAMS, { test: true }));
 });
 
+describe('Signup', () => {
+	it('Should register test user', () => axios.post(`http://localhost:${PORT}/signup`, {
+		_id: 7357,
+		name: 'Test User',
+		roll: '22TS10001',
+		phone: 7357001001,
+		username: 'testuser',
+		password: 'password',
+		email: 'testuser@mail.co'
+	}).then(async res => {
+		assert(res.status === 200);
+	})).timeout(1_000);
+
+	it('Should prevent registering with similar credentials', () => axios.post(`http://localhost:${PORT}/signup`, {
+		_id: 7358,
+		name: 'Test User',
+		roll: '22TS10001',
+		phone: 7357001002,
+		username: 'testuser',
+		password: 'password',
+		email: 'testuser1@mail.co'
+	}).then(() => Promise.resolve(false)).catch(({ response }) => {
+		assert(response.status === 500);
+	})).timeout(1_000);
+});
+
 describe('Should prevent login in case of missing data', () => {
 	it('Blank Username', () => axios.post(`http://localhost:${PORT}/login`,
 		{ username: '   ', password: 'random' }
@@ -61,4 +87,7 @@ describe('Should login to test user successfully', () => it('With test user cred
 ).timeout(process.platform === 'win32' ? 5_000 : 3_000)
 );
 
-after(server.close);
+after(async function () {
+	await dbh.removeTestUser();
+	server.close();
+});

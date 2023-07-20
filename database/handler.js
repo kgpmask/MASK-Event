@@ -56,7 +56,7 @@ async function removeSession (sessionId) {
 }
 
 async function removeTestUser () {
-	await User.deleteOne({ _id: 6969 });
+	await User.deleteOne({ _id: 7358 });
 	return 'Test User Deleted';
 }
 
