@@ -1,14 +1,13 @@
-{% extends _base.njk%}
-{% macro heading(h, label) %}
+{% macro heading(h,label) %}
 	<div class="heading">
-		<{{ h }}>{{ label }}</{{ h }}>
+		<{{h}}>{{ label }}</{{h}}>
 	</div>
 {% endmacro %}
 
 {% macro field(id, label, value) %}
 	<div class="item field">
-		<label>{{ label }}</label>
 		<input type="text" required id="{{ id }}" {% if value %} value="{{ value }}" {% endif %}>
+		<label>{{ label }}</label>
 	</div>
 {% endmacro %}
 
@@ -48,7 +47,7 @@
 {% macro datetime(id, label, value) %}
 	<div class="item datetime">
 		<label>{{ label }}</label>
-		<input type="date" id="{{ id }}" value="{{ value }}">
+		<input type="date" id="{{ id }}" {% if value %} value="{{ value }}" {% endif %}>
 	</div>
 {% endmacro %}
 
@@ -81,7 +80,7 @@
 {% endmacro %}
 
 {% macro formCss() %}
-	<link rel="stylesheet" type="text/scss" href="/assets/styles/forms.scss"/>
+	<link rel="stylesheet" type="text/css" href="/assets/styles/form.css"/>
 {% endmacro %}
 
 {% macro formFunction() %}
