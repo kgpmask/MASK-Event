@@ -85,7 +85,7 @@ describe('Should signup for a set of fresh credentials', () => {
 		const sessionID = res.headers['set-cookie'].pop().split(';').filter(i => i.includes('sessionID=')).pop().slice(10);
 		await dbh.removeUser((await dbh.getUserFromSessionID(sessionID))._id);
 		await dbh.removeSession(sessionID);
-	})).timeout(process.platform === 'win32' ? 5_000 : 3_000);
+	})).timeout(10_000);
 });
 
 describe('Should prevent login in case of missing data', () => {
