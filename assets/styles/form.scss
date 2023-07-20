@@ -360,10 +360,7 @@ input[type=date]{
 	margin: 25px 0 10px;
 }
 .link p a {
-	color: var(--white);
-	text-decoration:none;
-	font-weight: 600;
-}
-.link p a:hover {
+	// color: var(--white);
 	text-decoration: underline;
+	font-weight: 600;
 }

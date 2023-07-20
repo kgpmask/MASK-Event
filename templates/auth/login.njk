@@ -9,11 +9,11 @@
 
 {% block pagecontent %}
 	{% call forms.form() %}
-		{{ forms.heading('h1','Event Login') }}
+		{{ forms.heading('h1','Login') }}
+		{{ forms.link('registerlink', "New to our site? ", 'Register Now!', link='/signup' )}}
 		{{ forms.field('username','Username')}}
 		{{ forms.field('password','Password',type='password')}}
 		{{ forms.button('submit', 'Login') }}
-		{{ forms.link('registerlink', "New to our site? ", 'Register Now!' )}}
 	{% endcall %}
 {% endblock %}
 

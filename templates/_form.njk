@@ -78,10 +78,10 @@
 {% macro button(id, label, onclick) %}
 	<button id="{{ id }}" {% if onclick %} type="button" onclick="{{ onclick }}()" {% else %} type="submit" {% endif %}>{{ label }}</button>
 {% endmacro %}
-{% macro link(id, label, anchor, link = "#") %}
+{% macro link(id, label, anchor, postanchor='', link = '#') %}
 	<div id ="{{ id }}" class="link">
         <p>
-			{{label}}<a href="{{link}}" class="link-class">{{anchor}}</a>
+			{{label}} <a href="{{link}}" class="link-class">{{anchor}}</a> {{ postanchor }}
 		</p>
     </div>
 {% endmacro %}
