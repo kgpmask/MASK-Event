@@ -14,6 +14,7 @@
 		"prepare": "husky install",
 		"mocha-all": "cross-env NODE_ENV=test mocha test/**.js --parallel --exit",
 		"mocha": "cross-env NODE_ENV=test mocha --exit",
+		"start": "node .",
 		"test": "npm run lint && npm run mocha-all && echo \"Passing all tests.\" & exit 0",
 		"update-branch": "git fetch $(git rev-parse --symbolic-full-name --abbrev-ref @{upstream} | sed 's!/! !') && git merge FETCH_HEAD"
 	},

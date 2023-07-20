@@ -189,4 +189,5 @@ Your PR will be approved when two of the following conditions are met:
 ### Team Head  
 - [Vidunram A R](https://github.com/Goose-Of-War)
 ### Team Members  
+- [Sahil Patel](https://github.com/Symbiot01)
 > _will be added as they contribute_
