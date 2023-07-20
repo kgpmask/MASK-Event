@@ -1,13 +1,13 @@
 {% macro heading(h, label) %}
 	<div class="heading">
-		<{{ h }}>{{ label }}</{{ h }}>
+		<{{h}}>{{ label }}</{{h}}>
 	</div>
 {% endmacro %}
 
 {% macro field(id, label, value, type = "text") %}
 	<div class="item field">
+		<input type="text" required id="{{ id }}" {% if value %} value="{{ value }}" {% endif %}>
 		<label>{{ label }}</label>
-		<input type="{{ type }}" required id="{{ id }}" {% if value %} value="{{ value }}" {% endif %}>
 	</div>
 {% endmacro %}
 
@@ -47,7 +47,7 @@
 {% macro datetime(id, label, value) %}
 	<div class="item datetime">
 		<label>{{ label }}</label>
-		<input type="date" id="{{ id }}" value="{{ value }}">
+		<input type="date" id="{{ id }}" {% if value %} value="{{ value }}" {% endif %}>
 	</div>
 {% endmacro %}
 

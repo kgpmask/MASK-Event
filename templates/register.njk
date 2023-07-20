@@ -1,0 +1,41 @@
+{% extends '_base.njk' %}
+{% import '_form.njk' as forms %}
+
+{% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
+
+{% block pagecontent %}
+	{% call forms.form() %}
+        {{ forms.heading('h1','Login') }}
+        {{ forms.field('username','Username')}}
+        {{ forms.field('email','Email')}}
+        {{ forms.field('password','Password')}}
+        {{ forms.field('confirm-password','Confirm Password')}}
+		{{ forms.datetime('dob','DOB')}}
+		{{ forms.radio('member', 'Are you a KGPian?',[{'label': 'Yes', 'value': 'true'},{'label' : 'No', 'value' : 'false'}])}}
+		{{ forms.checkbox('mask', 'Are you a member of Mask?' ,[
+		{'label' : 'No', 'value' : 'false'},
+		{'label': 'Design', 'value': 'dna'},
+		{'label': 'AMV', 'value': 'amv'},
+        {'label': 'MN', 'value': 'mn'},
+		{'label': 'Webdev', 'value': 'webdev'},
+		{'label': 'Quiz', 'value': 'quiz'}])}}
+		{{forms.button('register-button','Register', 'function')}}
+	{% endcall %}
+{% endblock %}
+
+{% block customcss %}
+	{{ forms.formCss() }}
+	<style>
+		{# Extra Styles #}
+	</style>
+{% endblock %}
+
+{% block customjs %}
+	{{ forms.formFunction() }}
+	<script>
+		axios.defaults.withCredentials = true;
+		axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
+
+		{# Other Functions #}
+	</script>
+{% endblock %}
