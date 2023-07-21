@@ -1,6 +1,6 @@
 {
 	"name": "mask-event",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "A lighter site made for events using github.com/kgpmask/MASK as a base",
 	"main": "src/server.js",
 	"directories": {
@@ -38,7 +38,7 @@
 		"cookie-parser": "^1.4.6",
 		"express": "^5.0.0-beta.1",
 		"express-validator": "^7.0.1",
-		"mongoose": "^7.2.4",
+		"mongoose": "^7.4.0",
 		"nunjucks": "^3.2.4",
 		"sass": "^1.63.4"
 	},
