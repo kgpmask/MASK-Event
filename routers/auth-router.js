@@ -47,14 +47,14 @@ router.post('/signup', [
 		.trim()
 		.notEmpty().withMessage('No Roll Provided')
 		.matches(/^[12][890123][A-Z]{2}[0-9][A-Z0-9]{2}\d\d$/i).withMessage('Please provide a valid roll number'),
-	body('phone')
-		.trim()
-		.notEmpty().withMessage('No Phone Number Provided')
-		.isMobilePhone('en-IN').withMessage('Please provide a valid phone number'),
 	body('email')
 		.trim()
 		.notEmpty().withMessage('No Email Provided')
 		.isEmail().withMessage('Please provide a valid email'),
+	body('phone')
+		.trim()
+		.notEmpty().withMessage('No Phone Number Provided')
+		.isMobilePhone('en-IN').withMessage('Please provide a valid phone number'),
 	body('username')
 		.trim()
 		.notEmpty().withMessage('No Username Provided')

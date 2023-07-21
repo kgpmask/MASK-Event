@@ -40,12 +40,16 @@
 			data.roll = data.roll.toUpperCase();
 			if (data.password === data.confirmpassword) {
 				delete data.confirmpassword;
-				console.log(data)
+				axios.post('/signup', data)
+				.then(() => window.location.href = '/')
+				.catch(e => {
+					console.log(e);
+					return alert(e.response.data);
+				});	
 			}
 			else {
-				console.log('Pasword and confirm password doesnot match');
+				return alert('Pasword and confirm password doesnot match');
 			}
-			console.log(data);
 		}
 	</script>
 {% endblock %}

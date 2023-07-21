@@ -9,7 +9,8 @@ const userSchema = new mongoose.Schema({
 	username: { type: String, required: true, unique: true },
 	salt: { type: String, required: true },
 	hash: { type: String, required: true },
-	image: String
+	image: String,
+	isAdmin: Boolean
 }, { collection: 'event-users' });
 
 module.exports = mongoose.model('User', userSchema);
