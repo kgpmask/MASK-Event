@@ -29,7 +29,7 @@ describe('Server (auth):', () => {
 
 	it('Should have the right PARAMS object', () => assert.deepEqual(PARAMS, { test: true }));
 
-	['/login', '/signup'].forEach(page => it(`Should render ${page} page`,
+	['/login', '/signup', '/logout'].forEach(page => it(`Should render ${page} page`,
 		() => axios.get(`http://localhost:${PORT}${page}`)
 			.then(res => assert(res.status === 200))
 	).timeout(3_000));
@@ -137,6 +137,16 @@ describe('Should login to test user successfully', () => it('With test user cred
 		await dbh.removeSession(sessionID);
 	})
 ).timeout(process.platform === 'win32' ? 5_000 : 3_000)
+);
+
+describe('Should logout properly', () => it('Using a dummy session', () => {
+	axios.post(`http://localhost:${PORT}/logout`, {}, {
+		headers: { 'set-cookie': ['sessionID=you-are-already-dead'] }
+	}).then(res => {
+		assert(res.status === 200);
+		assert(res.data === 'Signed out successfully. Mata ne.');
+	})
+})
 );
 
 after(async function () {
