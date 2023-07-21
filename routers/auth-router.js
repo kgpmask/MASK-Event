@@ -2,6 +2,12 @@ const router = require('express').Router();
 const dbh = require('../database/handler');
 const { body, validationResult } = require('express-validator');
 
+router.use((req, res, next) => {
+	return PARAMS.mongoless ?
+		req.method === 'GET' ? res.forbidden() : res.status(403).send('Forbidden: Mongoless mode')
+		: next();
+});
+
 router.get('/login', (req, res) => {
 	if (req.loggedIn) return res.redirect('/');
 	return res.renderFile('auth/login.njk');

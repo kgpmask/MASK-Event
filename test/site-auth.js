@@ -28,6 +28,11 @@ describe('Server (auth):', () => {
 	});
 
 	it('Should have the right PARAMS object', () => assert.deepEqual(PARAMS, { test: true }));
+
+	['/login', '/signup'].forEach(page => it(`Should render ${page} page`,
+		() => axios.get(`http://localhost:${PORT}${page}`)
+			.then(res => assert(res.status === 200))
+	).timeout(3_000));
 });
 
 describe('Should prevent signup in case of invalid data', () => {
