@@ -12,13 +12,13 @@
 		{{ forms.heading('h1','Register') }}
 		{{ forms.link('loginlink', 'Already have an acount? ', 'Click here', 'to Login', '/login')}}
 		{{ forms.field('name','Name')}}
-		{{ forms.field('rollno','Roll No')}}
+		{{ forms.field('roll','Roll No')}}
 		{{ forms.field('email','Email', type'email')}}
-		{{ forms.field('phonenumber','Phone number')}}
+		{{ forms.field('phone','Phone number')}}
 		{{ forms.field('username','Username')}}
 		{{ forms.field('password','Password', type='password')}}
 		{{ forms.field('confirmpassword', 'Confirm Password', type='password')}}
-		{{ forms.button('submit', 'Register') }}
+		{{ forms.button('submit', 'Register', 'signup') }}
 	{% endcall %}
 {% endblock %}
 
@@ -35,6 +35,21 @@
 		axios.defaults.withCredentials = true;
 		axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
 
-		{# Other Functions #}
+		function signup() {
+			const data = getData();
+			data.roll = data.roll.toUpperCase();
+			if (data.password === data.confirmpassword) {
+				delete data.confirmpassword;
+				axios.post('/signup', data)
+				.then(() => window.location.href = '/')
+				.catch(e => {
+					console.log(e);
+					return alert(e.response.data);
+				});	
+			}
+			else {
+				return alert('Pasword and confirm password doesnot match');
+			}
+		}
 	</script>
 {% endblock %}

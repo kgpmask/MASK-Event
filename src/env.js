@@ -48,13 +48,13 @@ exports.init = () => {
 			));
 			const env = JSON.parse(file);
 			for (const property in env) process.env[property] = process.env[property] ?? env[property];
-			if (!PARAMS.prod) process.env.MONGO_URL = PARAMS.local ? 'mongodb://127.0.0.1/mask' : process.env.MONGO_TEST_URL;
 		} catch (e) {
 			if (!PARAMS.test) console.log(e.code === 'ENOENT' ? 'Unable to find credentials.json. Starting in mongoless mode.' : e);
-			if (!process.env.MONGO_URL) {
+			if (!process.env.MONGO_URL && !process.env.MONGO_TEST_URL) {
 				console.log('Starting in mongoless mode.');
 				PARAMS.mongoless = true;
 			}
 		}
+		if (!PARAMS.prod) process.env.MONGO_URL = PARAMS.local ? 'mongodb://127.0.0.1/mask' : process.env.MONGO_TEST_URL;
 	}
 };

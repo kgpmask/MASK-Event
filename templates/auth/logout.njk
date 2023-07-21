@@ -1,0 +1,51 @@
+{% extends "_base.njk" %}
+{% import '_form.njk' as forms %}
+
+{% set thispage = 'login' %}
+{% set pagetitle = 'Login' %}
+
+{% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
+
+{% block pagecontent %}
+	{% call forms.form() %}
+		{{ forms.heading('h3','Are you sure you want to logout?') }}
+		{{ forms.button('return', 'No, Return to Home', 'back') }}
+		{{ forms.button('logout', 'Yes, Logout', 'logout') }}
+	{% endcall %}
+
+{% endblock %}
+
+{% block customcss %}
+	{{ forms.formCss() }}
+	<style>
+		#return {
+			background-color: #1bc90f;
+		}
+	</style>
+{% endblock %}
+
+{% block customjs %}
+<script>
+	const logout = () => {
+		axios.post('/logout')
+			.then(() => {
+				document.querySelector('form').innerHTML = '<h3> Logged Out Successfully </h3>';
+				setTimeout(() => window.location.href = '/', 1_500);
+			})
+			.catch(err => {
+				console.log(err);
+				return alert(err.response.data.errors[0]);
+			});
+	}
+
+	const back = () => {
+		window.location.href = '/';
+	}
+
+	window.onload = () => {
+		document.querySelector('#logout').onclick = logout;
+		document.querySelector('#return').onclick = back;
+	}
+</script>
+{% endblock %}
+
