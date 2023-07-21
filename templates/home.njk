@@ -1,6 +1,95 @@
 {% extends '_base.njk' %}
 
 {% block pagecontent %}
-	<h1> Coming Sooner... </h1>
-	<span style="font-size: 1.1em;"> Meanwhile, visit our <a href="https://kgpmask.club"> main website </a> </span>
+    <div class="heading">
+		<p>
+			Anime Quiz Bonanza
+		</p>
+	</div>
+    <p class="p">Join Us for a Night of Anime Trivia Fun!</p>
+      <div class="wrapper">
+			<div class="clock-container">
+				<div class="clock-col">
+					<p id="clock-day" class="clock-timer">00
+					</p>
+					<p class="clock-label">
+					Day
+					</p>
+				</div>
+				<div class="clock-col">
+					<p id="clock-hours" class="clock-timer">00
+					</p>
+					<p class="clock-label">
+					Hours
+					</p>
+				</div>
+				<div class="clock-col">
+					<p id="clock-minutes" class="clock-timer">00
+					</p>
+					<p class="clock-label">
+					Minutes
+					</p>
+				</div>
+				<div class="clock-col">
+					<p id="clock-seconds" class="clock-timer">00
+					</p>
+					<p class="clock-label">
+					Seconds
+					</p>
+				</div>
+			</div>
+         {# <div className="text-wrapper-5">Coming Soon!</div>
+          <div className="container-border" />
+          <div className="container" />
+          <img className="prizes" alt="Prizes" src="prizes.svg" />
+          <img className="rules" alt="Rules" src="rules.svg" /> #}
+        </div>
+      </div>
 {% endblock %}
+{% block customcss %}
+<style>
+.heading{
+	font-size: 4.5rem;
+	font-weight: bold;
+	color: var(--white);
+}
+.clock-container{
+	display: flex;
+	align-items: center;
+	justify-content:center;
+}
+.clock-col{
+	display: flex;
+	flex-direction:column;
+	margin: 2rem;
+	pading: 2rem;
+	border: 2px solid var(--white);
+	height: 7rem;
+	aspect-ratio: 1.2;
+}
+.clock-timer{
+	font-size: 4rem;
+}
+</style>
+{% endblock %}
+{% block customjs %}
+<script>
+let eventdate = new Date("Sept 03, 2023 14:00:00").getTime();
+let x = setInterval(function(){
+	let now = new Date().getTime();
+	let timer = eventdate - now;
+
+	let days = Math.floor(timer/(1000*60*60*24));
+	let totalhrs = Math.floor(timer/(1000*60*60));
+	let hrs = Math.floor((timer%(1000*60*60*24))/(1000*60*60));
+	let mins = Math.floor((timer%(1000*60*60))/(1000*60));
+	let secs = Math.floor((timer%(1000*60))/(1000));
+
+	document.getElementById("clock-day").innerHTML = days;
+	document.getElementById("clock-hours").innerHTML = hrs;
+	document.getElementById("clock-minutes").innerHTML = mins;
+	document.getElementById("clock-seconds").innerHTML = secs;
+},1000);
+</script>
+{% endblock %}
+
