@@ -139,16 +139,17 @@ describe('Should login to test user successfully', () => it('With test user cred
 ).timeout(process.platform === 'win32' ? 5_000 : 3_000)
 );
 
-describe('Should logout properly', () => it('Using a dummy session', () => {
-	axios.post(`http://localhost:${PORT}/logout`, {}, {
-		headers: { 'set-cookie': ['sessionID=you-are-already-dead'] }
-	}).then(res => {
-		assert(res.status === 200);
-		assert(res.data === 'Signed out successfully. Mata ne.');
+describe('Should logout properly', () => {
+	it('Using a dummy session', () => {
+		axios.post(`http://localhost:${PORT}/logout`, {}, {
+			headers: { 'set-cookie': ['sessionID=you-are-already-dead'] }
+		}).then(res => {
+			assert(res.status === 200);
+			assert(res.data === 'Signed out successfully. Mata ne.');
+		});
 	});
-})
-);
 
-after(async function () {
-	server.close();
+	after(async function () {
+		server.close();
+	});
 });
