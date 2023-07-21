@@ -96,6 +96,8 @@
 			[...document.getElementsByClassName('item')].map(e => {
 				switch (e.classList[1]) {
 					case 'field':
+						data[e.children[0].id] = e.children[0].value;
+						break;
 					case 'datetime':
 						data[e.children[1].id] = e.children[1].value;
 						break;

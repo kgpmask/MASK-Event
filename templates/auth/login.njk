@@ -13,7 +13,7 @@
 		{{ forms.link('registerlink', "New to our site? ", 'Register Now!', link='/signup' )}}
 		{{ forms.field('username','Username')}}
 		{{ forms.field('password','Password',type='password')}}
-		{{ forms.button('submit', 'Login') }}
+		{{ forms.button('submit', 'Login', 'login') }}
 	{% endcall %}
 {% endblock %}
 
@@ -30,6 +30,9 @@
 		axios.defaults.withCredentials = true;
 		axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
 
-		{# Other Functions #}
+		function login() {
+			const data = getData();
+			console.log(data);
+		}
 	</script>
 {% endblock %}
