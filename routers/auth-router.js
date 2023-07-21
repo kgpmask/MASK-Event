@@ -4,17 +4,17 @@ const { body, validationResult } = require('express-validator');
 
 router.get('/login', (req, res) => {
 	if (req.loggedIn) return res.redirect('/');
-	return res.renderFile('login.njk');
+	return res.renderFile('auth/login.njk');
 });
 
 router.get('/logout', (req, res) => {
 	if (!req.loggedIn) return res.redirect('/login');
-	return res.renderFile('logout.njk');
+	return res.renderFile('auth/logout.njk');
 });
 
 router.get('/signup', (req, res) => {
 	if (req.loggedIn) return res.redirect('/');
-	return res.renderFile('signup.njk');
+	return res.renderFile('auth/signup.njk');
 });
 
 // Post requests here
