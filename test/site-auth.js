@@ -145,7 +145,7 @@ describe('Should logout properly', () => it('Using a dummy session', () => {
 	}).then(res => {
 		assert(res.status === 200);
 		assert(res.data === 'Signed out successfully. Mata ne.');
-	})
+	});
 })
 );
 
