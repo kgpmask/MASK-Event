@@ -1,6 +1,146 @@
 {% extends '_base.njk' %}
 
 {% block pagecontent %}
-	<h1> Coming Sooner... </h1>
-	<span style="font-size: 1.1em;"> Meanwhile, visit our <a href="https://kgpmask.club"> main website </a> </span>
+    <div class="heading animate-pop-in">
+		<p>
+			Anime Quiz Bonanza
+		</p>
+	</div>
+    <p class="p animate-pop-in">Join Us for a Night of Anime Trivia Fun!</p>
+      <div class="wrapper animate-pop-in">
+			<div class="clock-container">
+				<div class="clock-col">
+					<p id="clock-day" class="clock-timer">00
+					</p>
+					<p class="clock-label">
+					Day
+					</p>
+				</div>
+				<div class="clock-col">
+					<p id="clock-hours" class="clock-timer">00
+					</p>
+					<p class="clock-label">
+					Hours
+					</p>
+				</div>
+				<div class="clock-col">
+					<p id="clock-minutes" class="clock-timer">00
+					</p>
+					<p class="clock-label">
+					Minutes
+					</p>
+				</div>
+				<div class="clock-col">
+					<p id="clock-seconds" class="clock-timer">00
+					</p>
+					<p class="clock-label">
+					Seconds
+					</p>
+				</div>
+			</div>
+         {# <div className="text-wrapper-5">Coming Soon!</div>
+          <div className="container-border" />
+          <div className="container" />
+          <img className="prizes" alt="Prizes" src="prizes.svg" />
+          <img className="rules" alt="Rules" src="rules.svg" /> #}
+        </div>
+		<div class = "rules">
+<svg class="ionicon" viewBox="0 0 512 512">
+<path d="M416 221.25V416a48 48 0 01-48 48H144a48 48 0 01-48-48V96a48 48 0 0148-48h98.75a32 32 0 0122.62 9.37l141.26 141.26a32 32 0 019.37 22.62z"
+ fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32"/>
+<path d="M256 56v120a32 32 0 0032 32h120M176 288h160M176 368h160" fill="none" stroke="currentColor"
+ stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/></svg>
+		</div>
+      </div>
+{% endblock %}
+{% block customcss %}
+<style>
+.js-loading *, .js-loading *:before, .js-loading *:after {
+  -webkit-animation-play-state: paused !important;
+          animation-play-state: paused !important;
+}
+
+.animate-pop-in {
+  -webkit-animation: no-transform .6s cubic-bezier(0, 0.9, 0.3, 1.2) forwards;
+          animation: no-transform .6s cubic-bezier(0, 0.9, 0.3, 1.2) forwards;
+  opacity: 0;
+  -webkit-transform: translateY(-4rem) scale(.8);
+          transform: translateY(-4rem) scale(.8);
+}
+.heading{
+	font-size: 4.5rem;
+	font-weight: bold;
+	color: var(--white);
+}
+.clock-container{
+	display: flex;
+	align-items: center;
+	justify-content:center;
+}
+.clock-col{
+	display: flex;
+	flex-direction:column;
+	margin: 2rem;
+	pading: 2rem;
+	border: 2px solid var(--white);
+	height: 7rem;
+	aspect-ratio: 1.2;
+}
+.clock-timer{
+	font-size: 4rem;
+}
+
+.heading {
+  -webkit-animation-delay: .6s;
+          animation-delay: .6s;
+}
+.p {
+  -webkit-animation-delay: .8s;
+          animation-delay: .8s;
+}
+.clock-container,
+.clock-timer,
+.wrapper {
+  -webkit-animation-delay: 1.0s;
+          animation-delay: 1.0s;
+}
+.rules{
+	scale: 0.1;
+}
+body{
+  -webkit-animation: no-transform 2s .5s cubic-bezier(0, 0.5, 0, 1) forwards;
+          animation: no-transform 2s .5s cubic-bezier(0, 0.5, 0, 1) forwards;
+}
+{# Animations #}
+
+
+@-webkit-keyframes no-transform {
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+            transform: none;
+  }
+}
+</style>
+{% endblock %}
+{% block customjs %}
+<script>
+
+let eventdate = new Date("Sept 03, 2023 14:00:00").getTime();
+let x = setInterval(function(){
+	let now = new Date().getTime();
+	let timer = eventdate - now;
+
+	let days = Math.floor(timer/(1000*60*60*24));
+	let totalhrs = Math.floor(timer/(1000*60*60));
+	let hrs = Math.floor((timer%(1000*60*60*24))/(1000*60*60));
+	let mins = Math.floor((timer%(1000*60*60))/(1000*60));
+	let secs = Math.floor((timer%(1000*60))/(1000));
+
+	document.getElementById("clock-day").innerHTML = days;
+	document.getElementById("clock-hours").innerHTML = hrs;
+	document.getElementById("clock-minutes").innerHTML = mins;
+	document.getElementById("clock-seconds").innerHTML = secs;
+},1000);
+</script>
 {% endblock %}
