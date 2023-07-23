@@ -211,7 +211,6 @@ span.float-middle {
 	display: flex;
 	width: 100%;
 	align-items: center;
-	padding: 3px 0px 3px 0px;
 }
 
 .navbar-container {
@@ -225,6 +224,7 @@ span.float-middle {
 
 .navbar-full li a,
 .dropbtn {
+	padding: 3px 0px 3px 0px;
 	display: block;
 	padding: 14px 16px;
 	text-align: center;
