@@ -51,6 +51,13 @@ async function createSession (userId) {
 	return sessionId;
 }
 
+// async function createDummySession () {
+// 	return new Session({
+// 		_id: 'you-are-already-dead',
+// 		userID: 7357
+// 	});
+// }
+
 async function removeSession (sessionId) {
 	// Use this if we want to remove sessions after logout
 	await Session.findByIdAndDelete(sessionId);
@@ -67,6 +74,7 @@ module.exports = {
 	getUserByUsername,
 	getUserFromSessionID,
 	createSession,
+	// createDummySession,
 	removeSession,
 	removeUser
 };
