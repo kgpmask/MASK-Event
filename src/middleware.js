@@ -1,12 +1,24 @@
+const cookieParser = require('cookie-parser');
 const express = require('express');
 const path = require('path');
+const dbh = require('../database/handler');
 
 module.exports = function initMiddleware (app) {
 	app.use(express.json());
 	app.use(express.urlencoded({ extended: true }));
+	app.use(cookieParser());
 	app.use('/assets', express.static(path.join(__dirname, '..', 'assets')));
 
-	// need to add for login as well
+	app.use(async (req, res, next) => {
+		try {
+			const { sessionID } = req.cookies;
+			if (!sessionID) return next();
+			req.user = await dbh.getUserFromSessionID(sessionID);
+		} catch (err) {
+			res.clearCookie('sessionID');
+		}
+		next();
+	});
 
 	app.use((req, res, next) => {
 		res.renderFile = (files, ctx) => {
@@ -46,7 +58,7 @@ module.exports = function initMiddleware (app) {
 
 	app.use((req, res, next) => {
 		res.locals.mongoless = PARAMS.mongoless;
-		// need to add req.loggedIn once we have the login system up and running
+		req.loggedIn = res.locals.loggedIn = Boolean(req.user);
 		next();
 	});
 };

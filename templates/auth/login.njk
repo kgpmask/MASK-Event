@@ -1,0 +1,43 @@
+{% extends '_base.njk' %}
+{% import '_form.njk' as forms %}
+
+{% set thispage = 'login' %}
+{% set pagetitle = 'Login' %}
+{% set pagedesc = 'Login to Manga and Anime Society Kharagpur [MASK]! site' %}
+
+{% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
+
+{% block pagecontent %}
+	{% call forms.form() %}
+		{{ forms.heading('h1','Login') }}
+		{{ forms.link('registerlink', "New to our site? ", 'Register Now!', link='/signup' )}}
+		{{ forms.field('username','Username')}}
+		{{ forms.field('password','Password',type='password')}}
+		{{ forms.button('submit', 'Login', 'login') }}
+	{% endcall %}
+{% endblock %}
+
+{% block customcss %}
+	{{ forms.formCss() }}
+	<style>
+		{# extra css #}
+	</style>
+{% endblock %}
+
+{% block customjs %}
+	{{ forms.formFunction() }}
+	<script>
+		axios.defaults.withCredentials = true;
+		axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
+
+		function login() {
+			const data = getData();
+			axios.post('/login', data)
+			.then(() => window.location.href = '/')
+			.catch(err => {
+				console.log(err);
+				return alert(err.response.data);
+			});
+		}
+	</script>
+{% endblock %}
