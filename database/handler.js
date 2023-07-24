@@ -19,6 +19,10 @@ async function createUser (userData) {
 	return user._id;
 }
 
+async function getUsers () {
+	return await User.find().lean().sort({ 'name': 1 });
+}
+
 async function getUserByUsername (username) {
 	return await User.findOne({ 'username': `${username}` });
 }
@@ -64,6 +68,7 @@ async function removeUser (id) {
 module.exports = {
 	createUser,
 	validateUser,
+	getUsers,
 	getUserByUsername,
 	getUserFromSessionID,
 	createSession,
