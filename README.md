@@ -8,7 +8,10 @@ This repository uses the MASK Website [repository](https://github.com/kgpmask/MA
 ## Dependencies  
 Most of the dependencies used are pretty much the same as the ones used in the MASK repository:
 - `axios`: An API used for sending HTTP requests and testing.
+- `bcrypt`: A library to help has functions.
+- `cookie-parser`: Creates a cookie parser middleware.
 - `express`: A lightweight framework for running the server.
+- `express-validator`: A middleware for validating the body of requests.
 - `mongoose`: An ORM used to work with MongoDB.
 - `nunjucks`: A templating engine similar to Jinja.
 - `sass`: A preprocessor for making CSS files.
