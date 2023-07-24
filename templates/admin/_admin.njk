@@ -1,10 +1,10 @@
 {% extends '_base.njk' %}
 
-{% set navlinks=[{
-	href: 'list-users',
+{% set adminlinks = [{
+	href: 'admin/list-users',
 	name: 'List Users'
 },{
-	href: 'quiz-master',
+	href: 'admin/quiz-master',
 	name: 'Quiz Portal'
 }] %}
 
@@ -14,7 +14,7 @@
 			<li><a href="/" style="padding:0px 16px;vertical-align:middle;" class="nohover" target="_self"><img src="/assets/logo.jpeg" alt="Logo" width="100%" height="100%" id="navbar-logo"/></a></li>
 			<span class="navbar-line">&nbsp;</span>
 			<div class="navbar-container">
-				{% for link in navlinks %}
+				{% for link in adminlinks %}
 					<li><a href="/{{ link.href }}" {% if link.href === thispage %} class="active-page" {% endif %} target="_self">{{ link.name }}</a></li>
 				{% endfor %}
 			</div>
