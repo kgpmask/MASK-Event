@@ -1,4 +1,6 @@
-{% set navlinks = [] %}
+{% set navlinks = [
+	{ name: 'Main Website', href: 'https://kgpmask.club' }
+] %}
 {# array elements: { name, href } #}
 
 <!doctype html>
@@ -35,16 +37,17 @@
 								{% endfor %}
 							</div>
 							<div style="float:right;" id="dropdown">
-								{# <a href="/about" class="dropbtn" target="_self">About</a>
-								<div class="dropdown-content">
-									<a href="/about" {% if 'about' === thispage %} class="active-page" {% endif %} target="_self">Our Society</a>
-									<a href="/members" {% if 'members' === thispage %} class="active-page" {% endif %} target="_self">Our Members</a>
-									{% if loggedIn %}
-										<a href="/profile" class="{% if 'profile' === thispage %}active-page {% endif %}{% if mongoless %}disabled {% endif %}" target="_self">Profile</a>
-									{% else %}
-										<a href="/login" class="{% if 'login' === thispage %}active-page {% endif %}{% if mongoless %}disabled {% endif %}" target="_self">Login</a>
-									{% endif %}
-								</div> #}
+								{% if not loggedIn %}
+									<a href="/login" class="dropbtn {{ 'active-page' if thispage === 'login' }}" target="_self">Login</a>
+									<div class="dropdown-content">
+										<a href="/signup" class="{% if 'register' === thispage %}active-page {% endif %}{% if mongoless %}disabled {% endif %}" target="_self"> Register </a>
+									</div>
+								{% else %}
+									<a href="/profile" class="dropbtn {{ 'active-page' if thispage === 'profile' }}" target="_self" disabled>Profile</a>
+									<div class="dropdown-content">
+											<a href="/logout" class="{% if 'logout' === thispage %}active-page {% endif %}{% if mongoless %}disabled {% endif %}" target="_self">Logout</a>
+									</div>
+								{% endif %}
 							</div>
 						</ul>
 					</div>
@@ -58,14 +61,17 @@
 						{% endfor %}
 						{# <a href="/about" target="_self"><div class="lettuce{% if 'about' == thispage %} active-page {% endif %}" id="most-bottom">Our Society</div></a>
 						<hr class="minor lower-border"/>
-						<a href="/members" target="_self"><div class="lettuce{% if 'members' == thispage %} active-page{% endif %}" id="almost-bottom">Our Members</div></a>
-						<hr class="minor lower-border lower-border-upper"/>
+						<a href="/members" target="_self"><div class="lettuce{% if 'members' == thispage %} active-page{% endif %}" id="almost-bottom">Our Members</div></a> #}
 						{% if loggedIn %}
-							<a href="/profile" target="_self"><div class="lettuce{% if 'profile' == thispage %} active-page{% endif %}{% if mongoless %} disabled{% endif %}" id="top-bottom">Profile</div></a>
+							<a href="/profile" target="_self"><div class="lettuce{% if 'profile' == thispage %} active-page{% endif %}{% if mongoless %} disabled{% endif %}" id="almost-bottom">Profile</div></a>
+							<hr class="minor lower-border">
+							<a href="/logout" target="_self"><div class="lettuce{% if 'logout' == thispage %} active-page{% endif %}{% if mongoless %} disabled{% endif %}" id="most-bottom"> Logout </div></a>
 						{% else %}
-							<a href="/login" target="_self"><div class="lettuce{% if 'login' == thispage %} active-page{% endif %}{% if mongoless %} disabled{% endif %}" id="top-bottom">Login</div></a>
+							<a href="/login" target="_self"><div class="lettuce{% if 'login' == thispage %} active-page{% endif %}{% if mongoless %} disabled{% endif %}" id="almost-bottom"> Login </div></a>
+							<hr class="minor lower-border">
+							<a href="/signup" target="_self"><div class="lettuce{% if 'register' == thispage %} active-page{% endif %}{% if mongoless %} disabled{% endif %}" id="most-bottom"> Register </div></a>
 						{% endif %}
-						<hr class="border-bottom"/> #}
+						<hr class="border-bottom"/>
 					</div>
 					<script>
 						document.querySelector('.burger').addEventListener('click', function () {
@@ -77,14 +83,13 @@
 				{% endblock %}
 				<div id="pagecontent">
 					{% block pagecontent %}
-						
-							Huh, this is an empty page.
+						Huh, this is an empty page.
 					{% endblock %}
 				<div>
 			</div>
 			<footer>
 				<a id="footer-logo" href="/"><img src="/assets/logo.jpeg" alt="MASK"/></a>
-				<a href="/" id="footer-name"><p>Manga & Anime<br/>Society Kharagpur</p></a>
+				<a href="/" id="footer-name"><p>Manga and Anime<br/>Society Kharagpur</p></a>
 				<div id="contact-us"><span class="float-middle">Find us!</span></div>
 				<a href="https://www.youtube.com/@maskiitkgp" target="_blank" target="_self" class="social-link"><img class="social-icon" src="/assets/icons/youtube.png" alt="Youtube"/></a>
 				<a href="https://www.instagram.com/maskiitkgp" target="_blank" target="_self" class="social-link"><img class="social-icon" src="/assets/icons/instagram.png" alt="Instagram"/></a>

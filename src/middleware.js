@@ -58,8 +58,7 @@ module.exports = function initMiddleware (app) {
 
 	app.use((req, res, next) => {
 		res.locals.mongoless = PARAMS.mongoless;
-		// need to add req.loggedIn once we have the login system up and running
-		req.loggedIn = res.locals.loggedIn = req.user ? true : false; // does this work ?
+		req.loggedIn = res.locals.loggedIn = Boolean(req.user);
 		next();
 	});
 };
