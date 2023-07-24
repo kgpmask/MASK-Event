@@ -20,7 +20,7 @@ async function createUser (userData) {
 }
 
 async function getUsers () {
-	return await User.find().lean().sort({ 'name': 1 });
+	return await User.find({ _id: { $gt: 10000 } }).lean();
 }
 
 async function getUserByUsername (username) {
