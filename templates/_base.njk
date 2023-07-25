@@ -94,22 +94,6 @@
 			{% block autoscroll %}
 				<script>
 					window.scrollTo(0, 0);
-
-			let learnmore = document.getElementById('learnmore');
-			learnmore.addEventListener('click', (e) =>{
-				smoothScroll(document.getElementById('pagetwo'))
-			})
-			// Prepare the body tag by adding a "js-paused" class
-			document.body.className = 'js-loading';
-
-			// Listen for when everything has loaded
-			window.addEventListener("load", showPage, false);
-
-			function showPage() {
-				console.log("loaded");
-				// Remove the "js-paused" class
-				document.body.removeAttribute('class');
-			}
 				</script>
 			{% endblock %}
 		</div>
