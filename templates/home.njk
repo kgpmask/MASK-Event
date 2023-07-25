@@ -1,57 +1,76 @@
 {% extends '_base.njk' %}
 
 {% block pagecontent %}
+	<div id = "pageone">
     <div class="heading animate-pop-in">
 		<p>
 			Anime Quiz Bonanza
 		</p>
 	</div>
     <p class="p animate-pop-in">Join Us for a Night of Anime Trivia Fun!</p>
-      <div class="wrapper animate-pop-in">
-			<div class="clock-container">
-				<div class="clock-col">
-					<p id="clock-day" class="clock-timer">00
-					</p>
-					<p class="clock-label">
-					Day
-					</p>
-				</div>
-				<div class="clock-col">
-					<p id="clock-hours" class="clock-timer">00
-					</p>
-					<p class="clock-label">
-					Hours
-					</p>
-				</div>
-				<div class="clock-col">
-					<p id="clock-minutes" class="clock-timer">00
-					</p>
-					<p class="clock-label">
-					Minutes
-					</p>
-				</div>
-				<div class="clock-col">
-					<p id="clock-seconds" class="clock-timer">00
-					</p>
-					<p class="clock-label">
-					Seconds
-					</p>
-				</div>
-			</div>
-         {# <div className="text-wrapper-5">Coming Soon!</div>
-          <div className="container-border" />
-          <div className="container" />
-          <img className="prizes" alt="Prizes" src="prizes.svg" />
-          <img className="rules" alt="Rules" src="rules.svg" /> #}
-        </div>
-		<div class = "rules">
-<svg class="ionicon" viewBox="0 0 512 512">
-<path d="M416 221.25V416a48 48 0 01-48 48H144a48 48 0 01-48-48V96a48 48 0 0148-48h98.75a32 32 0 0122.62 9.37l141.26 141.26a32 32 0 019.37 22.62z"
- fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32"/>
-<path d="M256 56v120a32 32 0 0032 32h120M176 288h160M176 368h160" fill="none" stroke="currentColor"
- stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/></svg>
+	<div class = gradient-animation></div>
+	<div class="clock-container animate-pop-in">
+		<div class="clock-col">
+			<p id="clock-day" class="clock-timer">00
+			</p>
+			<p class="clock-label">
+			Day
+			</p>
 		</div>
-      </div>
+		<div class="clock-col">
+			<p id="clock-hours" class="clock-timer">00
+			</p>
+			<p class="clock-label">
+			Hours
+			</p>
+		</div>
+		<div class="clock-col">
+			<p id="clock-minutes" class="clock-timer">00
+			</p>
+			<p class="clock-label">
+			Minutes
+			</p>
+		</div>
+		<div class="clock-col">
+			<p id="clock-seconds" class="clock-timer">00
+			</p>
+			<p class="clock-label">
+			Seconds
+			</p>
+		</div>
+	</div>
+	<div class= btn-box>
+	<div id ="learnmore" class="btn">
+    <span>Learn More</span>
+ 	 </div>
+  </div>
+  </div>
+	</div>
+	<div id= "pagetwo">
+	<div class= "event-rules">
+		<h2>RULES</h2>
+		<div>
+			<div class = "bullet-point"></div>
+			<p>isdca b bsiduzbgfudsb uvisdgfub usd gfhbbdsku fbsdjdb</p>
+		</div>
+		<div class = "bullet-point">
+			<div class = "bullet"></div>
+			<p>isdca b bsiduzbgfudsb uvisdgfub usd gfhbbdsku fbsdjdb</p>
+		</div>
+		<div class = "bullet-point">
+			<div class = "bullet"></div>
+			<p>isdca b bsiduzbgfudsb uvisdgfub usd gfhbbdsku fbsdjdb</p>
+		</div>
+		<div class = "bullet-point">
+			<div class = "bullet"></div>
+			<p>isdca b bsiduzbgfudsb uvisdgfub usd gfhbbdsku fbsdjdb</p>
+		</div>
+		<div class = "bullet-point">
+			<div class = "bullet"></div>
+			<p>isdca b bsiduzbgfudsb uvisdgfub usd gfhbbdsku fbsdjdb</p>
+		</div>
+	</div>
+    </div>
 {% endblock %}
 {% block customcss %}
 <style>
@@ -59,13 +78,17 @@
   -webkit-animation-play-state: paused !important;
           animation-play-state: paused !important;
 }
-
+#pageone{
+	height: 100dvh;
+}
 .animate-pop-in {
-  -webkit-animation: no-transform .6s cubic-bezier(0, 0.9, 0.3, 1.2) forwards;
-          animation: no-transform .6s cubic-bezier(0, 0.9, 0.3, 1.2) forwards;
-  opacity: 0;
-  -webkit-transform: translateY(-4rem) scale(.8);
-          transform: translateY(-4rem) scale(.8);
+	margin: 0;
+	width: 100%;
+	-webkit-animation: no-transform .6s cubic-bezier(0, 0.9, 0.3, 1.2) forwards;
+			animation: no-transform .6s cubic-bezier(0, 0.9, 0.3, 1.2) forwards;
+	opacity: 0;
+	-webkit-transform: translateY(-4rem) scale(.8);
+			transform: translateY(-4rem) scale(.8);
 }
 .heading{
 	font-size: 4.5rem;
@@ -98,22 +121,115 @@
   -webkit-animation-delay: .8s;
           animation-delay: .8s;
 }
-.clock-container,
-.clock-timer,
 .wrapper {
   -webkit-animation-delay: 1.0s;
           animation-delay: 1.0s;
 }
-.rules{
-	scale: 0.1;
+.gradient-animation{
+	position: relative;
+	height:1px;
+	left: 30vw;
+	width: 40vw;
+	margin-top: 3vh;
+	background-color: var(--red);
+	animation: gradient-animation 2s 3s ease-out infinite;
 }
-body{
-  -webkit-animation: no-transform 2s .5s cubic-bezier(0, 0.5, 0, 1) forwards;
-          animation: no-transform 2s .5s cubic-bezier(0, 0.5, 0, 1) forwards;
+{# body{
+  -webkit-animation: opacity-transform 2s .5s cubic-bezier(0, 0.5, 0, 1) forwards;
+          animation: opacity-transform 2s .5s cubic-bezier(0, 0.5, 0, 1) forwards;
+} #}
+#scroll-icon {
+    color: $color-leuchterred;
+    {# display: none; #}
+    {# position: fixed; right: 3.5rem; bottom: 3rem; #}
+	height: 20px;
+    font-size: 3rem;
+}
+#pagetwo {
+	display:flex;
+	{# width: 100vw; #}
+	border: none;
+	align-items: center;
+	justify-content: center;
+	height: 100dvh;
+}
+.event-rules{
+	margin: 7.5%;
+	width:85%;
+	heading: fit-content;
+	border-radius: 1rem;
+	border: 1px solid rgba(214, 31, 53, 0.7);
+	backdrop-filter: blur(5px)
+}
+.btn-box {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.btn {
+	line-height: 50px;
+	height: 50px;
+	text-align: center;
+	width: 250px;
+	cursor: pointer;
+}
+
+.btn {
+	color: #FFF;
+	transition: all 0.5s;
+	position: relative;
+}
+
+.btn::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	background-color: rgba(255, 255, 255, 0.1);
+	transition: all 0.3s;
+}
+
+.btn:hover::before {
+	opacity: 0;
+	transform: scale(0.5, 0.5);
+}
+
+.btn::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	opacity: 0;
+	transition: all 0.3s;
+	border: 1px solid rgba(255, 255, 255, 0.5);
+	transform: scale(1.2, 1.2);
+}
+
+.btn:hover::after {
+	opacity: 1;
+	transform: scale(1, 1);
 }
 {# Animations #}
 
-
+@-webkit-keyframes opacity-transform {
+	0% {
+    opacity: 1;
+    -webkit-transform: none;
+            transform: none;
+  }
+	100% {
+    opacity: 0.85;
+    -webkit-transform: none;
+            transform: none;
+  }
+}
 @-webkit-keyframes no-transform {
   100% {
     opacity: 1;
@@ -121,6 +237,21 @@ body{
             transform: none;
   }
 }
+@-webkit-keyframes gradient-animation {
+	0% {
+	background: rgb(2,0,36);
+	background: linear-gradient(90deg, var(--grey) 0%, var(--red) 1%, var(--grey) 10%);
+  }
+  50% {
+	background: rgb(2,0,36);
+	background: linear-gradient(90deg, var(--grey) 90%, var(--red) 99%, var(--grey) 100%);
+  }
+  	100% {
+	background: rgb(2,0,36);
+	background: linear-gradient(90deg, var(--grey) 0%, var(--red) 1%, var(--grey) 10%);
+  }
+}
+
 </style>
 {% endblock %}
 {% block customjs %}
@@ -142,5 +273,28 @@ let x = setInterval(function(){
 	document.getElementById("clock-minutes").innerHTML = mins;
 	document.getElementById("clock-seconds").innerHTML = secs;
 },1000);
+
+window.smoothScroll = function(target) {
+    var scrollContainer = target;
+    do { //find scroll container
+        scrollContainer = scrollContainer.parentNode;
+        if (!scrollContainer) return;
+        scrollContainer.scrollTop += 1;
+    } while (scrollContainer.scrollTop == 0);
+
+    var targetY = 0;
+    do { //find the top of target relatively to the container
+        if (target == scrollContainer) break;
+        targetY += target.offsetTop;
+    } while (target = target.offsetParent);
+
+    scroll = function(c, a, b, i) {
+        i++; if (i > 30) return;
+        c.scrollTop = a + (b - a) / 30 * i;
+        setTimeout(function(){ scroll(c, a, b, i); }, 20);
+    }
+    // start scrolling
+    scroll(scrollContainer, scrollContainer.scrollTop, targetY, 0);
+}
 </script>
 {% endblock %}
