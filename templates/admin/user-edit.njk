@@ -1,6 +1,45 @@
 {% extends 'admin/_admin.njk' %}
+{% import '_form.njk' as forms %}
+
+{% set thispage = 'edituser' %}
+{% set pagetitle = 'Edit User' %}
+
+{% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
 
 {% block pagecontent %}
-	Edit User
-	{# In the submit function make this const _id = {{ user._id }} #}
+	{% call forms.form() %}
+		{{ forms.heading('h1','Edit User') }}
+		<div id="idUpdate" style="display:none;">{{_id}}</div>
+		{{ forms.field('name','Name', name)}}
+		{{ forms.field('roll','Roll No', roll)}}
+		{{ forms.field('email','Email', email, type='email')}}
+		{{ forms.field('phone','Phone number', phone)}}
+		{{ forms.field('username','Username', username)}}
+		{{ forms.field('password','Password', type='password')}}
+		{{ forms.button('submit', 'Update User', 'update') }}
+	{% endcall %}
+{% endblock %}
+
+{% block customcss %}
+	{{ forms.formCss() }}
+{% endblock %}
+
+{% block customjs %}
+	{{ forms.formFunction() }}
+	<script>
+		axios.defaults.withCredentials = true;
+		axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
+
+		function update() {
+			const data = getData();
+			data.roll = data.roll.toUpperCase();
+			data._id = document.getElementById('idUpdate').innerHTML;
+			axios.patch('/admin/edit-user', data)
+			.then(() => window.location.href = '/')
+			.catch(e => {
+				console.log(e);
+				return alert(e.response.data);
+			});	
+		}
+	</script>
 {% endblock %}

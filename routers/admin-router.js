@@ -16,11 +16,16 @@ router.get('/list-users', async (req, res) => {
 	res.renderFile('admin/user-list.njk');
 });
 
-router.get('/edit-user', (req, res) => {
-	res.renderFile('admin/user-edit.njk');
+router.get('/edit-user', async (req, res) => {
+	const username = req.query.username;
+	if (!username) return res.redirect('/admin/list-users');
+	const data = (await dbh.getUserByUsername(username)).toObject();
+	delete data.salt;
+	delete data.hash;
+	res.renderFile('admin/user-edit.njk', { ...data });
 });
 
-router.post('/edit-user', [
+router.patch('/edit-user', [
 	body('name')
 		.trim()
 		.notEmpty().withMessage('No Name Provided'),
@@ -47,7 +52,6 @@ router.post('/edit-user', [
 		.isLength({ min: 6, max: 32 }).withMessage('Password must be between 6 and 32 characters long.')
 		.matches(/^\S+$/).withMessage('Password cannot contain whitespaces')
 ], async (req, res) => {
-	if (req.loggedIn) return res.error('How are you signing up when you are already logged in? What is this power????');
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		const errorMessages = errors.array().map(error => error.msg);
