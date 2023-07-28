@@ -51,6 +51,7 @@ router.patch('/edit-user', [
 		.notEmpty().withMessage('No Password Provided')
 		.isLength({ min: 6, max: 32 }).withMessage('Password must be between 6 and 32 characters long.')
 		.matches(/^\S+$/).withMessage('Password cannot contain whitespaces')
+		.optional({ values: 'falsy' })
 ], async (req, res) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {

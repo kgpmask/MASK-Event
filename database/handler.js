@@ -26,8 +26,10 @@ async function editUser (userData) {
 	user.roll = userData.roll;
 	user.phone = userData.phone;
 	user.email = userData.email;
-	user.username = userData.username;
-	user.hash = await bcrypt.hash(userData.password, user.salt);
+	if (password) {
+		user.username = userData.username;
+		user.hash = await bcrypt.hash(userData.password, user.salt);
+	}
 	return await user.save();
 }
 
