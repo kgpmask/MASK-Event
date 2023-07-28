@@ -47,14 +47,14 @@ router.post('/edit-user', [
 		.isLength({ min: 6, max: 32 }).withMessage('Password must be between 6 and 32 characters long.')
 		.matches(/^\S+$/).withMessage('Password cannot contain whitespaces')
 ], async (req, res) => {
-	if (req.loggedIn) return res.error('How are you signing up when you are already logged in, what is this power !');
+	if (req.loggedIn) return res.error('How are you signing up when you are already logged in? What is this power????');
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		const errorMessages = errors.array().map(error => error.msg);
 		throw new Error(errorMessages[0]);
 	}
 	await dbh.editUser(req.body);
-	res.send('Edited Successfully');
+	return res.send('Edited Successfully');
 });
 
 module.exports = {
