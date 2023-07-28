@@ -103,6 +103,44 @@ For more info on what else can be done using Nunjucks, check out the [docs](http
 
 ---
 
+## Forms  
+
+Among templates, there are a separate group of templates which use the `_form.njk` template as a base. These templates have a slightly different pattern and some more features. 
+
+```jinja
+{% extends '_base.njk' %}
+{% import '_form.njk' as forms %}
+
+{% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
+
+{% block pagecontent %}
+	{% call forms.form() %}
+		{# Form Content #}
+	{% endcall %}
+{% endblock %}
+
+{% block customcss %}
+	{{ forms.formCss() }}
+	<style>
+		{# Extra Styles #}
+	</style>
+{% endblock %}
+
+{% block customjs %}
+	{{ forms.formFunction() }}
+	<script>
+		axios.defaults.withCredentials = true;
+		axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
+
+		{# Other Functions #}
+	</script>
+{% endblock %}
+```
+
+For in-depth info about the same, check out the [forms](https://github.com/kgpmask/MASK-Event/docs/forms.md) markdown file.
+
+---
+
 ## Styles  
 The base style is provided by `mask.scss` in `assets/styles`. The SASS file is compiled into a CSS file and used in the server. For any addition to the style throughout the site, it is recommended to add to the SASS file. The CSS files generated are ignored by git and will be overwritten on in case of any edit to the SASS file. Therefore, it is advised not to touch the CSS files.  
 You can also make your own SASS files for styles which will be used in multiple pages. For smaller CSS additions, you can proceed with using the custom css in the templates using customcss blocks.
