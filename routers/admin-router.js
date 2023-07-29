@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
 
 router.get('/list-users', async (req, res) => {
 	const users = await dbh.getUsers();
-	res.renderFile('admin/user-list.njk');
+	res.renderFile('admin/user-list.njk', { users });
 });
 
 router.get('/edit-user', async (req, res) => {
