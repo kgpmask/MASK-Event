@@ -9,7 +9,7 @@
 {% block pagecontent %}
 	{% call forms.form() %}
 		{{ forms.heading('h1','Edit User') }}
-		<div id="idUpdate" style="display:none;">{{_id}}</div>
+		{{ forms.field('_id','Name', _id, type='hidden')}}
 		{{ forms.field('name','Name', name)}}
 		{{ forms.field('roll','Roll No', roll)}}
 		{{ forms.field('email','Email', email, type='email')}}
@@ -33,9 +33,11 @@
 		function update() {
 			const data = getData();
 			data.roll = data.roll.toUpperCase();
-			data._id = document.getElementById('idUpdate').innerHTML;
 			axios.patch('/admin/edit-user', data)
-			.then(() => window.location.href = '/')
+			.then(() => {
+				alert('Success')
+				setTimeout(() => {window.location.href = '/admin/list-users';}, 1000);
+			})
 			.catch(e => {
 				console.log(e);
 				return alert(e.response.data);
