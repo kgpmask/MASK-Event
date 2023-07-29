@@ -19,6 +19,24 @@ async function createUser (userData) {
 	return user._id;
 }
 
+async function editUser (userData) {
+	const user = await User.findById(userData._id);
+	if (!user) throw new Error('Invalid User ID');
+	user.name = userData.name;
+	user.roll = userData.roll;
+	user.phone = userData.phone;
+	user.email = userData.email;
+	user.username = userData.username;
+	if (userData.password) {
+		user.hash = await bcrypt.hash(userData.password, user.salt);
+	}
+	return await user.save();
+}
+
+async function getUsers () {
+	return await User.find({ _id: { $gt: 10000 } }).lean();
+}
+
 async function getUserByUsername (username) {
 	return await User.findOne({ 'username': `${username}` });
 }
@@ -70,8 +88,10 @@ async function removeUser (id) {
 
 module.exports = {
 	createUser,
-	validateUser,
+	editUser,
+	getUsers,
 	getUserByUsername,
+	validateUser,
 	getUserFromSessionID,
 	createSession,
 	// createDummySession,
