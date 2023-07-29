@@ -9,7 +9,7 @@
 {% block pagecontent %}
 	{% call forms.form() %}
 		{{ forms.heading('h1','Edit User') }}
-		{{ forms.field('_id','Name', _id, type='hidden')}}
+		{{ forms.field('_id','UserID', _id, type='hidden')}}
 		{{ forms.field('name','Name', name)}}
 		{{ forms.field('roll','Roll No', roll)}}
 		{{ forms.field('email','Email', email, type='email')}}
