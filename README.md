@@ -137,7 +137,7 @@ Among templates, there are a separate group of templates which use the `_form.nj
 {% endblock %}
 ```
 
-For in-depth info about the same, check out the [forms](https://github.com/kgpmask/MASK-Event/docs/forms.md) markdown file.
+For in-depth info about the same, check out the [forms](./docs/forms.md) markdown file.
 
 ---
 
@@ -173,6 +173,11 @@ The file `handler.js` in `database` folder uses all the schemas to make function
 
 ---
 
+## Auth System  
+
+The website uses a password auth system using session cookies. You can check the schemas of the [users](../database/Schemas/User.js) and [sessions](../database/Schemas/Session.js) for more info regarding the schema structure. The passwords are stored after hashing using randomly generated salts using `bcrypt`, ensuring the safety of the privacy of the passwords from the team, as well as in the unlikely event of an unexpected leak.
+
+---
 ## Running the server  
 The main file of the server is `server.js` in the `src` folder. The server can be run using `npm run param`, where `param` can be any of the following:
 - `dev`: Used while developing. Runs the server using `nodemon`
