@@ -1,0 +1,93 @@
+{% extends "_base.njk" %}
+
+{% set thispage = 'live' %}
+{% set pagetitle = 'Live Quiz' %}
+
+{% block pagecontent %}
+	<div class="container">
+		<div class="timer">
+			<span class="timer">69</span>
+		</div>
+		<div class="buttons">
+			<div class="prevQ">
+				<button onclick="prevQ()">Previous Question</button>
+			</div>
+			<div class="nextQ">
+				<button onclick="nextQ()">Next Question</button>
+			</div>
+		</div>
+		<div class="question-box">
+		</div>
+		<div class="end-button">
+			<button onclick="endQuiz()">End Quiz</button>
+		</div>
+	</div> 
+{% endblock %}
+
+{% block customcss %}
+	<link rel="stylesheet" type="text/css" href="/assets/styles/icons.css"/>
+	<style>
+		.prevQ {
+			display: inline-flex;
+			justify-content: left;
+		}
+		.nextQ {
+			display: inline-flex;
+			justify-content: right;
+		}
+		.container {
+			width: 80%;
+			margin: auto;
+			border: solid;
+		}
+		button.rel {
+			width: 100px;
+			height: 30px;
+			background-color: var(--gray);
+			color: var(--off-white);
+			border: 2px solid var(--ghost-gray);
+			border-radius: 5px;
+			cursor: pointer;
+		}
+		button.rel:disabled {
+			background-color: var(--tinted-gray);
+			border: 1px solid var(--gray);
+			color: var(--ghost-gray);
+			cursor: default;
+		}
+		button.rel:not(:disabled):hover {
+			background-color: var(--middle-gray);
+		}
+		h3 {
+			margin: 10px;
+		}
+		.option {
+			margin: 8px;
+		}
+		.option-image {
+			margin: 10px;
+		}
+		.question-box {
+			border-radius: 10px;
+			background: rgba(0, 0, 0, 0.5);
+			padding: 25px;
+		}
+		button.disabled {
+			width: 0px;
+			height: 0px;
+		}
+		button.enabled {
+			width: 100px;
+			height: 30px;
+			background-color: var(--gray);
+			color: var(--off-white);
+			border: 2px solid var(--ghost-gray);
+			border-radius: 5px;
+			cursor: pointer;
+		}
+		button.enabled:hover {
+			background-color: var(--middle-gray);
+		}
+		button.start {}
+	</style>
+{% endblock %}
