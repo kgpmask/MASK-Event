@@ -86,6 +86,11 @@ async function removeUser (id) {
 	return 'Test User Deleted';
 }
 
+/*
+## To Do
+getLiveQuiz
+*/
+
 module.exports = {
 	createUser,
 	editUser,

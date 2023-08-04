@@ -1,0 +1,45 @@
+{% extends '_base.njk' %}
+
+{% set thispage = 'events' %}
+{% set pagetitle = 'Live Quiz' %}
+
+{% block pagecontent %}
+	<div class="container">
+		<fieldset class="question">
+			<legend id="info">&nbsp;&nbsp;Waiting for question&nbsp;&nbsp;</legend>
+			<div class="question-container">
+				<div class="question-text">Should i get treat ?</div>
+				<div class="answers"></div>
+			</div>
+			<button onclick="submit()">Submit</button>
+		</fieldset>
+	</div>
+{% endblock %}
+
+{% block customcss %}
+	<style>
+		legend {
+			transition: 0.5s all;
+		}
+	</style>
+{% endblock %}
+
+{% block customjs %}
+	<script>
+		function generateOptions(options) {
+			return options.map(option => {
+				switch (option.type) {
+					case 'image': return `<img src="${option.val}" class="option-image" style="${option.style || ''}"/>`;
+					case 'mp3': return `<audio src="${option.val}" type="audio/mpeg"> </audio>`;
+					case 'title': return `<h3>${option.val}</h3>`;
+					case undefined: break;
+					default: return option.val;
+				}
+			}).filter(opt => opt).join('<br/>');
+		}
+
+		function submit() {
+			
+		}
+	</script>
+{% endblock %}
