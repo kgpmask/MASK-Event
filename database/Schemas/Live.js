@@ -12,15 +12,7 @@ const questionSchema = new mongoose.Schema({
 		type: [
 			{
 				title: String,
-				question: {
-					type: [
-						{
-							val: { type: String, required: true },
-							type: { type: String, enum: ['text', 'image', 'video', 'mp3'], required: true }
-						}
-					],
-					required: true
-				},
+				question: { type: String, required: true },
 				points: Number,
 				options: {
 					type: {
@@ -28,12 +20,7 @@ const questionSchema = new mongoose.Schema({
 						required: true,
 						enum: ['text', 'mcq', 'number']
 					},
-					value: [
-						{
-							val: { type: String, required: true },
-							type: { type: String, enum: ['text', 'image'], required: true }
-						}
-					]
+					value: [{ type: String, required: true }]
 				},
 				solutions: {
 					type: [String, Number, [{ type: [String, Number] }]],
@@ -43,4 +30,6 @@ const questionSchema = new mongoose.Schema({
 		],
 		required: true
 	}
-});
+}, { collection: 'live' });
+
+module.exports = mongoose.model('Questions', questionSchema);

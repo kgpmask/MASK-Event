@@ -18,28 +18,34 @@
 
 {% block customcss %}
 	<style>
-		legend {
-			transition: 0.5s all;
-		}
+
 	</style>
 {% endblock %}
 
 {% block customjs %}
 	<script>
-		function generateOptions(options) {
-			return options.map(option => {
-				switch (option.type) {
-					case 'image': return `<img src="${option.val}" class="option-image" style="${option.style || ''}"/>`;
-					case 'mp3': return `<audio src="${option.val}" type="audio/mpeg"> </audio>`;
-					case 'title': return `<h3>${option.val}</h3>`;
-					case undefined: break;
-					default: return option.val;
-				}
-			}).filter(opt => opt).join('<br/>');
+		let quesCounter = 1;
+
+		function showQuestion() {
+			document.getElementById('question-no').innerHTML = `&nbsp;&nbsp;Question #${quesCounter}&nbsp;&nbsp;`;
+
 		}
 
-		function submit() {
-			
+		async function submit() {
+			const submitted = '';
+			const response = await axios.post('/live/submit', {submitted});
 		}
+
+		socket.on('question', req => {
+			showQuestion()
+		});
+		
+		// QUestion submit, a bit done
+		// Fetch new question
+		// Check for quiz end
+		// make hmtl on fetching new questions
+		// save user submitted responses
 	</script>
 {% endblock %}
+
+{% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
