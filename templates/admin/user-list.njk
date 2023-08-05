@@ -9,8 +9,8 @@
 				<div class="card">
 					<img src="{{ user.image }}" onerror="this.src='../assets/logo.jpeg'"/>
 					<div class="details">
-						<p>Name : {{ user.name }}</p>
-						<p>Username: {{ user.username }}</p>
+						<div title="{{ user.name }}" class="names">{{ user.name }}</div>
+						<div title="{{ user.username }}" class="usernames">{{ user.username }}</div>
 					</div>
 					<button onclick="edit('{{ user.username }}')">Edit User</button>
 				</div>
@@ -27,6 +27,9 @@
 		}
 
 		fieldset {
+			border:1px solid red;
+			margin:auto 20px;
+			box-shadow: 1px 1px 10px #d61f35 ;
 			width: 90%;
 			display: flex;
 			flex-direction: row;
@@ -34,18 +37,51 @@
 			padding: 20px;
 		}
 		.card {
-			border: 2px solid var(--off-white);
+			width:130px;
+			height:160px;
+			border: 2px solid;
 			border-radius: 7px;
-			padding: 10px;
+			padding: 10px 5px;
 			margin: 10px;
+			box-shadow: 1px  1px 10px  #777777 inset;
 		}
 
 		.card > img {
-			height: 100px;
-			width: 100px;
+			border-radius:16px;
+			height: 60px;
+			width: 60px;
 		}
 		.details {
-			margin: 20px 0 20px 0;;
+			margin: 10px 0 30px 0;
+		}
+		.names{
+			height:15px;
+			width:90px;
+			color:#d0d0d0;
+			font-size:13px;
+			padding:1px 3px;
+			margin:1px auto;
+			overflow:hidden;
+			text-overflow: ellipsis;
+		}
+		.usernames{
+			height:15px;
+			width:60px;
+			font-size:11px;
+			color:#777777;
+			margin:1px auto;
+			padding:1px 3px;
+			overflow:hidden;
+			text-overflow: ellipsis;
+		}
+		.card > button{
+			font-size:12px;
+			width:60%;
+			padding:5px 7px;
+			background-color: #d61f35;
+			border-radius:2px;
+			color:white;
+			border:none;
 		}
 	</style>
 {% endblock %}
