@@ -10,10 +10,13 @@
 		</div>
 		<div class="buttons">
 			<div class="prevQ">
-				<button onclick="prevQ()">Previous Question</button>
+				<button onclick="prevQ()" id="prevQ">Previous Question</button>
+			</div>
+			<div>
+				<button onclick="startQ()" id="startQ">Start Question</button>
 			</div>
 			<div class="nextQ">
-				<button onclick="nextQ()">Next Question</button>
+				<button onclick="nextQ()" id="nextQ">Next Question</button>
 			</div>
 		</div>
 		<div class="question-box">
@@ -90,4 +93,30 @@
 		}
 		button.start {}
 	</style>
+{% endblock %}
+
+{% block customjs %}
+	<script>
+		axios.defaults.withCredentials = true;
+		axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
+
+
+		let currentQues = 0;
+		const qAmt = {{ qAmt }};
+		const qs = quiz.map(que => que.q);
+
+		window.onload = () => {
+			startButton = document.getElementById('startQ');
+			nextButton = document.getElementById('nextQ');
+			prevButton = document.getElementById('prevQ');
+			qs.forEach((question, q) => {
+				document.getElementById(`question-${q + 1}`).innerHTML = generavteHTML(question);
+			});
+			document.getElementById('qbox-1').style.display = 'block';
+			nextQ();
+			console.log(startButton);
+			prevQ();
+		}
+
+	</script>
 {% endblock %}

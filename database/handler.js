@@ -86,10 +86,13 @@ async function removeUser (id) {
 	return 'Test User Deleted';
 }
 
-/*
-## To Do
-getLiveQuiz
-*/
+async function getLiveQuiz (query) {
+	// TODO: Use IDs as a parameter properly
+	const date = query || new Date().toISOString().slice(0, 10);
+	// The first live quiz
+	const quiz = await LiveQuiz.findOne({ title: date });
+	if (quiz) return quiz.toObject();
+}
 
 module.exports = {
 	createUser,
@@ -101,5 +104,6 @@ module.exports = {
 	createSession,
 	// createDummySession,
 	removeSession,
-	removeUser
+	removeUser,
+	getLiveQuiz
 };
