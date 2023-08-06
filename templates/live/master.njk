@@ -3,10 +3,12 @@
 {% set thispage = 'live' %}
 {% set pagetitle = 'Live Quiz' %}
 
+{% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
+
 {% block pagecontent %}
 	<div class="container">
 		<div class="timer">
-			<span class="timer">69</span>
+			<button id="startQuiz" onclick="startQuiz()">Start Quiz</button>
 		</div>
 		<div class="buttons">
 			<div class="prevQ">
@@ -100,22 +102,36 @@
 		axios.defaults.withCredentials = true;
 		axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
 
-
+		let timeLeft = 0;
 		let currentQues = 0;
-		const qAmt = {{ qAmt }};
-		const qs = quiz.map(que => que.q);
+
+		function startQuiz () {
+			//axios.post('/start', "start");
+			document.getElementById('startQuiz').style = 'display:none;';
+		}
+
+		async function startQ (time = 20) {
+			document.getElementById('startQ').disabled = true;
+			timeLeft = time;
+			while(timeLeft>0){
+				await new Promise((resolve) => setTimeout(resolve, 1000));
+				displayTime(--timeLeft);
+			}
+			document.getElementById('startQ').innerHTML = 'Time Ended';
+		}
+
+		function displayTime (timeLeft) {
+			document.getElementById('startQ').innerHTML = timeLeft;
+		}
 
 		window.onload = () => {
 			startButton = document.getElementById('startQ');
 			nextButton = document.getElementById('nextQ');
 			prevButton = document.getElementById('prevQ');
-			qs.forEach((question, q) => {
+			{# qs.forEach((question, q) => {
 				document.getElementById(`question-${q + 1}`).innerHTML = generavteHTML(question);
-			});
-			document.getElementById('qbox-1').style.display = 'block';
-			nextQ();
-			console.log(startButton);
-			prevQ();
+			}); #}
+			{# document.getElementById('qbox-1').style.display = 'block'; #}
 		}
 
 	</script>

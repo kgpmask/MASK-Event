@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const User = require('./Schemas/User');
 const Session = require('./Schemas/Session');
+const LiveQuiz = require('./Schemas/Live');
 
 async function createUser (userData) {
 	const _id = userData.userID ?? (await User.find({ _id: { '$gt': 10000 } })).length + 10001;
@@ -88,7 +89,7 @@ async function removeUser (id) {
 
 async function getLiveQuiz (query) {
 	// TODO: Use IDs as a parameter properly
-	const date = query || new Date().toISOString().slice(0, 10);
+	const date = query || 'SQ1';
 	// The first live quiz
 	const quiz = await LiveQuiz.findOne({ title: date });
 	if (quiz) return quiz.toObject();
