@@ -11,19 +11,17 @@ const questionSchema = new mongoose.Schema({
 	questions: {
 		type: [
 			{
-				title: String,
-				question: { type: String, required: true },
-				points: Number,
-				options: {
+				question: {
 					type: {
-						type: String,
-						required: true,
-						enum: ['text', 'mcq', 'number']
+						title: { type: String, required: true },
+						body: { type: String, required: true }
 					},
-					value: [{ type: String, required: true }]
+					required: true
 				},
+				type: { type: String, required: true, enum: ['text', 'mcq', 'number'] },
+				options: [{ type: String, required: true }],
 				solutions: {
-					type: [String, Number, [{ type: [String, Number] }]],
+					type: [String, [{ type: [String] }]],
 					required: true
 				}
 			}
