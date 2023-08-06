@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const dbh = require('../database/handler');
 
+const handlerContext = {};
+
 app.get('/master', async (req, res) => {
 	// TODO: In the future, set a 'daily' script to run at midnight and update a process.env.LIVE_QUIZ parameter
 	const quiz = await dbh.getLiveQuiz('SQ1');
@@ -13,13 +15,6 @@ app.get('/master', async (req, res) => {
 		dev: PARAMS.dev
 	});
 });
-
-// router.get('/', (req, res) => {
-// 	// if (req.user.isAdmin) return res.renderFile('live/master.njk');
-// 	res.renderFile('live/participant.njk');
-// });
-
-const handlerContext = {};
 
 router.get('/', async (req, res) => {
 	if (req.isAdmin) {
