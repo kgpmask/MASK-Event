@@ -14,6 +14,7 @@ module.exports = function initMiddleware (app) {
 			const { sessionID } = req.cookies;
 			if (!sessionID) return next();
 			req.user = await dbh.getUserFromSessionID(sessionID);
+			req.isAdmin = req.user?.isAdmin;
 		} catch (err) {
 			res.clearCookie('sessionID');
 		}
