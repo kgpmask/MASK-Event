@@ -26,7 +26,7 @@ router.post('/startQ', (req, res) => {
 
 router.post('/start-quiz', (req, res) => {
 	const quizId = req.body.id;
-	io.sockets.in('waiting-for-quiz-to-start').emit('start', true);
+	io.sockets.in('waiting-for-live-quiz').emit('start', true);
 	res.send('quiz-started');
 });
 
