@@ -7,8 +7,7 @@
 	<div class="container">
 		<fieldset class="question">
 			<legend id="info">&nbsp;&nbsp;Waiting for question&nbsp;&nbsp;</legend>
-			<div class="question-container">
-				<div class="answers"></div>
+			<div id="question-container">
 			</div>
 			<button onclick="submit()">Submit</button>
 		</fieldset>
@@ -27,12 +26,35 @@
 
 		function showQuestion(type, options) {
 			document.getElementById('question-no').innerHTML = `&nbsp;&nbsp;Question #${quesCounter}&nbsp;&nbsp;`;
-			document.getElementsByClassName('question-text')[0].innerHTML = 
 			const div = document.createElement('div');
+			div.classList.add('answer');
+			div.classList.add(type);
+			if(type === 'mcq') {
+				options.forEach(option => {
+					div.innerHTML += ```
+					<div class="option">
+						<input type="radio" id="${option}" name="${option}" class="option-input" value="${option}"/>
+						<div class="option-design"></div>
+						<div class="option-text" for="${option}">${option}</div>
+					</div>
+					```;
+				});
+			}
+			else {
+				div.innerHTML = `<input type="text" id='ans'>`;
+			}
+			document.getElementById('question-container').appendChild(div);
 		}
 
 		async function submit() {
-			const submitted = '';
+			let submitted;
+			const ans = document.getElementsByClassName('class')[0]
+			if (ans.classList[1] === 'mcq') {
+				submitted = ans.querySelector("input:checked")?.value;
+			}
+			else {
+				submitted = document.getElementById('ans').value;
+			}
 			const response = await axios.post('/live/submit', {submitted});
 		}
 
