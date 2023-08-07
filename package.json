@@ -40,7 +40,8 @@
 		"express-validator": "^7.0.1",
 		"mongoose": "^7.4.0",
 		"nunjucks": "^3.2.4",
-		"sass": "^1.63.4"
+		"sass": "^1.63.4",
+		"socket.io": "^4.7.2"
 	},
 	"devDependencies": {
 		"cross-env": "^7.0.3",
