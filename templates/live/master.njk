@@ -21,7 +21,13 @@
 				<button onclick="nextQ()" id="nextQ">Next Question</button>
 			</div>
 		</div>
-		<div class="question-box">
+		<div class="questions-container">
+			{% for q in qAmt %}
+				<div id="qbox-{{ q }}" style="display:none;">
+					<h3>{{ questions[q].question }}</h3>
+					<h4>{{ questions[q].type }}</h3>
+				</div>
+			{% endfor %}
 		</div>
 		<div class="end-button">
 			<button onclick="endQuiz()">End Quiz</button>
@@ -111,6 +117,7 @@
 		}
 
 		async function startQ (time = 20) {
+			await axios.post('/live/startQ', { questionNumber: currentQues});
 			document.getElementById('startQ').disabled = true;
 			timeLeft = time;
 			while(timeLeft>0){
@@ -124,14 +131,16 @@
 			document.getElementById('startQ').innerHTML = timeLeft;
 		}
 
+		function nextQ () {
+			
+		}
+
 		window.onload = () => {
 			startButton = document.getElementById('startQ');
 			nextButton = document.getElementById('nextQ');
 			prevButton = document.getElementById('prevQ');
-			{# qs.forEach((question, q) => {
-				document.getElementById(`question-${q + 1}`).innerHTML = generavteHTML(question);
-			}); #}
-			{# document.getElementById('qbox-1').style.display = 'block'; #}
+			document.getElementById('qbox-1').style.display = 'block';
+			currentQues = 0;
 		}
 
 	</script>

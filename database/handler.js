@@ -92,6 +92,7 @@ async function getLiveQuiz (query) {
 	const date = query || 'SQ1';
 	// The first live quiz
 	const quiz = await LiveQuiz.findOne({ title: date });
+	console.log(quiz);
 	if (quiz) return quiz.toObject();
 }
 
