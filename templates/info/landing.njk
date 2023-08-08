@@ -4,24 +4,42 @@
 
 {% block pagecontent %}
 	{{ loadingscreen('main-page') }}
-	<div id="main-page">
-		<div id="timer"/>
+	<div id="main-page" style="display: none;">
+		<div id="timer"></div>
+		<div id="content">
+			<p class="quote"> Konnichiwa, minna-san!!! </p>
+			<p> We, MASK, are organizing an Open Campus Quiz for everyone in IIT Kharagpur, from UG students to PG students (and even professors if interested) as an introductory event for the freshers and a fun event for the rest of you. </p>
+			<h3> What can you expect? </h3>
+			<p> Since it is our introductory event for the freshers, we are going to showcase various aspects of the society. A cumulative collaboration of all teams in the society, this event has a lot of things packed, with exciting surprises and prizes for winners. </p>
+			<h3> What are the questions from? </h3>
+			<p> The questions are from popular anime, be it the never-ending One Piece or rom-coms like Oregairu, good ol' Death Note or popular new anime like Demon Slayer or Jujutsu Kaisen. We have a vast collection which satisfies all kinds of fans. (Except maybe Samuel L. Jackson. I don't think we can give him what he wants.) </p>
+			<p> For more info, check out the <a href="/instructions">instructions</a> page. Stay tuned for more updates. </p>
+			<p class="quote"> Limited Seats Only! Register Soon!!! </p>
+		</div>
+		<div id="button-container">
+			<a href="/instructiions" class="redirect-link"> Instructions </a>
+			<a href="/live" class="redirect-link"> Quiz Portal </a>
+			<a href="{{ '/profile' if loggedIn else '/login' }}" class="redirect-link"> {{ 'Profile' if loggedIn else 'Login' }} </a>
+		</div>
 	</div>
 {% endblock %}
 
 {% block customjs %}
 	<script>
 		window.addEventListener('load', () => {
-			setInterval(() => {
-				const timerElement = document.querySelector('#timer');
+			const timerElement = document.querySelector('#timer');
+			const timer = () => {
 				let seconds, minutes, hours, days;
 				const timeLeftInSeconds = Math.floor((new Date('2023-09-03T14:00:00.000+0530').getTime() - new Date().getTime()) / 1000);
+				if (timeLeftInSeconds <= 0) return false;
 				seconds = (timeLeftInSeconds % 60).toLocaleString('en-us', { minimumIntegerDigits: 2 });
 				minutes = (Math.floor(timeLeftInSeconds / 60) % 60).toLocaleString('en-us', { minimumIntegerDigits: 2 });
 				hours = (Math.floor(timeLeftInSeconds / 3600) % 24).toLocaleString('en-us', { minimumIntegerDigits: 2 });
 				days = (Math.floor(timeLeftInSeconds / 86400)).toLocaleString('en-us', { minimumIntegerDigits: 2 });
 				timerElement.innerHTML = `${days}:${hours}:${minutes}:${seconds}`;
-			}, 1000);
+				setTimeout(timer, 1000);
+			};
+			if (!timer()) timerElement.innerHTML = 'Quiz Live Now!!!';
 		});
 	</script>
 {% endblock %}
@@ -29,9 +47,66 @@
 {% block customcss %}
 	<style>
 		#timer {
-			color: color-mix(in srgb, var(--dark-red) 50%, var(--red) 50%);
+			color: color-mix(in hsl, var(--dark-red) 50%, var(--error-red) 70%);
 			font-size: 2.5em;
 			font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+		}
+		
+		#content {
+			margin: 20px auto;
+			border: solid 2px var(--light-gray);
+			border-radius: 10px;
+			width: calc(min(80vw, 700px + 30vw, 1000px + 20vw));
+			
+			background-color: var(--abyss);
+		}
+
+		#content > * {
+			text-align: left;
+			margin: 10px;
+			margin: 20px;
+		}
+
+		#content h3 {
+			color: var(--red);
+			margin-block-start: 1.5em !important;
+			margin-block-end: 1.5em !important;
+		}
+
+		.quote {
+			color: var(--error-red);
+
+			text-align: center !important;
+			font-style: italic;
+			font-size: 120%;
+		}
+		
+
+		#button-container {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.redirect-link {
+			display: block;
+
+			margin: 5px 10px;
+			border: solid 2px var(--light-gray);
+			border-radius: 7px;
+			padding: 10px;
+
+			background-color: var(--abyss);
+			color: var(--red);
+
+			font-weight: 300;
+			text-decoration: none;
+		}
+
+		.redirect-link:active, .redirect-link:hover {
+			background-color: var(--shadow-gray);
 		}
 	</style>
 {% endblock %}
