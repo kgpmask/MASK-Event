@@ -1,0 +1,37 @@
+{% extends '_base.njk' %}
+
+{% set pagetitle = 'Open Campus Anime Quiz' %}
+
+{% block pagecontent %}
+	{{ loadingscreen('main-page') }}
+	<div id="main-page">
+		<div id="timer"/>
+	</div>
+{% endblock %}
+
+{% block customjs %}
+	<script>
+		window.addEventListener('load', () => {
+			setInterval(() => {
+				const timerElement = document.querySelector('#timer');
+				let seconds, minutes, hours, days;
+				const timeLeftInSeconds = Math.floor((new Date('2023-09-03T14:00:00.000+0530').getTime() - new Date().getTime()) / 1000);
+				seconds = (timeLeftInSeconds % 60).toLocaleString('en-us', { minimumIntegerDigits: 2 });
+				minutes = (Math.floor(timeLeftInSeconds / 60) % 60).toLocaleString('en-us', { minimumIntegerDigits: 2 });
+				hours = (Math.floor(timeLeftInSeconds / 3600) % 24).toLocaleString('en-us', { minimumIntegerDigits: 2 });
+				days = (Math.floor(timeLeftInSeconds / 86400)).toLocaleString('en-us', { minimumIntegerDigits: 2 });
+				timerElement.innerHTML = `${days}:${hours}:${minutes}:${seconds}`;
+			}, 1000);
+		});
+	</script>
+{% endblock %}
+
+{% block customcss %}
+	<style>
+		#timer {
+			color: color-mix(in srgb, var(--dark-red) 50%, var(--red) 50%);
+			font-size: 2.5em;
+			font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+		}
+	</style>
+{% endblock %}
