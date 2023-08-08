@@ -38,6 +38,7 @@
 				days = (Math.floor(timeLeftInSeconds / 86400)).toLocaleString('en-us', { minimumIntegerDigits: 2 });
 				timerElement.innerHTML = `${days}:${hours}:${minutes}:${seconds}`;
 				setTimeout(timer, 1000);
+				return true;
 			};
 			if (!timer()) timerElement.innerHTML = 'Quiz Live Now!!!';
 		});
