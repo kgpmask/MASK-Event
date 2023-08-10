@@ -41,6 +41,23 @@
 			tick();
 		}
 
+		function timer (time) {
+			timeLeft = time;
+			function tick () {
+				if (state === 'waiting') return;
+				document.getElementById('info').innerHTML = `&nbsp;&nbsp;Question #${quesCounter}  [${timeLeft--}]&nbsp;&nbsp;`
+				if (timeLeft >= 0) setTimeout(tick, 1000);
+				else {
+					if (state === 'running') {
+						state = 'time-out'
+						submit();
+						showMessage(`&nbsp;&nbsp;Question #${quesCounter}&nbsp;&nbsp;`, 'Time’s Up ! Your response has been submitted');
+					}
+				}
+			}
+			tick();
+		}
+
 		function showQuestion(type, options) {
 			document.getElementById('info').innerHTML = `&nbsp;&nbsp;Question #${quesCounter}&nbsp;&nbsp;`;
 			document.getElementById('submit').style.display = 'unset';
@@ -62,6 +79,8 @@
 				div.innerHTML = `<input type="text" id='ans'>`;
 			}
 			document.getElementById('question-container').replaceChildren(div);
+			state = 'running';
+			timer(20);
 		}
 
 		async function submit() {
@@ -73,10 +92,11 @@
 			else {
 				submitted = document.getElementById('ans').value;
 			}
-			showMessage('Waiting for next question', 'Answer Submitted Successfully');
-			waitMsg = 'Waiting for next question';
+			showMessage('Waiting for quizmaster', 'Answer Submitted Successfully');
+			waitMsg = 'Waiting for quizmaster';
+			state = 'waiting'
 			waitingAnimation();
-			const response = await axios.post('/live/submit', {submitted});
+			const response = await axios.post('/live/submit', {submitted, currentQ});
 		}
 
 		socket.on('question', req => {
@@ -87,7 +107,8 @@
 		});
 
 		socket.on('answer', req => {
-			state = 'showing-answer';
+			submit();
+			state = 'waiting';
 			showMessage('Waiting for next question', 'Answer is being displayed');
 			waitingAnimation();
 		});

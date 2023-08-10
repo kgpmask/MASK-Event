@@ -11,6 +11,9 @@ router.post('/startQ', (req, res) => {
 	console.log(currentQ, options, type);
 	io.sockets.in('waiting-for-live-quiz').emit('question', { currentQ, type, options });
 	handlerContext.LQnum = qNum;
+	setTimeout(() => {
+		io.sockets.in('waiting-for-live-quiz').emit('answer');
+	}, 24000);
 	res.send('question-live');
 });
 
@@ -36,14 +39,17 @@ router.get('/', async (req, res) => {
 			id: 'live'
 		});
 	} else {
-		if (!Object.keys(handlerContext).length) return res.renderFile('live/landing.njk');
+		// if (!Object.keys(handlerContext).length) return res.renderFile('live/landing.njk');
 		return res.renderFile('live/participant.njk');
 	}
 });
 
-router.post('/submit', (req, res) => {
+router.post('/submit', async (req, res) => {
 	if (req.isAdmin) return res.send('admins are not allowed here ;-;');
 	const answer = req.body.submitted;
+	const response = await dbh.addLiveResult(req.user._id, 'SQ4', req.body.currentQ, answer);
+	// console.log(response);
+	return res.send('submitted');
 });
 
 
