@@ -129,8 +129,28 @@
 		}
 
 		function nextQ () {
-			
+			if (currentQues<({{ qAmt }}-1)) {
+				console.log({{ qAmt }});
+				nextButton.disabled = false;
+				document.getElementById(`qbox-${currentQues+1}`).style = "display:none;";
+				currentQues++;
+				document.getElementById(`qbox-${currentQues+1}`).style = "display:block;";
+			} else {
+				nextButton.disabled = true;
+			}
 		}
+		
+		function prevQ () {
+			if (currentQues>0) {
+				prevButton.disabled = false;
+				document.getElementById(`qbox-${currentQues+1}`).style = "display:none;";
+				currentQues--;
+				document.getElementById(`qbox-${currentQues+1}`).style = "display:block;";
+			} else {
+				prevButton.disabled = true;
+			}
+		}
+
 
 		window.onload = () => {
 			startButton = document.getElementById('startQ');
