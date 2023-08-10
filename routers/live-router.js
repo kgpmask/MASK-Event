@@ -40,7 +40,7 @@ router.get('/', async (req, res) => {
 		const quiz = await dbh.getLiveQuiz();
 		// if (!quiz) return res.renderFile('events/quizzes_404.njk', { message: `The quiz hasn't started, yet!` });
 		const questions = quiz.questions;
-		return res.renderFile('events/live_master.njk', {
+		return res.renderFile('live/master.njk', {
 			quiz: JSON.stringify(questions),
 			qAmt: questions.length,
 			id: 'live',

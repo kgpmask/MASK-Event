@@ -81,8 +81,9 @@
 
 		socket.on('question', req => {
 			state = 'showing-question';
+			currentQ = req.currentQ;
 			quesCounter++;
-			showQuestion();
+			showQuestion(req.options.type, req.options.options?);
 		});
 
 		socket.on('answer', req => {
