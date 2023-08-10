@@ -22,8 +22,10 @@
 			</div>
 		</div>
 		<div class="questions-container">
-			{% for ele in questions %}
-				<p>a</p>
+			{% for q in questions %}
+				<div id='qbox-{{ loop.index }}' style='display:none;'>
+					{{ q.question.body }}
+				</div>
 			{% endfor %}
 		</div>
 		<div class="end-button">
@@ -33,7 +35,6 @@
 {% endblock %}
 
 {% block customcss %}
-	<link rel="stylesheet" type="text/css" href="/assets/styles/icons.css"/>
 	<style>
 		.prevQ {
 			display: inline-flex;
@@ -156,7 +157,7 @@
 			startButton = document.getElementById('startQ');
 			nextButton = document.getElementById('nextQ');
 			prevButton = document.getElementById('prevQ');
-			{# document.getElementById('qbox-1').style.display = 'block'; #}
+			document.getElementById('qbox-1').style.display = 'block';
 			currentQues = 0;
 		}
 

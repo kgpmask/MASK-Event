@@ -17,7 +17,7 @@ router.post('/startQ', (req, res) => {
 router.post('/start-quiz', (req, res) => {
 	const quizId = req.body.id;
 	io.sockets.in('waiting-for-live-quiz').emit('start', true);
-	res.send('quiz-started');
+	return res.send('quiz-started');
 });
 
 router.post('/end-quiz', (req, res) => {
@@ -31,7 +31,7 @@ router.get('/', async (req, res) => {
 		// if (!quiz) return res.renderFile('events/quizzes_404.njk', { message: `The quiz hasn't started, yet!` });
 		const questions = handlerContext.quiz.questions;
 		return res.renderFile('live/master.njk', {
-			quiz: questions,
+			questions,
 			qAmt: questions.length,
 			id: 'live'
 		});
