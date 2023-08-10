@@ -95,7 +95,6 @@
 			showMessage('Waiting for quizmaster', 'Answer Submitted Successfully');
 			waitMsg = 'Waiting for quizmaster';
 			state = 'waiting'
-			waitingAnimation();
 			const response = await axios.post('/live/submit', {submitted, qNum: quesCounter});
 		}
 
@@ -111,7 +110,13 @@
 			submit();
 			state = 'waiting';
 			showMessage('Waiting for next question', 'Answer is being displayed');
-			waitingAnimation();
+			setTimeout(() => {
+				state = '';
+				showMessage('Waiting for next question', 'Please wait for the quizmaster to start the next question ^_^');
+				waitingMsg = 'Waitng for Quiz';
+				state = 'waiting';
+				waitingAnimation();
+			}, 3000);
 		});
 		
 		window.onload = () => {

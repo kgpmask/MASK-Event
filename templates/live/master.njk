@@ -140,6 +140,8 @@
 				document.getElementById(`qbox-${currentQues+1}`).style = "display:none;";
 				currentQues++;
 				document.getElementById(`qbox-${currentQues+1}`).style = "display:block;";
+				document.getElementById('startQ').innerHTML = 'Start Question';
+				startButton.disabled = false;
 			} else {
 				nextButton.disabled = true;
 			}

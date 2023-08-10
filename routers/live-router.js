@@ -12,6 +12,9 @@ router.post('/startQ', (req, res) => {
 		handlerContext.qNum = qNum;
 		io.sockets.in('waiting-for-live-quiz').emit('question', { qNum, type, options });
 		handlerContext.LQnum = qNum;
+		setTimeout(() => {
+			io.sockets.in('waiting-for-live-quiz').emit('answer');
+		}, 24000);
 		return res.send('question-live');
 	} else {
 		return res.send('not admin');
