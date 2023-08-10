@@ -6,68 +6,178 @@
 {% block pagecontent %}
 	<div class="container">
 		<fieldset class="question">
-			<legend id="info">&nbsp;&nbsp;Waiting for question&nbsp;&nbsp;</legend>
+			<legend id="info">&nbsp;&nbsp;Waiting for Quiz to Start&nbsp;&nbsp;</legend>
 			<div id="question-container">
 			</div>
-			<button onclick="submit()">Submit</button>
+			<button id="submit" onclick="submit()">Submit</button>
 		</fieldset>
 	</div>
 {% endblock %}
 
-{% block customcss %}
-	<style>
-
-	</style>
-{% endblock %}
-
 {% block customjs %}
 	<script>
-		let quesCounter = 1;
+		let quesCounter = 0;
+		let state = 'waiting';
+		let waitMsg = 'Waiting for Quiz'
+
+		function showMessage(heading, message) {
+			document.getElementById('info').innerHTML = `&nbsp;&nbsp;${heading}&nbsp;&nbsp;`;
+			document.getElementById('submit').style.display = 'none';
+			const div = document.createElement('div');
+			div.classList.add('message');
+			div.innerHTML = message;
+			document.getElementById('question-container').replaceChildren(div);
+		}
+
+		function waitingAnimation () {
+			step = 0;
+			function tick () {
+				if (state !== 'waiting') return;
+				step = step % 4;
+				document.getElementById('info').innerHTML = `&nbsp;&nbsp;${waitMsg} ${[...Array(step++)].map(() => '.').filter(e => e).join('')}${[...Array(4 - step)].map(() => '&nbsp;').filter(e => e).join('')}&nbsp;&nbsp;`;
+				setTimeout(tick, 400);
+			}
+			tick();
+		}
 
 		function showQuestion(type, options) {
-			document.getElementById('question-no').innerHTML = `&nbsp;&nbsp;Question #${quesCounter}&nbsp;&nbsp;`;
+			document.getElementById('info').innerHTML = `&nbsp;&nbsp;Question #${quesCounter}&nbsp;&nbsp;`;
+			document.getElementById('submit').style.display = 'unset';
 			const div = document.createElement('div');
 			div.classList.add('answer');
 			div.classList.add(type);
 			if(type === 'mcq') {
-				options.forEach(option => {
-					div.innerHTML += ```
+				options.map(option => {
+					div.innerHTML += `
 					<div class="option">
-						<input type="radio" id="${option}" name="${option}" class="option-input" value="${option}"/>
+						<input type="radio" id="${option}" name="ans" class="option-input" value="${option}"/>
 						<div class="option-design"></div>
 						<div class="option-text" for="${option}">${option}</div>
 					</div>
-					```;
+					`;
 				});
 			}
 			else {
 				div.innerHTML = `<input type="text" id='ans'>`;
 			}
-			document.getElementById('question-container').appendChild(div);
+			document.getElementById('question-container').replaceChildren(div);
 		}
 
 		async function submit() {
-			let submitted;
-			const ans = document.getElementsByClassName('class')[0]
+			let submitted= null;
+			const ans = document.getElementsByClassName('answer')[0];
 			if (ans.classList[1] === 'mcq') {
 				submitted = ans.querySelector("input:checked")?.value;
 			}
 			else {
 				submitted = document.getElementById('ans').value;
 			}
+			showMessage('Waiting for next question', 'Answer Submitted Successfully');
+			waitMsg = 'Waiting for next question';
+			waitingAnimation();
 			const response = await axios.post('/live/submit', {submitted});
 		}
 
-		socket.on('question', req => {
-			showQuestion()
+		{# socket.on('question', req => {
+			state = 'showing-question';
+			quesCounter++;
+			showQuestion();
 		});
+
+		socket.on('answer', req => {
+			state = 'showing-answer';
+			showMessage('Waiting for next question', 'Answer is being displayed');
+			waitingAnimation();
+		}); #}
 		
+		window.onload = () => {
+			showMessage('Waiting for Quiz', 'Please wait for the quizmaster to start the quiz !');
+			waitingAnimation();
+		}
 		// QUestion submit, a bit done
 		// Fetch new question
 		// Check for quiz end
 		// make hmtl on fetching new questions
 		// save user submitted responses
 	</script>
+{% endblock %}
+
+{% block customcss %}
+	<style>
+		.message {
+			padding:60px;
+		}
+		#info {
+			font-size: 1.25em;
+		}
+		.option {
+			position: relative;
+			display: flex;
+			align-items: center;
+			border-radius: 10px;
+			cursor: pointer;
+			transition: 0.3s;
+			padding: 5px 10px;
+			margin: 7px;
+		}
+
+		.option:hover{
+			background: hsla(0, 0%, 80%, .14);
+			{# scale: 1.1; #}
+		}
+
+		.option-input {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			opacity: 0;
+			z-index: 1;
+		}
+
+		.option-design {
+			width: 22px;
+			height: 22px;
+			border-radius: 100px;
+			background: linear-gradient(to right bottom, hsl(0deg 100% 75%), hsl(0deg 100% 50%));
+			position: relative;
+		}
+
+		.option-design::before {
+			content: '';
+			display: inline-block;
+			width: inherit;
+			height: inherit;
+			border-radius: inherit;
+			background: hsl(0, 0%, 90%);
+			transform: scale(1.1);
+			transition: 0.3s;
+		}
+
+		.option-input:checked+.option-design::before {
+			transform: scale(0);
+		}
+
+		.option-text {
+			color: hsl(0, 0%, 60%);
+			margin-left: 14px;
+			font-weight: 900;
+			transition: 0.3s;
+		}
+
+		.option-input:checked~.option-text {
+			color: hsl(184deg 58% 60%);
+		}
+
+		.mcq {
+			position: relative;
+			width: 100%;
+			height: fit-content;
+			margin: 25px 0px;
+			padding: 10px 0px;;
+			display: flex;
+			flex-direction: column;
+		}
+	</style>
 {% endblock %}
 
 {% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
