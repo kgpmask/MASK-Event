@@ -96,12 +96,13 @@
 			waitMsg = 'Waiting for quizmaster';
 			state = 'waiting'
 			waitingAnimation();
-			const response = await axios.post('/live/submit', {submitted, currentQ});
+			const response = await axios.post('/live/submit', {submitted, qNum: quesCounter});
 		}
 
 		socket.on('question', req => {
 			state = 'showing-question';
-			currentQ = req.currentQ;
+			quesCounter = req.qNum;
+			console.log(quesCounter);
 			quesCounter++;
 			showQuestion(req.type, req.options);
 		});

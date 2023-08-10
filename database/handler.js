@@ -106,7 +106,7 @@ async function getAllLiveResults (quizId) {
 }
 
 async function addLiveResult (userId, quizId, questionNo, response) {
-	const user = await getUser(userId);
+	const user = await User.findById(userId);
 	if (!user) throw new Error('Invalid UserID');
 	const results = new Records({
 		userId,

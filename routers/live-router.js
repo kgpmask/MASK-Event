@@ -9,8 +9,8 @@ router.post('/startQ', (req, res) => {
 		const currentQ = handlerContext.quiz.questions[qNum].question;
 		const options = handlerContext.quiz.questions[qNum].options;
 		const type = handlerContext.quiz.questions[qNum].type;
-		console.log(currentQ, options, type);
-		io.sockets.in('waiting-for-live-quiz').emit('question', { currentQ, type, options });
+		handlerContext.qNum = qNum;
+		io.sockets.in('waiting-for-live-quiz').emit('question', { qNum, type, options });
 		handlerContext.LQnum = qNum;
 		return res.send('question-live');
 	} else {
@@ -56,8 +56,8 @@ router.get('/', async (req, res) => {
 router.post('/submit', async (req, res) => {
 	if (req.isAdmin) return res.send('admins are not allowed here ;-;');
 	const answer = req.body.submitted;
-	const response = await dbh.addLiveResult(req.user._id, 'SQ4', req.body.currentQ, answer);
-	// console.log(response);
+	const response = await dbh.addLiveResult(req.user._id, 'SQ4', req.body.qNum, answer);
+	console.log(response);
 	return res.send('submitted');
 });
 
