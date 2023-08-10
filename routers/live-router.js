@@ -47,6 +47,7 @@ router.get('/', async (req, res) => {
 			dev: PARAMS.dev
 		});
 	} else {
+		if (!Object.keys(handlerContext).length) return res.renderFile('live/landing.njk');
 		return res.renderFile('live/participant.njk');
 	}
 });

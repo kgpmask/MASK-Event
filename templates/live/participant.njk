@@ -19,6 +19,7 @@
 		let quesCounter = 0;
 		let state = 'waiting';
 		let waitMsg = 'Waiting for Quiz'
+		const socket = io();
 
 		function showMessage(heading, message) {
 			document.getElementById('info').innerHTML = `&nbsp;&nbsp;${heading}&nbsp;&nbsp;`;
@@ -78,7 +79,7 @@
 			const response = await axios.post('/live/submit', {submitted});
 		}
 
-		{# socket.on('question', req => {
+		socket.on('question', req => {
 			state = 'showing-question';
 			quesCounter++;
 			showQuestion();
@@ -88,7 +89,7 @@
 			state = 'showing-answer';
 			showMessage('Waiting for next question', 'Answer is being displayed');
 			waitingAnimation();
-		}); #}
+		});
 		
 		window.onload = () => {
 			showMessage('Waiting for Quiz', 'Please wait for the quizmaster to start the quiz !');
@@ -180,4 +181,4 @@
 	</style>
 {% endblock %}
 
-{% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
+{% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js', '/socket.io/socket.io.js'] %}
