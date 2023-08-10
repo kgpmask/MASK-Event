@@ -22,8 +22,10 @@
 			</div>
 		</div>
 		<div class="questions-container">
-			{% for ele in questions %}
-				<p>a</p>
+			{% for q in questions %}
+				<div id='qbox-{{ loop.index }}' style='display:none;'>
+					{{ q.question.body }}
+				</div>
 			{% endfor %}
 		</div>
 		<div class="end-button">
@@ -33,7 +35,6 @@
 {% endblock %}
 
 {% block customcss %}
-	<link rel="stylesheet" type="text/css" href="/assets/styles/icons.css"/>
 	<style>
 		.prevQ {
 			display: inline-flex;
@@ -109,7 +110,10 @@
 		let currentQues = 0;
 
 		function startQuiz () {
-			//axios.post('/start', "start");
+			axios.post('/live/start', "start");
+			startButton.disabled = false;
+			nextButton.disabled = false;
+			prevButton.disabled = false;
 			document.getElementById('startQuiz').style = 'display:none;';
 		}
 
@@ -130,6 +134,7 @@
 
 		function nextQ () {
 			if (currentQues<({{ qAmt }}-1)) {
+				nextButton.disabled = false;
 				console.log({{ qAmt }});
 				nextButton.disabled = false;
 				document.getElementById(`qbox-${currentQues+1}`).style = "display:none;";
@@ -141,6 +146,7 @@
 		}
 		
 		function prevQ () {
+			if (currentQues<({{qAmt}}-1)) nextButton.disabled = false;
 			if (currentQues>0) {
 				prevButton.disabled = false;
 				document.getElementById(`qbox-${currentQues+1}`).style = "display:none;";
@@ -151,12 +157,18 @@
 			}
 		}
 
+		function endQuiz () {
+			axios.post('/live/end-quiz', "end");
+		}
 
 		window.onload = () => {
 			startButton = document.getElementById('startQ');
 			nextButton = document.getElementById('nextQ');
 			prevButton = document.getElementById('prevQ');
-			{# document.getElementById('qbox-1').style.display = 'block'; #}
+			startButton.disabled = true;
+			nextButton.disabled = true;
+			prevButton.disabled = true;
+			document.getElementById('qbox-1').style.display = 'block';
 			currentQues = 0;
 		}
 
