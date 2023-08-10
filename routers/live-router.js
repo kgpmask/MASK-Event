@@ -3,18 +3,6 @@ const dbh = require('../database/handler');
 
 const handlerContext = {};
 
-router.get('/master', async (req, res) => {
-	// TODO: In the future, set a 'daily' script to run at midnight and update a process.env.LIVE_QUIZ parameter
-	handlerContext.quiz = await dbh.getLiveQuiz('SQ4');
-	// if (!quiz) return res.renderFile('events/quizzes_404.njk', { message: `The quiz hasn't started, yet!` });
-	const questions = handlerContext.quiz.questions;
-	return res.renderFile('live/master.njk', {
-		quiz: questions,
-		qAmt: questions.length,
-		id: 'live'
-	});
-});
-
 router.post('/startQ', (req, res) => {
 	const qNum = req.body.questionNumber;
 	const currentQ = handlerContext.quiz.questions[qNum].question;
@@ -39,14 +27,13 @@ router.post('/end-quiz', (req, res) => {
 
 router.get('/', async (req, res) => {
 	if (req.isAdmin) {
-		const quiz = await dbh.getLiveQuiz();
+		handlerContext.quiz = await dbh.getLiveQuiz('SQ4');
 		// if (!quiz) return res.renderFile('events/quizzes_404.njk', { message: `The quiz hasn't started, yet!` });
-		const questions = quiz.questions;
+		const questions = handlerContext.quiz.questions;
 		return res.renderFile('live/master.njk', {
-			quiz: JSON.stringify(questions),
+			quiz: questions,
 			qAmt: questions.length,
-			id: 'live',
-			dev: PARAMS.dev
+			id: 'live'
 		});
 	} else {
 		if (!Object.keys(handlerContext).length) return res.renderFile('live/landing.njk');
