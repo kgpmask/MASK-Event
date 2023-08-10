@@ -9,7 +9,7 @@ router.get('/master', async (req, res) => {
 	// if (!quiz) return res.renderFile('events/quizzes_404.njk', { message: `The quiz hasn't started, yet!` });
 	const questions = handlerContext.quiz.questions;
 	return res.renderFile('live/master.njk', {
-		quiz: JSON.stringify(questions),
+		quiz: questions,
 		qAmt: questions.length,
 		id: 'live'
 	});
