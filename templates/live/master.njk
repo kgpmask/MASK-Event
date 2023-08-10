@@ -22,11 +22,8 @@
 			</div>
 		</div>
 		<div class="questions-container">
-			{% for q in qAmt %}
-				<div id="qbox-{{ q }}" style="display:none;">
-					<h3>{{ questions[q].question }}</h3>
-					<h4>{{ questions[q].type }}</h3>
-				</div>
+			{% for ele in questions %}
+				<p>a</p>
 			{% endfor %}
 		</div>
 		<div class="end-button">
@@ -139,7 +136,7 @@
 			startButton = document.getElementById('startQ');
 			nextButton = document.getElementById('nextQ');
 			prevButton = document.getElementById('prevQ');
-			document.getElementById('qbox-1').style.display = 'block';
+			{# document.getElementById('qbox-1').style.display = 'block'; #}
 			currentQues = 0;
 		}
 
