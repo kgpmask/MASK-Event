@@ -20,7 +20,7 @@ const questionSchema = new mongoose.Schema({
 				},
 				type: { type: String, required: true, enum: ['text', 'mcq', 'number'] },
 				options: [{ type: String, required: true }],
-				solutions: {
+				solution: {
 					type: [String, [{ type: [String] }]],
 					required: true
 				}

@@ -83,7 +83,7 @@
 			state = 'showing-question';
 			currentQ = req.currentQ;
 			quesCounter++;
-			showQuestion(req.options.type, req.options.options?);
+			showQuestion(req.type, req.options);
 		});
 
 		socket.on('answer', req => {
