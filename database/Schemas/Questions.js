@@ -30,14 +30,4 @@ const questionSchema = new mongoose.Schema({
 	}
 }, { collection: 'live-questions' });
 
-const recordSchema = new mongoose.Schema({
-	userId: { type: String, required: true },
-	quizId: { type: String, required: true },
-	questionNo: { type: Number, required: true },
-	response: String
-}, { collection: 'live-records' });
-
-module.exports = {
-	LiveQuestions: mongoose.model('Questions', questionSchema),
-	LiveRecords: mongoose.model('Records', recordSchema)
-};
+module.exports = mongoose.model('Questions', questionSchema);

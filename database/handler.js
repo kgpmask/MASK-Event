@@ -1,7 +1,8 @@
 const bcrypt = require('bcryptjs');
 const User = require('./Schemas/User');
 const Session = require('./Schemas/Session');
-const Live = require('./Schemas/Live');
+const Questions = require('./Schemas/Questions');
+const Records = require('./Schemas/Records');
 
 async function createUser (userData) {
 	const _id = userData.userID ?? (await User.find({ _id: { '$gt': 10000 } })).length + 10001;
@@ -91,9 +92,30 @@ async function getLiveQuiz (query) {
 	// TODO: Use IDs as a parameter properly
 	const date = query || 'SQ1';
 	// The first live quiz
-	const quiz = await Live.LiveQuestions.findOne({ title: date });
+	const quiz = await Questions.findOne({ title: date });
 	console.log(quiz);
 	if (quiz) return quiz.toObject();
+}
+
+async function getLiveResult (userId, quizId, questionNo) {
+	const data = await Records.findOne({ userId, quizId, questionNo });
+	if (data) return data.toObject();
+}
+
+async function getAllLiveResults (quizId) {
+	return await LiveResult.find({ quizId }).lean();
+}
+
+async function addLiveResult (userId, quizId, questionNo, response) {
+	const user = await getUser(userId);
+	const results = new Records({
+		userId,
+		quizId,
+		questionNo,
+		response
+	});
+	await results.save();
+	return results.toObject();
 }
 
 module.exports = {
@@ -107,5 +129,8 @@ module.exports = {
 	// createDummySession,
 	removeSession,
 	removeUser,
-	getLiveQuiz
+	getLiveQuiz,
+	getLiveResult,
+	getAllLiveResults,
+	addLiveResult
 };
