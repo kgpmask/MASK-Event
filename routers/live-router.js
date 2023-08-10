@@ -5,6 +5,8 @@ const handlerContext = {};
 
 router.post('/startQ', (req, res) => {
 	if (req.user.isAdmin) {
+		if (handlerContext.responseCache) handlerContext.responseCache = [];
+		else handlerContext.responseCache = [];
 		const qNum = req.body.questionNumber;
 		const currentQ = handlerContext.quiz.questions[qNum].question;
 		const options = handlerContext.quiz.questions[qNum].options;
@@ -58,9 +60,11 @@ router.get('/', async (req, res) => {
 
 router.post('/submit', async (req, res) => {
 	if (req.isAdmin) return res.send('admins are not allowed here ;-;');
+	if (handlerContext.responseCache.includes(req.user._id)) return res.send('Forbidden: Already Submitted');
 	const answer = req.body.submitted;
 	const response = await dbh.addLiveResult(req.user._id, 'SQ4', req.body.qNum, answer);
 	console.log(response);
+	handlerContext.responseCache.push(req.user._id);
 	return res.send('submitted');
 });
 
