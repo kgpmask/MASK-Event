@@ -45,7 +45,7 @@
 			timeLeft = time;
 			function tick () {
 				if (state === 'waiting') return;
-				document.getElementById('info').innerHTML = `&nbsp;&nbsp;Question #${quesCounter}  [${timeLeft--}]&nbsp;&nbsp;`
+				document.getElementById('info').innerHTML = `&nbsp;&nbsp;Question #${quesCounter}  [<span class="time">${timeLeft--}</span>]&nbsp;&nbsp;`
 				if (timeLeft >= 0) setTimeout(tick, 1000);
 				else {
 					if (state === 'running') {
@@ -65,10 +65,10 @@
 			div.classList.add('answer');
 			div.classList.add(type);
 			if(type === 'mcq') {
-				options.map(option => {
+				options.map((option, index) => {
 					div.innerHTML += `
 					<div class="option">
-						<input type="radio" id="${option}" name="ans" class="option-input" value="${option}"/>
+						<input type="radio" id="${option}" name="ans" class="option-input" value="${index+1}"/>
 						<div class="option-design"></div>
 						<div class="option-text" for="${option}">${option}</div>
 					</div>
@@ -107,11 +107,10 @@
 		});
 
 		socket.on('answer', req => {
+			state = 'showing-answer'
 			submit();
-			state = 'waiting';
 			showMessage('Waiting for next question', 'Answer is being displayed');
 			setTimeout(() => {
-				state = '';
 				showMessage('Waiting for next question', 'Please wait for the quizmaster to start the next question ^_^');
 				waitingMsg = 'Waitng for Quiz';
 				state = 'waiting';
@@ -138,6 +137,43 @@
 		}
 		#info {
 			font-size: 1.25em;
+		}
+		.time {
+			color: red;
+			font-weight: 600;
+		}
+		.container {
+			position: absolute;
+			top: 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			width: 100vw;
+		}
+		fieldset {
+			width: 70%;
+			padding: 20px 5vw;
+		}
+		.text,
+		.number {
+			all: revert;
+			margin: 50px 0 50px 0;
+		}
+		.text > input,
+		.number > input {
+			margin-bottom: 10px;
+			background-color: rgba(255,255,255,0.07);
+			font-weight: 300;
+			border-radius: 5px;
+			border: 2px solid var(--light-gray);
+			padding: 10px;
+			color: #fff;
+			outline: none;
+			min-width: 50%;
+			-moz-box-sizing: border-box;
+			-webkit-box-sizing: border-box;
+			box-sizing: border-box;
 		}
 		.option {
 			position: relative;
@@ -205,6 +241,20 @@
 			padding: 10px 0px;;
 			display: flex;
 			flex-direction: column;
+		}
+		#submit {
+			align-self: center;
+			margin: 15px 0px;
+			width: 50%;
+			background-color: var(--red);
+			color: white;
+			border: 0px;
+			padding: 12px 0;
+			font-size: 18px;
+			font-weight: 600;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: 0.3s;
 		}
 	</style>
 {% endblock %}
