@@ -99,14 +99,13 @@
 			document.getElementById('button-div').style = 'display:flex;justify-content:center;';
 			startButton.disabled = false;
 			nextButton.disabled = false;
-			prevButton.disabled = false;
+			prevButton.disabled = true;
 			document.getElementById('startQuiz').style = 'display:none;';
 			document.getElementById('qbox-1').style = 'display:block;';
-			prevButton.disabled = true;
 		}
 
 		async function startQ (time = 20) {
-			await axios.post('/live/startQ', { questionNumber: currentQues});
+			await axios.post('/live/start-q', { questionNumber: currentQues});
 			startButton.disabled = true;
 			prevButton.disabled = true;
 			nextButton.disabled = true;

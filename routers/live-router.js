@@ -3,7 +3,7 @@ const dbh = require('../database/handler');
 
 const handlerContext = {};
 
-router.post('/startQ', (req, res) => {
+router.post('/start-q', (req, res) => {
 	if (req.user.isAdmin) {
 		if (handlerContext.responseCache) handlerContext.responseCache = [];
 		else handlerContext.responseCache = [];
