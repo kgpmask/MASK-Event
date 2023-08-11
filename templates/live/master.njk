@@ -7,97 +7,81 @@
 
 {% block pagecontent %}
 	<div class="container">
+		<div style="padding-bottom:10px;"><p style="font-size:25px;">QUIZMASTER</p></div>
 		<div class="timer">
-			<button id="startQuiz" onclick="startQuiz()">Start Quiz</button>
+			<button id="startQuiz" onclick="startQuiz()" class="quiz-button"><b>Start Quiz</b></button>
 		</div>
-		<div class="buttons">
-			<div class="prevQ">
-				<button onclick="prevQ()" id="prevQ">Previous Question</button>
-			</div>
-			<div>
-				<button onclick="startQ()" id="startQ">Start Question</button>
-			</div>
-			<div class="nextQ">
-				<button onclick="nextQ()" id="nextQ">Next Question</button>
-			</div>
-		</div>
-		<div class="questions-container">
+
+		<div class="question-container">
 			{% for q in questions %}
-				<div id='qbox-{{ loop.index }}' style='display:none;'>
-					{{ q.question.body }}
+				<div id='qbox-{{ loop.index }}' class="qbox" style='display:none;'>
+					<h3>Question: {{ loop.index }}</h3>
+					<h1 style="font-color:gray;">{{ q.question.body }}</h1>
 				</div>
 			{% endfor %}
 		</div>
-		<div class="end-button">
-			<button onclick="endQuiz()">End Quiz</button>
+
+		<div id="button-div" style="display:none;">
+			<div>
+				<button onclick="prevQ()" id="prevQ" class="question-button">Previous Question</button>
+			</div>
+			<div>
+				<button onclick="startQ()" id="startQ" class="question-button">Start Question</button>
+			</div>
+			<div>
+				<button onclick="nextQ()" id="nextQ" class="question-button">Next Question</button>
+			</div>
 		</div>
 	</div> 
+	<div class="end-button">
+		<button onclick="endQuiz()" class="quiz-button">End Quiz</button>
+	</div>
 {% endblock %}
 
 {% block customcss %}
 	<style>
-		.prevQ {
-			display: inline-flex;
-			justify-content: left;
-		}
-		.nextQ {
-			display: inline-flex;
-			justify-content: right;
-		}
-		.container {
-			width: 80%;
-			margin: auto;
-			border: solid;
-		}
-		button.rel {
-			width: 100px;
-			height: 30px;
-			background-color: var(--gray);
-			color: var(--off-white);
-			border: 2px solid var(--ghost-gray);
+		.quiz-button {
+			height: 40px;
+			width: 250px;
+			background-color: var(--red);
+			opacity: 100%;
 			border-radius: 5px;
+			border-color: whitesmoke;
+			color: whitesmoke;
 			cursor: pointer;
+			margin: 10px 10px 10px 10px;
+		} 
+		.quiz-button:hover {
+			opacity: 80%;
 		}
-		button.rel:disabled {
-			background-color: var(--tinted-gray);
-			border: 1px solid var(--gray);
-			color: var(--ghost-gray);
+		.quiz-button:disabled {
+			background-color: var(--gray);
+			opacity: 50%;
 			cursor: default;
 		}
-		button.rel:not(:disabled):hover {
-			background-color: var(--middle-gray);
-		}
-		h3 {
-			margin: 10px;
-		}
-		.option {
-			margin: 8px;
-		}
-		.option-image {
-			margin: 10px;
-		}
-		.question-box {
-			border-radius: 10px;
-			background: rgba(0, 0, 0, 0.5);
-			padding: 25px;
-		}
-		button.disabled {
-			width: 0px;
-			height: 0px;
-		}
-		button.enabled {
-			width: 100px;
-			height: 30px;
-			background-color: var(--gray);
-			color: var(--off-white);
-			border: 2px solid var(--ghost-gray);
-			border-radius: 5px;
+
+		.question-button {
+			margin: 10px 10px 10px 10px;
+			height: 40px;
+			width: 200px;
 			cursor: pointer;
 		}
-		button.enabled:hover {
-			background-color: var(--middle-gray);
+
+		.question-button:disabled {
+			background-color: whitesmoke;
+			opacity: 70%;
+			border-radius: 5px;
 		}
-		button.start {}
+		
+		h1 {
+			margin: 0px 10px -2px 10px;
+		}
+		.qbox {
+			margin-top: 40px;
+		}
+		#button-div {
+			margin-bottom: 30px;
+		}
 	</style>
 {% endblock %}
 
@@ -111,52 +95,61 @@
 
 		function startQuiz () {
 			axios.post('/live/start-quiz', "start");
+			document.getElementById('button-div').style = 'display:flex;justify-content:center;';
 			startButton.disabled = false;
 			nextButton.disabled = false;
 			prevButton.disabled = false;
 			document.getElementById('startQuiz').style = 'display:none;';
+			document.getElementById('qbox-1').style = 'display:block;';
+			prevButton.disabled = true;
 		}
 
 		async function startQ (time = 20) {
 			await axios.post('/live/startQ', { questionNumber: currentQues});
-			document.getElementById('startQ').disabled = true;
+			startButton.disabled = true;
+			prevButton.disabled = true;
+			nextButton.disabled = true;
 			timeLeft = time;
 			while(timeLeft>0){
 				await new Promise((resolve) => setTimeout(resolve, 1000));
 				displayTime(--timeLeft);
 			}
 			document.getElementById('startQ').innerHTML = 'Time Ended';
+			resetQuestionButtons();
 		}
 
 		function displayTime (timeLeft) {
 			document.getElementById('startQ').innerHTML = timeLeft;
 		}
 
-		function nextQ () {
-			if (currentQues<({{ qAmt }}-1)) {
+		function resetQuestionButtons () {
+			if (currentQues > 0) {
+				prevButton.disabled = false;
+			} else {
+				prevButton.disabled = true;
+			}
+			if (currentQues < {{ qAmt }} - 1) {
 				nextButton.disabled = false;
-				console.log({{ qAmt }});
-				nextButton.disabled = false;
-				document.getElementById(`qbox-${currentQues+1}`).style = "display:none;";
-				currentQues++;
-				document.getElementById(`qbox-${currentQues+1}`).style = "display:block;";
-				document.getElementById('startQ').innerHTML = 'Start Question';
-				startButton.disabled = false;
 			} else {
 				nextButton.disabled = true;
 			}
 		}
+		function nextQ () {
+			document.getElementById(`qbox-${currentQues+1}`).style = "display:none;";
+			currentQues++;
+			document.getElementById(`qbox-${currentQues+1}`).style = "display:block;";
+			startButton.innerHTML = 'Start Question';
+			startButton.disabled = false;
+			resetQuestionButtons();
+		}
 		
 		function prevQ () {
-			if (currentQues<({{qAmt}}-1)) nextButton.disabled = false;
-			if (currentQues>0) {
-				prevButton.disabled = false;
-				document.getElementById(`qbox-${currentQues+1}`).style = "display:none;";
-				currentQues--;
-				document.getElementById(`qbox-${currentQues+1}`).style = "display:block;";
-			} else {
-				prevButton.disabled = true;
-			}
+			document.getElementById(`qbox-${currentQues+1}`).style = "display:none;";
+			currentQues--;
+			document.getElementById(`qbox-${currentQues+1}`).style = "display:block;";
+			startButton.innerHTML = 'Start Question';
+			startButton.disabled = false;
+			resetQuestionButtons();
 		}
 
 		function endQuiz () {
@@ -170,7 +163,6 @@
 			startButton.disabled = true;
 			nextButton.disabled = true;
 			prevButton.disabled = true;
-			document.getElementById('qbox-1').style.display = 'block';
 			currentQues = 0;
 		}
 
