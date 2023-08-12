@@ -31,8 +31,8 @@ server.listen(PORT, () => {
 });
 
 exports.ready = () => waitForDB;
-exports.close = () => {
-	server.close();
-	DB.disconnect();
-	sass.kill();
+exports.close = async () => {
+	await server.close();
+	await DB.disconnect();
+	await sass.kill();
 };
