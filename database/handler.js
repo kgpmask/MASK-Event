@@ -3,6 +3,7 @@ const User = require('./Schemas/User');
 const Session = require('./Schemas/Session');
 const Questions = require('./Schemas/Questions');
 const Records = require('./Schemas/Records');
+const Results = require('./Schemas/Results');
 
 async function createUser (userData) {
 	const _id = userData.userID ?? (await User.find({ _id: { '$gt': 10000 } })).length + 10001;
@@ -116,6 +117,21 @@ async function addLiveResult (userId, quizId, questionNo, response) {
 	});
 	await results.save();
 	return results.toObject();
+}
+
+async function updateResult(userId) {
+	const result = await Results.findOne({ userId });
+	if (!result) {
+		const data = new Results({
+			userId,
+		});
+		data.points = 10;
+		await data.save();
+		return data.toObject();
+	}
+	result.points = result.points + 10;
+	await result.save();
+	return result.toObject();
 }
 
 module.exports = {
