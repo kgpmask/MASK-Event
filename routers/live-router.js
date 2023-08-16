@@ -7,8 +7,7 @@ const handlerContext = {};
 
 router.post('/start-q', (req, res) => {
 	if (req.user.isAdmin) {
-		if (handlerContext.responseCache) handlerContext.responseCache = [];
-		else handlerContext.responseCache = [];
+		handlerContext.responseCache = {};
 		const qNum = req.body.questionNumber;
 		const currentQ = handlerContext.quiz.questions[qNum].question;
 		const options = handlerContext.quiz.questions[qNum].options;
@@ -18,6 +17,7 @@ router.post('/start-q', (req, res) => {
 		handlerContext.LQnum = qNum;
 		setTimeout(() => {
 			io.sockets.in('waiting-for-live-quiz').emit('answer');
+			check(handlerContext.responseCache, type, handlerContext.quiz.questions[qNum].solution);
 		}, 23000);
 		return res.send('question-live');
 	} else {
@@ -66,7 +66,7 @@ router.post('/submit', async (req, res) => {
 	const answer = req.body.submitted;
 	const response = await dbh.addLiveRecord(req.user._id, 'SQ4', req.body.qNum, answer);
 	console.log(response);
-	handlerContext.responseCache.push(req.user._id);
+	handlerContext.responseCache[req.user._id] = answer;
 	return res.send('submitted');
 });
 

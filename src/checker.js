@@ -1,5 +1,3 @@
-const tools = require('./tools');
-
 module.checkLive = function checkLive (answer, type, solution) {
 	if (!answer) return 0;
 	switch (answer) {
