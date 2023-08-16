@@ -119,11 +119,11 @@ async function addLiveResult (userId, quizId, questionNo, response) {
 	return results.toObject();
 }
 
-async function updateResult(userId) {
+async function updateResult (userId) {
 	const result = await Results.findOne({ userId });
 	if (!result) {
 		const data = new Results({
-			userId,
+			userId
 		});
 		data.points = 10;
 		await data.save();

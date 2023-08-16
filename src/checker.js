@@ -1,5 +1,5 @@
-const tools = require('./tools')
+const tools = require('./tools');
 
 function checkLive (answer, type, solution) {
-     // something ig hehehehehehehehhehehheheheheheheeh
+	// something ig hehehehehehehehhehehheheheheheheeh
 }
