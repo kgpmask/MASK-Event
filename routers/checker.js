@@ -1,4 +1,4 @@
-const checker = requier('../src/checker.js');
+const checker = require('../src/checker.js');
 const dbh = require('../database/handler');
 
 exports.check = async function check (responses, type, solution) {

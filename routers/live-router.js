@@ -37,7 +37,7 @@ router.post('/start-quiz', (req, res) => {
 router.post('/end-quiz', (req, res) => {
 	if (req.user.isAdmin) {
 		io.sockets.in('waiting-for-live-quiz').emit('end', true);
-		res.send('quiz-ended');
+		return res.send('quiz-ended');
 	} else {
 		return res.send('not admin');
 	}

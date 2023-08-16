@@ -98,6 +98,11 @@
 			const response = await axios.post('/live/submit', {submitted, qNum: quesCounter});
 		}
 
+		socket.on('end', req => {
+			state = 'quiz-ended';
+			showMessage('Quiz Ended', 'results will be shown soon...');
+			setTimeout(() => { window.location.href = '/'; }, 5000);
+		});
 		socket.on('question', req => {
 			state = 'showing-question';
 			quesCounter = req.qNum;
