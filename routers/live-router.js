@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const dbh = require('../database/handler');
 
+const check = require('./checker');
+
 const handlerContext = {};
 
 router.post('/start-q', (req, res) => {
@@ -62,7 +64,7 @@ router.post('/submit', async (req, res) => {
 	if (req.isAdmin) return res.send('admins are not allowed here ;-;');
 	if (handlerContext.responseCache.includes(req.user._id)) return res.send('Forbidden: Already Submitted');
 	const answer = req.body.submitted;
-	const response = await dbh.addLiveResult(req.user._id, 'SQ4', req.body.qNum, answer);
+	const response = await dbh.addLiveRecord(req.user._id, 'SQ4', req.body.qNum, answer);
 	console.log(response);
 	handlerContext.responseCache.push(req.user._id);
 	return res.send('submitted');

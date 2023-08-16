@@ -97,16 +97,16 @@ async function getLiveQuiz (query) {
 	if (quiz) return quiz.toObject();
 }
 
-async function getLiveResult (userId, quizId, questionNo) {
+async function getLiveRecord (userId, quizId, questionNo) {
 	const data = await Records.findOne({ userId, quizId, questionNo });
 	if (data) return data.toObject();
 }
 
-async function getAllLiveResults (quizId) {
+async function getAllLiveRecords (quizId) {
 	return await LiveResult.find({ quizId }).lean();
 }
 
-async function addLiveResult (userId, quizId, questionNo, response) {
+async function addLiveRecord (userId, quizId, questionNo, response) {
 	const user = await User.findById(userId);
 	if (!user) throw new Error('Invalid UserID');
 	const results = new Records({
@@ -119,7 +119,7 @@ async function addLiveResult (userId, quizId, questionNo, response) {
 	return results.toObject();
 }
 
-async function updateResult (userId) {
+async function updateLiveResult (userId, points) {
 	const result = await Results.findOne({ userId });
 	if (!result) {
 		const data = new Results({
@@ -129,7 +129,7 @@ async function updateResult (userId) {
 		await data.save();
 		return data.toObject();
 	}
-	result.points = result.points + 10;
+	result.points = result.points + points;
 	await result.save();
 	return result.toObject();
 }
@@ -146,7 +146,8 @@ module.exports = {
 	removeSession,
 	removeUser,
 	getLiveQuiz,
-	getLiveResult,
-	getAllLiveResults,
-	addLiveResult
+	getLiveRecord,
+	getAllLiveRecords,
+	addLiveRecord,
+	updateLiveResult
 };
