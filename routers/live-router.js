@@ -17,7 +17,7 @@ router.post('/start-q', (req, res) => {
 		handlerContext.LQnum = qNum;
 		setTimeout(() => {
 			io.sockets.in('waiting-for-live-quiz').emit('answer');
-			check(handlerContext.responseCache, type, handlerContext.quiz.questions[qNum].solution);
+			check.check(handlerContext.responseCache, type, handlerContext.quiz.questions[qNum].solution);
 		}, 23000);
 		return res.send('question-live');
 	} else {
@@ -62,7 +62,7 @@ router.get('/', async (req, res) => {
 
 router.post('/submit', async (req, res) => {
 	if (req.isAdmin) return res.send('admins are not allowed here ;-;');
-	if (handlerContext.responseCache.includes(req.user._id)) return res.send('Forbidden: Already Submitted');
+	if (handlerContext.responseCache[req.user._id]) return res.send('Forbidden: Already Submitted');
 	const answer = req.body.submitted;
 	const response = await dbh.addLiveRecord(req.user._id, 'SQ4', req.body.qNum, answer);
 	console.log(response);

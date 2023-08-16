@@ -1,13 +1,14 @@
-module.checkLive = function checkLive (answer, type, solution) {
+exports.checkLive = function checkLive (answer, type, solution) {
+	if (!Array.isArray(solution)) solution = [solution];
 	if (!answer) return 0;
-	switch (answer) {
+	switch (type) {
 		case 'number':
-			if (answer === ~~solution) return 10;
+			if (~~answer === ~~solution[0]) return 10;
 		case 'mcq':
-			if (answer === solution) return 10;
+			if (answer === solution[0]) return 10;
 		case 'text':
-			return Math.max(...solution.forEach(sol => {
-				return Tools.levenshtein(Tools.toID(answer), Tools.toID(sol)) > 5;
+			return Math.max([...solution].forEach(sol => {
+				return Tools.levenshtein(Tools.toID(answer), Tools.toID(sol)) > 5 ? 10 : 0;
 			}));
 	}
 };
