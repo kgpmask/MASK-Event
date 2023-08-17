@@ -119,6 +119,21 @@ async function addLiveRecord (userId, quizId, questionNo, response) {
 	return results.toObject();
 }
 
+async function addLiveResult (userId, points) {
+	const result = await Results.findOne({ userId });
+	if (!result) {
+		const data = new Results({
+			userId,
+			points
+		});
+		await data.save();
+		return data.toObject();
+	}
+	result.points = points;
+	await result.save();
+	return result.toObject();
+}
+
 async function updateLiveResult (userId, points) {
 	const result = await Results.findOne({ userId });
 	if (!result) {
@@ -149,5 +164,6 @@ module.exports = {
 	getLiveRecord,
 	getAllLiveRecords,
 	addLiveRecord,
+	addLiveResult,
 	updateLiveResult
 };

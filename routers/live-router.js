@@ -4,6 +4,7 @@ const dbh = require('../database/handler');
 const check = require('./checker');
 
 const handlerContext = {};
+const quizID = 'SQ4';
 
 router.post('/start-q', (req, res) => {
 	if (req.user.isAdmin) {
@@ -18,7 +19,7 @@ router.post('/start-q', (req, res) => {
 		setTimeout(() => {
 			io.sockets.in('waiting-for-live-quiz').emit('answer');
 			Object.entries(handlerContext.responseCache).map(async ([userId, answer] = response) => {
-				await dbh.addLiveRecord(userId, 'SQ4', handlerContext.qNum, answer);
+				await dbh.addLiveRecord(userId, quizID, handlerContext.qNum, answer);
 			});
 			check.check(handlerContext.responseCache, type, handlerContext.quiz.questions[qNum].solution);
 		}, 23000);
@@ -49,7 +50,7 @@ router.post('/end-quiz', (req, res) => {
 router.get('/', async (req, res) => {
 	if (!req.user) return res.send('not logged in');
 	if (req.isAdmin) {
-		handlerContext.quiz = await dbh.getLiveQuiz('SQ4');
+		handlerContext.quiz = await dbh.getLiveQuiz(quizID);
 		// if (!quiz) return res.renderFile('events/quizzes_404.njk', { message: `The quiz hasn't started, yet!` });
 		const questions = handlerContext.quiz.questions;
 		return res.renderFile('live/master.njk', {
@@ -61,6 +62,12 @@ router.get('/', async (req, res) => {
 		// if (!Object.keys(handlerContext).length) return res.renderFile('live/landing.njk');
 		return res.renderFile('live/participant.njk');
 	}
+});
+
+router.get('/recheck', async (req, res) => {
+	if (!req.isAdmin) return res.send('Forbidden: User does not have the permission');
+	const records = await dbh.getAllLiveRecords(quizID);
+	const quiz = await dbh.getLiveQuiz(quizID);
 });
 
 router.post('/submit', async (req, res) => {
