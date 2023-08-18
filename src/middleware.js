@@ -63,6 +63,7 @@ module.exports = function initMiddleware (app) {
 	app.use((req, res, next) => {
 		res.locals.mongoless = PARAMS.mongoless;
 		req.loggedIn = res.locals.loggedIn = Boolean(req.user);
+		req.isAdmin = res.locals.isAdmin = req.user?.isAdmin;
 		next();
 	});
 };

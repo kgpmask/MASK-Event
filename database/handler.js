@@ -91,7 +91,7 @@ async function removeUser (id) {
 
 async function getLiveQuiz (query) {
 	// TODO: Use IDs as a parameter properly
-	const title = query || 'SQ1';
+	const title = query || new Date().toISOString().slice(0, 10);
 	// The first live quiz
 	const quiz = await Questions.findOne({ "title": title });
 	if (quiz) return quiz.toObject();
