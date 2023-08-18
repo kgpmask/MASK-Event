@@ -88,8 +88,6 @@ router.get('/', async (req, res) => {
 	}
 });
 
-});
-
 router.post('/submit', async (req, res) => {
 	if (req.isAdmin) return res.send('admins are not allowed here ;-;');
 	if (handlerContext.responseCache[req.user._id]) return res.send('Forbidden: Already Submitted');
