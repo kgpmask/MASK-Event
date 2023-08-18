@@ -103,7 +103,7 @@ async function getLiveRecord (userId, quizId, questionNo) {
 }
 
 async function getAllLiveRecords (quizId) {
-	return await LiveResult.find({ quizId }).lean();
+	return await Records.find({ quizId }).lean();
 }
 
 async function addLiveRecord (userId, quizId, questionNo, response) {

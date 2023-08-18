@@ -72,6 +72,22 @@ router.get('/recheck', async (req, res) => {
 	if (!req.isAdmin) return res.status(403).send('Forbidden: Admin permissions not detected.');
 	const records = await dbh.getAllLiveRecords(handlerContext.quiz.title);
 	const quiz = await dbh.getLiveQuiz(handlerContext.quiz.title);
+	const userData = {};
+	records.forEach(record => {
+		if (!record.response) return;
+		const points = checker.checkLive(
+			record.response,
+			quiz.questions[record.questionNo].type,
+			quiz.questions[record.questionNo].solution
+		);
+		if (points) {
+			if (userData[record.userId]) userData[record.userId] = points;
+			else userData[record.userId] = userData[record.userId] + points;
+		}
+		Object.entries(handlerContext.responseCache).map(async ([userId, points] = elements) => {
+			console.log('here');
+		});
+	});
 });
 
 module.exports = {
