@@ -80,7 +80,7 @@
 			}
 			document.getElementById('question-container').replaceChildren(div);
 			state = 'running';
-			timer(20);
+			timer(type === 'mcq' ? 10 : 15);
 		}
 
 		async function submit() {
@@ -92,17 +92,17 @@
 			else {
 				submitted = document.getElementById('ans').value;
 			}
-			showMessage('Waiting for quizmaster', 'Answer Submitted Successfully');
-			waitMsg = 'Waiting for quizmaster';
-			state = 'waiting'
+			showMessage('Waiting for Quizmaster', 'Answer Submitted Successfully');
+			setTimeout(() => showMessage('Waiting for Quizmaster', 'Please wait for other participants to finish answering'), 3000)
 			const response = await axios.post('/live/submit', {submitted, qNum: quesCounter});
 		}
 
 		socket.on('end', req => {
 			state = 'quiz-ended';
-			showMessage('Quiz Ended', 'results will be shown soon...');
+			showMessage('Quiz Ended', 'Results will be shown soon...');
 			setTimeout(() => { window.location.href = '/'; }, 5000);
 		});
+
 		socket.on('question', req => {
 			state = 'showing-question';
 			quesCounter = req.qNum;
@@ -114,24 +114,19 @@
 		socket.on('answer', req => {
 			state = 'showing-answer'
 			submit();
-			showMessage('Waiting for next question', 'Answer is being displayed');
+			showMessage('Waiting for Question', 'Time’s Up !');
 			setTimeout(() => {
-				showMessage('Waiting for next question', 'Please wait for the quizmaster to start the next question ^_^');
-				waitingMsg = 'Waitng for Quiz';
+				showMessage('Waiting for Question', 'Please wait for the quizmaster to start the next question ^_^');
+				waitingMsg = 'Waiting for Question';
 				state = 'waiting';
 				waitingAnimation();
 			}, 3000);
 		});
 		
 		window.onload = () => {
-			showMessage('Waiting for Quiz', 'Please wait for the quizmaster to start the quiz !');
+			showMessage('Waiting for Question', 'Please wait for the quizmaster to start the question ^_^');
 			waitingAnimation();
 		}
-		// QUestion submit, a bit done
-		// Fetch new question
-		// Check for quiz end
-		// make hmtl on fetching new questions
-		// save user submitted responses
 	</script>
 {% endblock %}
 

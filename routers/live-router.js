@@ -13,6 +13,7 @@ router.use((req, res, next) => {
 router.get('/', async (req, res) => {
 	if (req.isAdmin) {
 		handlerContext.quiz = await dbh.getLiveQuiz(PARAMS.dev ? 'SQ4' : undefined);
+		handlerContext.quizTitle = handlerContext.quiz.title;
 		const questions = handlerContext.quiz.questions;
 		return res.renderFile('live/master.njk', {
 			questions,
@@ -50,7 +51,7 @@ router.post('/start-q', (req, res) => {
 			const points = checker.checkLive(answer, type, solution);
 			if (points) return await dbh.updateLiveResult(userId, points);
 		});
-	}, 23000);
+	}, type === 'mcq' ? 12000 : 17000);
 	return res.send('question-live');
 });
 
@@ -65,13 +66,14 @@ router.post('/submit', async (req, res) => {
 router.post('/end-quiz', (req, res) => {
 	if (!req.isAdmin) return res.status(403).send('Forbidden: Admin permissions not detected.');
 	io.sockets.in('waiting-for-live-quiz').emit('end', true);
+	handlerContext.quiz = {};
 	return res.send('quiz-ended');
 });
 
 router.get('/recheck', async (req, res) => {
 	if (!req.isAdmin) return res.status(403).send('Forbidden: Admin permissions not detected.');
-	const records = await dbh.getAllLiveRecords(handlerContext.quiz.title);
-	const quiz = await dbh.getLiveQuiz(handlerContext.quiz.title);
+	const records = await dbh.getAllLiveRecords(handlerContext.quizTitle);
+	const quiz = await dbh.getLiveQuiz(handlerContext.quizTitle);
 	const userData = {};
 	records.forEach(record => {
 		if (!record.response) return;
