@@ -86,9 +86,9 @@ router.get('/recheck', async (req, res) => {
 			if (userData[record.userId]) userData[record.userId] = points;
 			else userData[record.userId] = userData[record.userId] + points;
 		}
-		Object.entries(handlerContext.responseCache).map(async ([userId, points] = elements) => {
-			console.log('here');
-		});
+	});
+	Object.entries(userData).map(async ([userId, points] = user) => {
+		await dbh.addLiveResult(userId, points);
 	});
 });
 
