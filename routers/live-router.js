@@ -90,7 +90,7 @@ router.post('/recheck', async (req, res) => {
 			quiz.questions[record.questionNo].type,
 			quiz.questions[record.questionNo].solution
 		);
-		if (points) {
+		if (points > 0) {
 			if (!userData[record.userId]) userData[record.userId] = points;
 			else userData[record.userId] = userData[record.userId] + points;
 		}
