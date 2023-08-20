@@ -3,10 +3,12 @@ exports.checkLive = function checkLive (answer, type, solution) {
 	if (!answer) return 0;
 	switch (type) {
 		case 'mcq':
-			if (answer === solution[0]) return 10;
+			return answer === solution[0] ? 10 : 0;
 		case 'text':
-			return Math.max([...solution].forEach(sol => {
-				return Tools.levenshtein(Tools.toID(answer), Tools.toID(sol)) > 5 ? 10 : 0;
+			return Math.max(...[...solution].map(sol => {
+				return Tools.levenshtein(Tools.toID(answer), Tools.toID(sol)) < 5 ? 10 : 0;
 			}));
+		default:
+			return answer === soution[0] && typeof answer === typeof solution[0] ? 10 : 0;
 	}
 };

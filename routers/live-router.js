@@ -14,6 +14,7 @@ router.get('/', async (req, res) => {
 	if (req.isAdmin) {
 		handlerContext.quiz = await dbh.getLiveQuiz(PARAMS.dev ? 'SQ4' : undefined);
 		handlerContext.quizTitle = handlerContext.quiz.title;
+		handlerContext.quizId = handlerContext.quiz._id;
 		const questions = handlerContext.quiz.questions;
 		return res.renderFile('live/master.njk', {
 			questions,
@@ -24,6 +25,12 @@ router.get('/', async (req, res) => {
 		if (!handlerContext.quizStarted) return res.renderFile('live/landing.njk');
 		return res.renderFile('live/participant.njk');
 	}
+});
+
+router.get('/results', async (req, res) => {
+	if (!req.isAdmin) return res.forbidden();
+	const results = await dbh.getLiveResults(handlerContext.quizId);
+	return res.renderFile('live/results.njk', { results });
 });
 
 router.post('/start-quiz', (req, res) => {
@@ -47,9 +54,9 @@ router.post('/start-q', (req, res) => {
 		const solution = handlerContext.quiz.questions[qNum].solution;
 		io.sockets.in('waiting-for-live-quiz').emit('answer');
 		Object.entries(handlerContext.responseCache).map(async ([userId, answer] = response) => {
-			await dbh.addLiveRecord(userId, handlerContext.quiz.title, handlerContext.qNum, answer);
+			await dbh.addLiveRecord(userId, handlerContext.quiz._id, handlerContext.qNum, answer);
 			const points = checker.checkLive(answer, type, solution);
-			if (points) return await dbh.updateLiveResult(userId, points);
+			if (points) return await dbh.updateLiveResult(userId, handlerContext.quiz._id, points);
 		});
 	}, type === 'mcq' ? 12000 : 17000);
 	return res.send('question-live');
@@ -70,9 +77,9 @@ router.post('/end-quiz', (req, res) => {
 	return res.send('quiz-ended');
 });
 
-router.get('/recheck', async (req, res) => {
+router.post('/recheck', async (req, res) => {
 	if (!req.isAdmin) return res.status(403).send('Forbidden: Admin permissions not detected.');
-	const records = await dbh.getAllLiveRecords(handlerContext.quizTitle);
+	const records = await dbh.getAllLiveRecords(handlerContext.quizId);
 	const quiz = await dbh.getLiveQuiz(handlerContext.quizTitle);
 	const userData = {};
 	records.forEach(record => {
@@ -83,12 +90,12 @@ router.get('/recheck', async (req, res) => {
 			quiz.questions[record.questionNo].solution
 		);
 		if (points) {
-			if (userData[record.userId]) userData[record.userId] = points;
+			if (!userData[record.userId]) userData[record.userId] = points;
 			else userData[record.userId] = userData[record.userId] + points;
 		}
 	});
 	Object.entries(userData).map(async ([userId, points] = user) => {
-		await dbh.addLiveResult(userId, points);
+		await dbh.addLiveResult(userId, quiz._id, points);
 	});
 });
 

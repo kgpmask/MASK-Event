@@ -119,11 +119,12 @@ async function addLiveRecord (userId, quizId, questionNo, response) {
 	return results.toObject();
 }
 
-async function addLiveResult (userId, points) {
+async function addLiveResult (userId, quizId, points) {
 	const result = await Results.findOne({ userId });
 	if (!result) {
 		const data = new Results({
 			userId,
+			quizId,
 			points
 		});
 		await data.save();
@@ -134,11 +135,12 @@ async function addLiveResult (userId, points) {
 	return result.toObject();
 }
 
-async function updateLiveResult (userId, points) {
+async function updateLiveResult (userId, quizId, points) {
 	const result = await Results.findOne({ userId });
 	if (!result) {
 		const data = new Results({
-			userId
+			userId,
+			quizId
 		});
 		data.points = 10;
 		await data.save();
@@ -147,6 +149,10 @@ async function updateLiveResult (userId, points) {
 	result.points = result.points + points;
 	await result.save();
 	return result.toObject();
+}
+
+async function getLiveResults (quizId) {
+	return await Results.find({ quizId }).lean().sort({ 'points': -1 });
 }
 
 module.exports = {
@@ -165,5 +171,6 @@ module.exports = {
 	getAllLiveRecords,
 	addLiveRecord,
 	addLiveResult,
-	updateLiveResult
+	updateLiveResult,
+	getLiveResults
 };
