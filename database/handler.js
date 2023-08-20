@@ -40,6 +40,10 @@ async function getUsers () {
 	return await User.find({ _id: { $gt: 10000 } }).lean();
 }
 
+async function getUserFromID (userID) {
+	return await User.findById(userID);
+}
+
 async function getUserByUsername (username) {
 	return await User.findOne({ 'username': `${username}` });
 }

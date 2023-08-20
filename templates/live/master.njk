@@ -15,7 +15,9 @@
 		<div class="question-container">
 			{% for q in questions %}
 				<div id='qbox-{{ loop.index }}' class="qbox" style='display:none;'>
-					<h3>Question: {{ loop.index }}</h3>
+					<h3>Question: {{ loop.index0 }}</h3>
+					<h3>Type: {{ q.type | upper }}</h3>
+					<h2 style="font-color:gray;">{{ q.question.title }}</h2>
 					<h1 style="font-color:gray;">{{ q.question.body }}</h1>
 				</div>
 			{% endfor %}
@@ -104,12 +106,12 @@
 			document.getElementById('qbox-1').style = 'display:block;';
 		}
 
-		async function startQ (time = 20) {
+		async function startQ () {
 			await axios.post('/live/start-q', { questionNumber: currentQues});
 			startButton.disabled = true;
 			prevButton.disabled = true;
 			nextButton.disabled = true;
-			timeLeft = time;
+			timeLeft = document.getElementById(`qbox-${currentQues + 1}`).children[1].innerHTML.split(" ")[1].toLowerCase() === 'mcq' ? 10 : 15;
 			while(timeLeft>0){
 				await new Promise((resolve) => setTimeout(resolve, 1000));
 				displayTime(--timeLeft);

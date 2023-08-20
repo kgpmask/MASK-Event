@@ -12,7 +12,7 @@ router.use((req, res, next) => {
 
 router.get('/', async (req, res) => {
 	if (req.isAdmin) {
-		handlerContext.quiz = await dbh.getLiveQuiz(PARAMS.dev ? 'SQ4' : undefined);
+		handlerContext.quiz = await dbh.getLiveQuiz('2023-09-03');
 		handlerContext.quizTitle = handlerContext.quiz.title;
 		handlerContext.quizId = handlerContext.quiz._id;
 		const questions = handlerContext.quiz.questions;
@@ -30,6 +30,7 @@ router.get('/', async (req, res) => {
 router.get('/results', async (req, res) => {
 	if (!req.isAdmin) return res.forbidden();
 	const results = await dbh.getLiveResults(handlerContext.quizId);
+	// const allUsers = await dbh.getUsers();
 	return res.renderFile('live/results.njk', { results });
 });
 
@@ -97,6 +98,7 @@ router.post('/recheck', async (req, res) => {
 	Object.entries(userData).map(async ([userId, points] = user) => {
 		await dbh.addLiveResult(userId, quiz._id, points);
 	});
+	return res.send('rechecked');
 });
 
 module.exports = {

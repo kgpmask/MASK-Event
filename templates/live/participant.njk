@@ -114,7 +114,6 @@
 		socket.on('answer', req => {
 			state = 'showing-answer'
 			submit();
-			showMessage('Waiting for Question', 'Time’s Up !');
 			setTimeout(() => {
 				showMessage('Waiting for Question', 'Please wait for the quizmaster to start the next question ^_^');
 				waitingMsg = 'Waiting for Question';
