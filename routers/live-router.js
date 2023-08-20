@@ -30,8 +30,8 @@ router.get('/', async (req, res) => {
 router.get('/results', async (req, res) => {
 	if (!req.isAdmin) return res.forbidden();
 	const results = await dbh.getLiveResults(handlerContext.quizId);
-	// const allUsers = await dbh.getUsers();
-	return res.renderFile('live/results.njk', { results });
+	const userMap = await dbh.genUserMap();
+	return res.renderFile('live/results.njk', { results, userMap });
 });
 
 router.post('/start-quiz', (req, res) => {

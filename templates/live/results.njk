@@ -11,7 +11,7 @@
 		{% for result in results %}
 			<tr>
 				<td>{{ loop.index }}</td>
-				<td>{{ result.userId }}</td>
+				<td>{{ userMap[result.userId] }}</td>
 				<td>{{ result.points }}</td>
 			</tr>
 		{% endfor %}

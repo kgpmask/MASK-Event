@@ -40,8 +40,13 @@ async function getUsers () {
 	return await User.find({ _id: { $gt: 10000 } }).lean();
 }
 
-async function getUserFromID (userID) {
-	return await User.findById(userID);
+async function genUserMap (userID) {
+	const data = await getUsers();
+	const map = {};
+	data.forEach(ele => {
+		map[ele._id] = ele.username;
+	});
+	return map;
 }
 
 async function getUserByUsername (username) {
@@ -163,6 +168,7 @@ module.exports = {
 	createUser,
 	editUser,
 	getUsers,
+	genUserMap,
 	getUserByUsername,
 	validateUser,
 	getUserFromSessionID,
