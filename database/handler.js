@@ -40,11 +40,11 @@ async function getUsers () {
 	return await User.find({ _id: { $gt: 10000 } }).lean();
 }
 
-async function genUserMap (userID) {
+async function genUserMap () {
 	const data = await getUsers();
 	const map = {};
 	data.forEach(ele => {
-		map[ele._id] = ele.username;
+		map[ele._id] = [ele.username, ele.name];
 	});
 	return map;
 }
