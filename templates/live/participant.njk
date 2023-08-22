@@ -5,7 +5,14 @@
 
 {% block pagecontent %}
 	<div class="container">
-		<fieldset class="question">
+		<div id="instructions">
+			<div id="instruction-body">
+				<p>Test</p>
+			</div>
+			<button onclick="userConfirm()">Start Attempt</button>
+		</div>
+		<div id="timer" style="display: none;">Time Left</div>
+		<fieldset id="question" style="display: none;">
 			<legend id="info">&nbsp;&nbsp;Waiting for Quiz to Start&nbsp;&nbsp;</legend>
 			<div id="question-container">
 			</div>
@@ -18,9 +25,15 @@
 	<script>
 		let quesCounter = 0;
 		let state = 'waiting';
-		let waitMsg = 'Waiting for Quiz'
+		let waitMsg = 'Waiting'
+		let readInstructions = false;
 		const socket = io();
 
+		function userConfirm() {
+			readInstructions = true;
+			document.getElementById('question').style.display = 'revert';
+			document.getElementById('instructions').style.display = 'none';
+		}
 		function showMessage(heading, message) {
 			document.getElementById('info').innerHTML = `&nbsp;&nbsp;${heading}&nbsp;&nbsp;`;
 			document.getElementById('submit').style.display = 'none';
@@ -43,15 +56,16 @@
 
 		function timer (time) {
 			timeLeft = time;
+			document.getElementById('timer').style.display = 'revert';
 			function tick () {
-				if (state === 'waiting') return;
-				document.getElementById('info').innerHTML = `&nbsp;&nbsp;Question #${quesCounter}  [<span class="time">${timeLeft--}</span>]&nbsp;&nbsp;`
+				document.getElementById('timer').innerHTML = `Time Left: ${timeLeft--}`
 				if (timeLeft >= 0) setTimeout(tick, 1000);
 				else {
+					document.getElementById('timer').style.display = 'none';
 					if (state === 'running') {
 						state = 'time-out'
 						submit();
-						showMessage(`&nbsp;&nbsp;Question #${quesCounter}&nbsp;&nbsp;`, 'Time’s Up ! Your response has been submitted');
+						showMessage(`Waiting`, 'Time’s Up ! Your response has been submitted');
 					}
 				}
 			}
@@ -92,8 +106,15 @@
 			else {
 				submitted = document.getElementById('ans').value;
 			}
-			showMessage('Waiting for Quizmaster', 'Answer Submitted Successfully');
-			setTimeout(() => showMessage('Waiting for Quizmaster', 'Please wait for other participants to finish answering'), 3000)
+			if (state === 'time-out') {
+				showMessage('Waiting for Quizmaster', 'Time’s Up! Your answer has been submitted.');
+			}
+			else {
+				showMessage('Waiting for Quizmaster', 'Answer Submitted Successfully');
+				setTimeout(() => {
+					if (state === 'running') showMessage('Waiting for Quizmaster', 'Please wait for other participants to finish answering');
+				}, 3000)
+			}
 			const response = await axios.post('/live/submit', {submitted, qNum: quesCounter});
 		}
 
@@ -104,26 +125,28 @@
 		});
 
 		socket.on('question', req => {
-			state = 'showing-question';
-			quesCounter = req.qNum;
-			console.log(quesCounter);
-			quesCounter++;
-			showQuestion(req.type, req.options);
+			if (readInstructions) {
+				state = 'showing-question';
+				quesCounter = req.qNum;
+				console.log(quesCounter);
+				quesCounter++;
+				showQuestion(req.type, req.options);
+			}
 		});
 
 		socket.on('answer', req => {
-			state = 'showing-answer'
 			submit();
 			setTimeout(() => {
-				showMessage('Waiting for Question', 'Please wait for the quizmaster to start the next question ^_^');
+				showMessage('Waiting for Question', 'Please wait for the quizmaster to start the next question');
 				waitingMsg = 'Waiting for Question';
 				state = 'waiting';
 				waitingAnimation();
-			}, 3000);
+			}, state === 'time-out' ? 3000 : 500);
+			state = 'showing-answer';
 		});
 		
 		window.onload = () => {
-			showMessage('Waiting for Question', 'Please wait for the quizmaster to start the question ^_^');
+			showMessage('Waiting for Question', 'Please wait for the quizmaster to start the question');
 			waitingAnimation();
 		}
 	</script>
@@ -145,10 +168,17 @@
 			position: absolute;
 			top: 0;
 			display: flex;
+			flex-direction: column;
 			justify-content: center;
 			align-items: center;
 			height: 100vh;
 			width: 100vw;
+		}
+		#timer {
+			margin-bottom: 20px;
+			font-weight: 600;
+			font-size: 20px;
+			color: var(--red);
 		}
 		fieldset {
 			width: 70%;
@@ -241,14 +271,14 @@
 			display: flex;
 			flex-direction: column;
 		}
-		#submit {
+		button {
 			align-self: center;
-			margin: 15px 0px;
-			width: 50%;
+			margin: 15px 0;
+			width: fit-content;
 			background-color: var(--red);
 			color: white;
 			border: 0px;
-			padding: 12px 0;
+			padding: 12px 10px;
 			font-size: 18px;
 			font-weight: 600;
 			border-radius: 5px;
