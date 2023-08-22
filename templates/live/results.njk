@@ -5,15 +5,15 @@
 	<table style="width: 80vw; margin: auto;">
 		<tr>
 			<th style="width:15%;">Rank</th>
-			<th style="width:35%;">Username</th>
 			<th style="width:35%;">Name</th>
+			<th style="width:35%;">Username</th>
 			<th style="width:15%;">Points</th>
 		</tr>
 		{% for result in results %}
 			<tr>
 				<td>{{ loop.index }}</td>
-				<td>{{ userMap[result.userId][0] }}</td>
 				<td>{{ userMap[result.userId][1] }}</td>
+				<td>{{ userMap[result.userId][0] }}</td>
 				<td>{{ result.points }}</td>
 			</tr>
 		{% endfor %}
