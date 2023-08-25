@@ -28,10 +28,17 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/results', async (req, res) => {
-	if (!req.isAdmin) return res.forbidden();
-	const results = await dbh.getLiveResults(handlerContext.quizId);
-	const userMap = await dbh.genUserMap();
-	return res.renderFile('live/results.njk', { results, userMap });
+	if (req.isAdmin) {
+		const results = await dbh.getLiveResults(handlerContext.quizId);
+		const userMap = await dbh.genUserMap();
+		handlerContext.results = results;
+		handlerContext.userMap = userMap;
+	}
+	return res.renderFile('live/results.njk', {
+		results: handlerContext.results,
+		userMap: handlerContext.userMap,
+		admin: req.isAdmin
+	});
 });
 
 router.post('/start-quiz', (req, res) => {
