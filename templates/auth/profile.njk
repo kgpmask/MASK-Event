@@ -1,0 +1,32 @@
+{% extends '_base.njk' %}
+
+{% block pagecontent %}
+    <div class="container">
+        <div class="profile">
+            <div class="main">
+                <div class="image">
+                    <img src="{{ user.image }}" onerror="this.src = './assets/profile/blank.jpeg';">
+                </div>
+                <div class="user">
+                    <p>Name : {{ user.name }}</p>
+                    <p>Username : {{ user.username }}</p>
+                </div>
+            </div>
+            <div class="details">
+                <p>Roll : {{ user.roll }}</p>
+                <p>Phone : {{ user.phone }}</p>
+                <p>Email : {{ user.email }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block customcss %}
+    <style>
+        .image > img {
+            height: 100px;
+            width: 100px;
+            border-radius: 50%;
+        }
+    </style>
+{% endblock %}
