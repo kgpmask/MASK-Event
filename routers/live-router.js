@@ -61,11 +61,13 @@ router.post('/start-q', (req, res) => {
 	setTimeout(() => {
 		const solution = handlerContext.quiz.questions[qNum].solution;
 		io.sockets.in('waiting-for-live-quiz').emit('answer');
-		Object.entries(handlerContext.responseCache).map(async ([userId, answer] = response) => {
-			await dbh.addLiveRecord(userId, handlerContext.quiz._id, handlerContext.qNum, answer);
-			const points = checker.checkLive(answer, type, solution);
-			if (points) return await dbh.updateLiveResult(userId, handlerContext.quiz._id, points);
-		});
+		setTimeout(() => {
+			Object.entries(handlerContext.responseCache).map(async ([userId, answer] = response) => {
+				await dbh.addLiveRecord(userId, handlerContext.quiz._id, handlerContext.qNum, answer);
+				const points = checker.checkLive(answer, type, solution);
+				if (points) return await dbh.updateLiveResult(userId, handlerContext.quiz._id, points);
+			});
+		}, 2000);
 	}, type === 'mcq' ? 12000 : 17000);
 	return res.send('question-live');
 });
