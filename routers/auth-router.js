@@ -25,6 +25,10 @@ router.get('/signup', (req, res) => {
 	return res.renderFile('auth/signup.njk');
 });
 
+router.get('/profile', (req, res) => {
+	if (!req.loggedIn) return res.redirect('/login');
+	return res.renderFile('auth/profile.njk', { user: req.user });
+});
 // Post requests here
 
 router.post('/login', [

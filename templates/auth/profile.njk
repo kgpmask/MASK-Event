@@ -1,9 +1,57 @@
-{% extends '_base.njk.njk' %}
+{% extends '_base.njk' %}
 
 {% block pagecontent %}
-	<div class="container">
-		<div class="profile">
-			
-		</div>
-	</div>
+    <div class="container">
+        <div class="profile">
+            <div class="main">
+                <div class="image">
+                    <img src="{{ user.image }}" onerror="this.src = './assets/profile/blank.jpeg';">
+                </div>
+                <div class="user">
+                    <p>Name : {{ user.name }}</p>
+                    <p>Username : {{ user.username }}</p>
+                </div>
+            </div>
+            <div class="details">
+                <p>Roll : {{ user.roll }}</p>
+                <p>Phone : {{ user.phone }}</p>
+                <p>Email : {{ user.email }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block customcss %}
+    <style>
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .profile {
+            position: relative;
+            width: min(380px, 70%);
+            background: transparent;
+            border: 3px solid;
+            border-color: var(--dark-gray);
+            border-top-color: var(--red);
+            border-bottom-color: var(--red);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 5px;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 0, 0, .5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            padding: 20px 1%;
+        }
+        .image > img {
+            height: 100px;
+            width: 100px;
+        }
+    </style>
 {% endblock %}

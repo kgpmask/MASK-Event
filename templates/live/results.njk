@@ -18,7 +18,9 @@
 			</tr>
 		{% endfor %}
 	</table>
-	<button onclick="recheck();">Recheck</button>
+	{% if admin %}
+		<button onclick="recheck();">Recheck</button>
+	{% endif %}
 {% endblock %}
 
 {% block customcss %}
