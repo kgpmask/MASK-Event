@@ -2,29 +2,56 @@
 
 {% block pagecontent %}
     <div class="container">
-        <div class="profile">
+		<div class="overlay" id="overlay" style="display:none;">
+			<div id="closeModal">X</div>
+			<div class="pictures">
+				{% for pic, path in pics %}
+				<button id="{{ pic }}" class="pic" onclick="change(this)">
+					<img src="../assets/profile/{{ path }}">
+				</button>
+				{% endfor %}
+			</div>
+			<button class="submit">Edit Pic</button>
+		</div>
+        <div class="profile" style="display: block;" id="profile">
             <div class="main">
                 <div class="image">
-                    <img src="{{ user.image }}" onerror="this.src = './assets/profile/blank.jpeg';">
+                    <img src="{{ user.image }}" onerror="this.src = './assets/profile/blank.jpeg';" id="user-image" onclick="ToggleOverlay()">
                 </div>
                 <div class="user">
-                    <p>Name : {{ user.name }}</p>
-                    <p>Username : {{ user.username }}</p>
+                    <p class="details">Name : {{ user.name }}</p>
+                    <p class="details">Username : {{ user.username }}</p>
                 </div>
             </div>
-            <div class="details">
-                <p>Roll : {{ user.roll }}</p>
-                <p>Phone : {{ user.phone }}</p>
-                <p>Email : {{ user.email }}</p>
+            <div class="details-container">
+                <p class="details">Roll : {{ user.roll }}</p>
+                <p class="details">Phone : {{ user.phone }}</p>
+                <p class="details">Email : {{ user.email }}</p>
             </div>
         </div>
+		{% if not user.image %}
+			<div style="color: var(--red); font-size: 12px; font-weight: 900; margin-top: 20px;">*Click on the profile picture to change it</div>
+		{% endif %}
     </div>
 {% endblock %}
 
 {% block customcss %}
     <style>
+		#closeModal {
+			font-size: 2em;
+			position: fixed;
+			top: 0;
+			left: 0;
+			z-index: -1;
+		}
+		.details {
+			font-weight: 150;
+			font-size: 20px;
+			padding: 4px 1%;
+		}
         .container {
             display: flex;
+			flex-direction: column;
             align-items: center;
             justify-content: center;
         }
@@ -40,7 +67,7 @@
             border-top-right-radius: 5px;
             border-bottom-left-radius: 5px;
             border-bottom-right-radius: 20px;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px);
             box-shadow: 0 0 20px rgba(0, 0, 0, .5);
             display: flex;
             flex-direction: column;
@@ -49,9 +76,97 @@
             box-sizing: border-box;
             padding: 20px 1%;
         }
+		.image {
+			padding: 30px 2%;
+		}
         .image > img {
             height: 100px;
             width: 100px;
+			border: outset var(--light-gray);
+			border-radius: 10px;
+			box-shadow: 0px 0px 30px var(--tinted-gray);
         }
+		.image > img:hover {
+			cursor: pointer;
+		}
+		.overlay {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+			z-index: 1;
+			width: 100%;
+			height: 100%;
+			position: fixed;
+			top: 0;
+			left: 0;
+			backdrop-filter: blur(5px);
+			background: rgba(0, 0, 0, 0.4);
+		}
+		.pictures {
+			display: flex;
+			overflow-y: scroll;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-content: center;
+			width: max(295px, 60vw);
+			height: max(300px, 60vh);
+			backdrop-filter: blur(10px);
+			background: rgba(0, 0, 0, 0.6);
+			padding: min(20px, 10vw);
+			box-shadow: 0px 0px 30px var(--tinted-gray);
+			border-radius: 6px;
+		}
+		.pic {
+			background: transparent;
+			outline: none;
+			border: none;
+		}
+		.pic > img {
+			height: 75px;
+			margin: 10px;
+			width: 75px;
+			transition: 0.3s all ease;
+		}
+		.pic > img:hover {
+			height: 85px;
+			margin: 5px;
+			width: 85px;
+		}
+		.submit {
+			align-self: center;
+			margin: 15px 0px;
+			width: max(280px, 60vw);
+			background-color: var(--red);
+			color: white;
+			border: 0px;
+			padding: 12px 0;
+			font-size: 18px;
+			font-weight: 600;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: 0.3s;
+		}
+
+		.submit:hover {
+			background-color: #c90c0c;
+}
     </style>
 {% endblock %}
+
+{% block customjs %}
+	<script>
+		document.getElementById('closeModal').addEventListener('click', () => {})
+
+		function change(element) {
+			axios.post('/edit')
+		}
+
+		function ToggleOverlay() {
+			const pfp_overlay = document.getElementById('overlay');
+			pfp_overlay.style.display === 'none' ? pfp_overlay.style.display = 'flex' : pfp_overlay.style.display;
+		}
+	</script>
+{% endblock %}
+
+{% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
