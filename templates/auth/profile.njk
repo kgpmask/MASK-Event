@@ -14,10 +14,12 @@
 			</div>
 			<button class="submit" onclick="submit()">Update Pic</button>
 		</div>
+		<h1>My Profile</h1>
         <div class="profile" style="display: block;" id="profile">
-            <div class="main">
-                <div class="image">
+            <div class="main-details">
+                <div class="image" style="position: relative;">
                     <img src="./assets/profile/{{ user.image }}" onerror="this.src = './assets/profile/blank.jpeg';" id="user-image" onclick="ToggleOverlay()">
+					<svg fill="#ffffff" version="1.1" id="edit-ico" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20px" height="20px" viewBox="0 0 528.899 528.899" xml:space="preserve" stroke="#a9a9a9"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M328.883,89.125l107.59,107.589l-272.34,272.34L56.604,361.465L328.883,89.125z M518.113,63.177l-47.981-47.981 c-18.543-18.543-48.653-18.543-67.259,0l-45.961,45.961l107.59,107.59l53.611-53.611 C532.495,100.753,532.495,77.559,518.113,63.177z M0.3,512.69c-1.958,8.812,5.998,16.708,14.811,14.565l119.891-29.069 L27.473,390.597L0.3,512.69z"></path> </g> </g></svg>
                 </div>
                 <div class="user">
                     <p class="details">Name : {{ user.name }}</p>
@@ -54,6 +56,24 @@
 		#closeModal:hover {
 			font-size: 2.3em;
 		}
+		#edit-ico {
+			position: absolute;
+			bottom: 32px;
+			right: 8px;
+			margin: 5px;
+			transition: 0.3s all ease-out
+		}
+		#user-image:hover ~ #edit-ico {
+			height: 22px;
+			width: 22px;
+			margin: 4px;
+		}
+		.main-details {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
 		.details {
 			font-weight: 150;
 			font-size: 20px;
@@ -85,6 +105,10 @@
         }
 		.image {
 			padding: 30px 2%;
+			position: relative;
+			display: flex;
+			justify-content: center;
+			align-items: flex-end;
 		}
         .image > img {
             height: 100px;
@@ -131,10 +155,10 @@
 			border: none;
 		}
 		.picture > img {
-			height: 75px;
-			margin: 10px;
-			width: 75px;
-			transition: 0.3s height ease, 0.3s width ease, 0.3s margin ease, 0.1s border ease;
+			height: max(75px, 6vw);
+			width: max(75px, 6vw);
+			margin: min(2vw, 10px);
+			transition: 0.3s all ease;
 		}
 		.pic {
 			position: absolute;
@@ -145,9 +169,9 @@
 		}
 		.pic:checked ~ img,
 		.pic:hover ~ img {
-			height: 85px;
-			margin: 5px;
-			width: 85px;
+			height: max(85px, calc(6vw + 10px));
+			width: max(85px, calc(6vw + 10px));
+			margin: min(5px, calc(2vw - 5px));
 		}
 		.pic:checked ~ img {
 			border: 1px solid var(--red);
