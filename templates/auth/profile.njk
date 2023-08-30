@@ -3,7 +3,7 @@
 {% block pagecontent %}
     <div class="container">
 		<div class="overlay" id="overlay" style="display:none;">
-			<div id="closeModal">X</div>
+			<button onclick="ToggleOverlay()" id="closeModal">&#10006;</button>
 			<div class="pictures">
 				{% for pic, path in pics %}
 				<div class="picture">
@@ -12,12 +12,12 @@
 				</div>
 				{% endfor %}
 			</div>
-			<button class="submit" onlick="submit()">Edit Pic</button>
+			<button class="submit" onclick="submit()">Update Pic</button>
 		</div>
         <div class="profile" style="display: block;" id="profile">
             <div class="main">
                 <div class="image">
-                    <img src="{{ user.image }}" onerror="this.src = './assets/profile/blank.jpeg';" id="user-image" onclick="ToggleOverlay()">
+                    <img src="./assets/profile/{{ user.image }}" onerror="this.src = './assets/profile/blank.jpeg';" id="user-image" onclick="ToggleOverlay()">
                 </div>
                 <div class="user">
                     <p class="details">Name : {{ user.name }}</p>
@@ -42,8 +42,17 @@
 			font-size: 2em;
 			position: fixed;
 			top: 0;
-			left: 0;
+			right: 0;
 			z-index: -1;
+			background: transparent;
+			color: var(--light-gray);
+			outline: none;
+			border: none;
+			margin: min(2vw, 20px);
+			transition: 0.5s all ease;
+		}
+		#closeModal:hover {
+			font-size: 2.3em;
 		}
 		.details {
 			font-weight: 150;
@@ -59,15 +68,12 @@
         .profile {
             position: relative;
             width: min(380px, 70%);
-            background: transparent;
+            background: rgba(20, 20, 20, 0.3);
             border: 3px solid;
             border-color: var(--dark-gray);
             border-top-color: var(--red);
             border-bottom-color: var(--red);
-            border-top-left-radius: 20px;
-            border-top-right-radius: 5px;
-            border-bottom-left-radius: 5px;
-            border-bottom-right-radius: 20px;
+            border-radius: 5px;
             backdrop-filter: blur(20px);
             box-shadow: 0 0 20px rgba(0, 0, 0, .5);
             display: flex;
@@ -95,7 +101,7 @@
 			align-items: center;
 			justify-content: center;
 			flex-direction: column;
-			z-index: 1;
+			z-index: 100;
 			width: 100%;
 			height: 100%;
 			position: fixed;
@@ -106,11 +112,12 @@
 		}
 		.pictures {
 			display: flex;
-			overflow-y: scroll;
+			overflow-y: auto;
 			flex-wrap: wrap;
 			justify-content: center;
+			align-content: flex-start;
 			width: max(295px, 60vw);
-			height: max(300px, 60vh);
+			max-height: max(300px, 60vh);
 			backdrop-filter: blur(10px);
 			background: rgba(0, 0, 0, 0.6);
 			padding: min(20px, 10vw);
@@ -127,7 +134,7 @@
 			height: 75px;
 			margin: 10px;
 			width: 75px;
-			transition: 0.3s all ease;
+			transition: 0.3s height ease, 0.3s width ease, 0.3s margin ease, 0.1s border ease;
 		}
 		.pic {
 			position: absolute;
@@ -143,7 +150,7 @@
 			width: 85px;
 		}
 		.pic:checked ~ img {
-			border: 2px solid var(--red);
+			border: 1px solid var(--red);
 		}
 		.submit {
 			align-self: center;
@@ -168,16 +175,16 @@
 
 {% block customjs %}
 	<script>
-		document.getElementById('closeModal').addEventListener('click', () => {})
-
-		function change() {
+		async function submit() {
 			const character = document.getElementsByClassName('pictures')[0].querySelectorAll('input:checked')[0].id;
-			axios.post('/edit', { character });
+			console.log(character);
+			const res = await axios.post('/edit-profile', { character });
+			setTimeout(() => window.location.href = window.location.href, 2000);
 		}
 
 		function ToggleOverlay() {
 			const pfp_overlay = document.getElementById('overlay');
-			pfp_overlay.style.display === 'none' ? pfp_overlay.style.display = 'flex' : pfp_overlay.style.display;
+			pfp_overlay.style.display === 'none' ? pfp_overlay.style.display = 'flex' : pfp_overlay.style.display = 'none';
 		}
 	</script>
 {% endblock %}

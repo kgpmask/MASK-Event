@@ -36,6 +36,13 @@ async function editUser (userData) {
 	return await user.save();
 }
 
+async function updateImage (username, image) {
+	const user = await getUserByUsername(username);
+	if (!user) throw new Error('Invalid User');
+	user.image = image;
+	return await user.save();
+}
+
 async function getUsers () {
 	return await User.find({ _id: { $gt: 10000 } }).lean();
 }
@@ -167,6 +174,7 @@ async function getLiveResults (quizId) {
 module.exports = {
 	createUser,
 	editUser,
+	updateImage,
 	getUsers,
 	genUserMap,
 	getUserByUsername,

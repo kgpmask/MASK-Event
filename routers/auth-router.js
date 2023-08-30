@@ -102,6 +102,9 @@ app.post('/logout', async (req, res, next) => {
 
 app.post('/edit-profile', async (req, res) => {
 	if (!req.loggedIn) return res.error('nande koko ni ??');
+	const response = await dbh.updateImage(req.user.username, profile[req.body.character]);
+	if (!response) throw new Error('Something went wrong');
+	return res.send('updated succesfully');
 });
 
 module.exports = {
