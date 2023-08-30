@@ -1,6 +1,6 @@
 {
 	"name": "mask-event",
-	"version": "0.2.0",
+	"version": "1.0.0",
 	"description": "A lighter site made for events using github.com/kgpmask/MASK as a base",
 	"main": "src/server.js",
 	"directories": {
@@ -15,7 +15,7 @@
 		"mocha-all": "cross-env NODE_ENV=test mocha test/**.js --parallel --exit",
 		"mocha": "cross-env NODE_ENV=test mocha --exit",
 		"start": "node .",
-		"test": "npm run lint && npm run mocha-all && echo \"Passing all tests.\" & exit 0",
+		"test": "(npm run lint || exit $?) && (npm run mocha-all || exit $?) && echo \"Passing all tests.\" & exit 0",
 		"update-branch": "git fetch $(git rev-parse --symbolic-full-name --abbrev-ref @{upstream} | sed 's!/! !') && git merge FETCH_HEAD"
 	},
 	"repository": {
@@ -40,7 +40,8 @@
 		"express-validator": "^7.0.1",
 		"mongoose": "^7.4.0",
 		"nunjucks": "^3.2.4",
-		"sass": "^1.63.4"
+		"sass": "^1.63.4",
+		"socket.io": "^4.7.2"
 	},
 	"devDependencies": {
 		"cross-env": "^7.0.3",

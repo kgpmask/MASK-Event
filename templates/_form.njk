@@ -5,7 +5,7 @@
 {% endmacro %}
 
 {% macro field(id, label, value, type = "text") %}
-	<div class="item field">
+	<div class="item field" {% if type == 'hidden' %} style="display: none;" {% endif %}>
 		<input type="{{type}}" required id="{{ id }}" {% if value %} value="{{ value }}" {% endif %}>
 		<label>{{ label }}</label>
 	</div>

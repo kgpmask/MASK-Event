@@ -2,6 +2,8 @@ const router = require('express').Router();
 const dbh = require('../database/handler');
 const { body, validationResult } = require('express-validator');
 
+const profile = require('../src/profile.json');
+
 router.use((req, res, next) => {
 	if (['/login', '/signup', '/logout'].indexOf(req.path) + 1 && PARAMS.mongoless)
 		return req.method === 'GET' ? res.forbidden() : res.status(403).send('Forbidden: Mongoless mode');
@@ -25,6 +27,10 @@ router.get('/signup', (req, res) => {
 	return res.renderFile('auth/signup.njk');
 });
 
+router.get('/profile', (req, res) => {
+	if (!req.loggedIn) return res.redirect('/login');
+	return res.renderFile('auth/profile.njk', { user: req.user, pics: Object.entries(profile) });
+});
 // Post requests here
 
 router.post('/login', [
@@ -92,6 +98,13 @@ app.post('/logout', async (req, res, next) => {
 	if (!req.loggedIn) return res.error('Stop trying to break the website ;-;');
 	await res.clearCookie('sessionID');
 	return res.send('Signed out successfully. Mata ne.');
+});
+
+app.post('/edit-profile', async (req, res) => {
+	if (!req.loggedIn) return res.error('nande koko ni ??');
+	const response = await dbh.updateImage(req.user.username, profile[req.body.character]);
+	if (!response) throw new Error('Something went wrong');
+	return res.send('updated succesfully');
 });
 
 module.exports = {

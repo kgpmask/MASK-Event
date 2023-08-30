@@ -1,0 +1,16 @@
+{% extends 'info/landing.njk' %}
+
+{% set pagetitle = 'Open Campus Anime Quiz' %}
+
+{% block extrajs %}
+	<script>
+		const socket = io();
+
+		socket.on('start', req => {
+			document.getElementById('content').innerHTML = '<p style="font-size: 20px;" class="quote">Quiz Has Started, Please wait while we redirect you to the quiz ^_^</p>'
+			setTimeout(() => window.location.href = window.location.href, 3000);
+		})
+	</script>
+{% endblock %}
+
+{% set scripts = ['/socket.io/socket.io.js'] %}

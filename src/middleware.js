@@ -14,6 +14,7 @@ module.exports = function initMiddleware (app) {
 			const { sessionID } = req.cookies;
 			if (!sessionID) return next();
 			req.user = await dbh.getUserFromSessionID(sessionID);
+			req.isAdmin = req.user?.isAdmin;
 		} catch (err) {
 			res.clearCookie('sessionID');
 		}
@@ -56,9 +57,13 @@ module.exports = function initMiddleware (app) {
 		next();
 	});
 
+	// Global middlewares: used while testing
+	if (global.MIDDLEWARES) app.use(...global.MIDDLEWARES);
+
 	app.use((req, res, next) => {
 		res.locals.mongoless = PARAMS.mongoless;
 		req.loggedIn = res.locals.loggedIn = Boolean(req.user);
+		req.isAdmin = res.locals.isAdmin = req.user?.isAdmin;
 		next();
 	});
 };

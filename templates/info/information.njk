@@ -1,0 +1,50 @@
+{% extends '_base.njk' %}
+
+{% block pagecontent %}
+	<div id="main-page">
+		<h1> Event Information </h1>
+		<ul>
+			<li> <span style="color: var(--red);">Date/Time:</span> September 3, 2023, 2:00 PM </li>
+			<li> <span style="color: var(--red);">Venue:</span> Raman Auditorium (Main Building) </li>
+			<br/>
+			<li> The quiz is open to all students of IIT Kharagpur. </li>
+			<li> The quiz is expected to run for 3 hours, with small breaks in between rounds. Be prepared with some water and/or snacks for the same. </li>
+			<li> The quiz will be conducted online via your device; you are advised to bring your laptop, but a mobile phone will also suffice. </li>
+			<li> Punctuality is recommended. If you come late, you might have to start from the middle of the quiz. </li>
+			<br/>
+		</ul>
+		In case of any doubt, feel free to contact Aman <r>(63773 08533)</r> and Soumil <r>(86975 63554)</r> </li>
+	</div>
+{% endblock %}
+
+{% block customcss %}
+	<style>
+		#main-page {
+			margin: 20px auto;
+			border: solid 2px var(--light-gray);
+			border-radius: 10px;
+			width: calc(min(80vw, 700px + 30vw, 1000px + 20vw));
+			padding: 20px 10px;
+			
+			background-color: var(--abyss);
+		}
+
+		#main-page > h1 {
+			color: var(--red);
+		}
+
+		#main-page > ul {
+			width: 80%;
+			margin: 10px auto;
+		}
+
+		#main-page > ul > li {
+			text-align: left;
+			margin: 5px;
+		}
+
+		r {
+			color: var(--error-red);
+		}
+	</style>
+{% endblock %}

@@ -11,6 +11,7 @@ const PORT = process.env.PORT ?? 6970;
 const initMiddleware = require('./middleware');
 const router = require('./router');
 const DB = require('../database/database');
+const socketio = require('socket.io')();
 
 global.app = express();
 const waitForDB = PARAMS.mongoless ? Promise.resolve({}) : DB.init();
@@ -30,9 +31,12 @@ server.listen(PORT, () => {
 	if (!PARAMS.test) console.log(`The server is up at http://localhost:${PORT}/`);
 });
 
+global.io = socketio.listen(server);
+require('./socket');
+
 exports.ready = () => waitForDB;
-exports.close = () => {
-	server.close();
-	DB.disconnect();
-	sass.kill();
+exports.close = async () => {
+	await server.close();
+	await DB.disconnect();
+	await sass.kill();
 };

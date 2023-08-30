@@ -1,0 +1,59 @@
+{% extends 'admin/_admin.njk' %}
+
+{% block pagecontent %}
+	<h1>Users Registered for Quiz</h1>
+	<div class="container">
+		<fieldset>
+			<legend>&nbsp;&nbsp;Registered Users: {{ users | length }}&nbsp;&nbsp;</legend><br/>
+			{% for user in users %}
+				<div class="card">
+					<img src="{{ user.image }}" onerror="this.src='../assets/logo.jpeg'"/>
+					<div class="details">
+						<p>Name : {{ user.name }}</p>
+						<p>Username: {{ user.username }}</p>
+					</div>
+					<button onclick="edit('{{ user.username }}')">Edit User</button>
+				</div>
+			{% endfor %}
+		</fieldset>
+	</div>
+{% endblock %}
+
+{% block customcss %}
+	<style>
+		.container {
+			display: flex;
+			justify-content: center;
+		}
+
+		fieldset {
+			width: 90%;
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			padding: 20px;
+		}
+		.card {
+			border: 2px solid var(--off-white);
+			border-radius: 7px;
+			padding: 10px;
+			margin: 10px;
+		}
+
+		.card > img {
+			height: 100px;
+			width: 100px;
+		}
+		.details {
+			margin: 20px 0 20px 0;;
+		}
+	</style>
+{% endblock %}
+
+{% block customjs %}
+	<script>
+		function edit(username) {
+			window.location.href = `/admin/edit-user?username=${username}`;
+		}
+	</script>
+{% endblock %}

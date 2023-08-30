@@ -6,7 +6,7 @@ const assert = require('assert');
 const axios = require('axios');
 const server = require('../src/server');
 
-const pages = ['/'];
+const pages = [''];
 
 describe("Server (mongoless):", () => {
 	before(async () => await server.ready());
