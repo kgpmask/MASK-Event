@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
 			id: 'live'
 		});
 	} else {
-		if (!handlerContext.quizStarted) return res.renderFile('live/landing.njk');
+		if (!handlerContext.quizStarted) return res.redirect('/');
 		return res.renderFile('live/participant.njk');
 	}
 });
