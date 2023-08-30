@@ -239,4 +239,6 @@ Your PR will be approved when two of the following conditions are met:
 - [Dishant Bothra](https://github.com/DishantB0411)
 - [Jai Sachdev](https://github.com/SachdevJai)
 - [Sahil Patel](https://github.com/Symbiot01)
+### Content
+- Aman Tater
 > _will be added as they contribute_
