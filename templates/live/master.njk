@@ -1,0 +1,173 @@
+{% extends "_base.njk" %}
+
+{% set thispage = 'live' %}
+{% set pagetitle = 'Live Quiz' %}
+
+{% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
+
+{% block pagecontent %}
+	<div class="container">
+		<div style="padding-bottom:10px;"><p style="font-size:25px;">QUIZMASTER</p></div>
+		<div class="timer">
+			<button id="startQuiz" onclick="startQuiz()" class="quiz-button"><b>Start Quiz</b></button>
+		</div>
+
+		<div class="question-container">
+			{% for q in questions %}
+				<div id='qbox-{{ loop.index }}' class="qbox" style='display:none;'>
+					<h3>Question: {{ loop.index0 }}</h3>
+					<h3>Type: {{ q.type | upper }}</h3>
+					<h2 style="font-color:gray;">{{ q.question.title }}</h2>
+					<h1 style="font-color:gray;">{{ q.question.body }}</h1>
+				</div>
+			{% endfor %}
+		</div>
+
+		<div id="button-div" style="display:none;">
+			<div>
+				<button onclick="prevQ()" id="prevQ" class="question-button">Previous Question</button>
+			</div>
+			<div>
+				<button onclick="startQ()" id="startQ" class="question-button">Start Question</button>
+			</div>
+			<div>
+				<button onclick="nextQ()" id="nextQ" class="question-button">Next Question</button>
+			</div>
+		</div>
+	</div> 
+	<div class="end-button">
+		<button onclick="endQuiz()" class="quiz-button">End Quiz</button>
+	</div>
+{% endblock %}
+
+{% block customcss %}
+	<style>
+		.quiz-button {
+			height: 40px;
+			width: 250px;
+			background-color: var(--red);
+			opacity: 100%;
+			border-radius: 5px;
+			border-color: whitesmoke;
+			color: whitesmoke;
+			cursor: pointer;
+			margin: 10px 10px 10px 10px;
+		} 
+		.quiz-button:hover {
+			opacity: 80%;
+		}
+		.quiz-button:disabled {
+			background-color: var(--gray);
+			opacity: 50%;
+			cursor: default;
+		}
+
+		.question-button {
+			margin: 10px 10px 10px 10px;
+			height: 40px;
+			width: 200px;
+			cursor: pointer;
+		}
+
+		.question-button:disabled {
+			background-color: whitesmoke;
+			opacity: 70%;
+			border-radius: 5px;
+			cursor: default;
+		}
+		
+		h1 {
+			margin: 0px 10px -2px 10px;
+		}
+		.qbox {
+			margin-top: 40px;
+		}
+		#button-div {
+			margin-bottom: 30px;
+		}
+	</style>
+{% endblock %}
+
+{% block customjs %}
+	<script>
+		axios.defaults.withCredentials = true;
+		axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
+
+		let timeLeft = 0;
+		let currentQues = 0;
+
+		function startQuiz () {
+			axios.post('/live/start-quiz', "start");
+			document.getElementById('button-div').style = 'display:flex;justify-content:center;';
+			startButton.disabled = false;
+			nextButton.disabled = false;
+			prevButton.disabled = true;
+			document.getElementById('startQuiz').style = 'display:none;';
+			document.getElementById('qbox-1').style = 'display:block;';
+		}
+
+		async function startQ () {
+			await axios.post('/live/start-q', { questionNumber: currentQues});
+			startButton.disabled = true;
+			prevButton.disabled = true;
+			nextButton.disabled = true;
+			timeLeft = document.getElementById(`qbox-${currentQues + 1}`).children[1].innerHTML.split(" ")[1].toLowerCase() === 'mcq' ? 10 : 15;
+			while(timeLeft>0){
+				await new Promise((resolve) => setTimeout(resolve, 1000));
+				displayTime(--timeLeft);
+			}
+			document.getElementById('startQ').innerHTML = 'Time Ended';
+			resetQuestionButtons();
+		}
+
+		function displayTime (timeLeft) {
+			document.getElementById('startQ').innerHTML = timeLeft;
+		}
+
+		function resetQuestionButtons () {
+			if (currentQues > 0) {
+				prevButton.disabled = false;
+			} else {
+				prevButton.disabled = true;
+			}
+			if (currentQues < {{ qAmt }} - 1) {
+				nextButton.disabled = false;
+			} else {
+				nextButton.disabled = true;
+			}
+		}
+		function nextQ () {
+			document.getElementById(`qbox-${currentQues+1}`).style = "display:none;";
+			currentQues++;
+			document.getElementById(`qbox-${currentQues+1}`).style = "display:block;";
+			startButton.innerHTML = 'Start Question';
+			startButton.disabled = false;
+			resetQuestionButtons();
+		}
+		
+		function prevQ () {
+			document.getElementById(`qbox-${currentQues+1}`).style = "display:none;";
+			currentQues--;
+			document.getElementById(`qbox-${currentQues+1}`).style = "display:block;";
+			startButton.innerHTML = 'Start Question';
+			startButton.disabled = false;
+			resetQuestionButtons();
+		}
+
+		function endQuiz () {
+			axios.post('/live/end-quiz', "end");
+			setTimeout(() => window.location.href = '/', 2000);
+		}
+
+		window.onload = () => {
+			startButton = document.getElementById('startQ');
+			nextButton = document.getElementById('nextQ');
+			prevButton = document.getElementById('prevQ');
+			startButton.disabled = true;
+			nextButton.disabled = true;
+			prevButton.disabled = true;
+			currentQues = 0;
+		}
+
+	</script>
+{% endblock %}

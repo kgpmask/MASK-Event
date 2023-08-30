@@ -1,11 +1,9 @@
 const router = require('express').Router();
 const dbh = require('../database/handler');
 const { body, validationResult } = require('express-validator');
+const checkAdmin = require('./check-admin');
 
-router.use('/', (req, res, next) => {
-	if (!req.user?.isAdmin) return req.method === 'GET' ? res.forbidden() : res.status(403).send('Forbidden: Not Authorized');
-	return next();
-});
+router.use('/', checkAdmin);
 
 router.get('/', (req, res) => {
 	res.renderFile('admin/_admin.njk');

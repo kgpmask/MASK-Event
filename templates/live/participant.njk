@@ -1,0 +1,291 @@
+{% extends '_base.njk' %}
+
+{% set thispage = 'events' %}
+{% set pagetitle = 'Live Quiz' %}
+
+{% block pagecontent %}
+	<div class="container">
+		<div id="instructions">
+			<div id="instruction-body">
+				<p>Test</p>
+			</div>
+			<button onclick="userConfirm()">Start Attempt</button>
+		</div>
+		<div id="timer" style="display: none;">Time Left</div>
+		<fieldset id="question" style="display: none;">
+			<legend id="info">&nbsp;&nbsp;Waiting for Quiz to Start&nbsp;&nbsp;</legend>
+			<div id="question-container">
+			</div>
+			<button id="submit" onclick="submit()">Submit</button>
+		</fieldset>
+	</div>
+{% endblock %}
+
+{% block customjs %}
+	<script>
+		let quesCounter = 0;
+		let state = 'waiting';
+		let waitMsg = 'Waiting'
+		let readInstructions = false;
+		const socket = io();
+
+		function userConfirm() {
+			readInstructions = true;
+			document.getElementById('question').style.display = 'revert';
+			document.getElementById('instructions').style.display = 'none';
+		}
+		function showMessage(heading, message) {
+			document.getElementById('info').innerHTML = `&nbsp;&nbsp;${heading}&nbsp;&nbsp;`;
+			document.getElementById('submit').style.display = 'none';
+			const div = document.createElement('div');
+			div.classList.add('message');
+			div.innerHTML = message;
+			document.getElementById('question-container').replaceChildren(div);
+		}
+
+		function waitingAnimation () {
+			step = 0;
+			function tick () {
+				if (state !== 'waiting') return;
+				step = step % 4;
+				document.getElementById('info').innerHTML = `&nbsp;&nbsp;${waitMsg} ${[...Array(step++)].map(() => '.').filter(e => e).join('')}${[...Array(4 - step)].map(() => '&nbsp;').filter(e => e).join('')}&nbsp;&nbsp;`;
+				setTimeout(tick, 400);
+			}
+			tick();
+		}
+
+		function timer (time) {
+			timeLeft = time;
+			document.getElementById('timer').style.display = 'revert';
+			function tick () {
+				document.getElementById('timer').innerHTML = `Time Left: ${timeLeft--}`
+				if (timeLeft >= 0) setTimeout(tick, 1000);
+				else {
+					document.getElementById('timer').style.display = 'none';
+					if (state === 'running') {
+						state = 'time-out'
+						submit();
+						showMessage(`Waiting`, 'Time’s Up ! Your response has been submitted');
+					}
+				}
+			}
+			tick();
+		}
+
+		function showQuestion(type, options) {
+			document.getElementById('info').innerHTML = `&nbsp;&nbsp;Question #${quesCounter}&nbsp;&nbsp;`;
+			document.getElementById('submit').style.display = 'unset';
+			const div = document.createElement('div');
+			div.classList.add('answer');
+			div.classList.add(type);
+			if(type === 'mcq') {
+				options.map((option, index) => {
+					div.innerHTML += `
+					<div class="option">
+						<input type="radio" id="${option}" name="ans" class="option-input" value="${index+1}"/>
+						<div class="option-design"></div>
+						<div class="option-text" for="${option}">${option}</div>
+					</div>
+					`;
+				});
+			}
+			else {
+				div.innerHTML = `<input type="text" id='ans'>`;
+			}
+			document.getElementById('question-container').replaceChildren(div);
+			state = 'running';
+			timer(type === 'mcq' ? 10 : 15);
+		}
+
+		async function submit() {
+			let submitted= null;
+			const ans = document.getElementsByClassName('answer')[0];
+			if (ans.classList[1] === 'mcq') {
+				submitted = ans.querySelector("input:checked")?.value;
+			}
+			else {
+				submitted = document.getElementById('ans').value;
+			}
+			if (state === 'time-out') {
+				showMessage('Waiting for Quizmaster', 'Time’s Up! Your answer has been submitted.');
+			}
+			else {
+				showMessage('Waiting for Quizmaster', 'Answer Submitted Successfully');
+				setTimeout(() => {
+					if (state === 'running') showMessage('Waiting for Quizmaster', 'Please wait for other participants to finish answering');
+				}, 3000)
+			}
+			const response = await axios.post('/live/submit', {submitted, qNum: quesCounter});
+		}
+
+		socket.on('end', req => {
+			state = 'quiz-ended';
+			showMessage('Quiz Ended', 'Results will be shown soon...');
+			setTimeout(() => { window.location.href = '/'; }, 5000);
+		});
+
+		socket.on('question', req => {
+			if (readInstructions) {
+				state = 'showing-question';
+				quesCounter = req.qNum;
+				console.log(quesCounter);
+				quesCounter++;
+				showQuestion(req.type, req.options);
+			}
+		});
+
+		socket.on('answer', req => {
+			submit();
+			setTimeout(() => {
+				showMessage('Waiting for Question', 'Please wait for the quizmaster to start the next question');
+				waitingMsg = 'Waiting for Question';
+				state = 'waiting';
+				waitingAnimation();
+			}, state === 'time-out' ? 3000 : 500);
+			state = 'showing-answer';
+		});
+		
+		window.onload = () => {
+			showMessage('Waiting for Question', 'Please wait for the quizmaster to start the question');
+			waitingAnimation();
+		}
+	</script>
+{% endblock %}
+
+{% block customcss %}
+	<style>
+		.message {
+			padding:60px;
+		}
+		#info {
+			font-size: 1.25em;
+		}
+		.time {
+			color: red;
+			font-weight: 600;
+		}
+		.container {
+			position: absolute;
+			top: 0;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			width: 100vw;
+		}
+		#timer {
+			margin-bottom: 20px;
+			font-weight: 600;
+			font-size: 20px;
+			color: var(--red);
+		}
+		fieldset {
+			width: 70%;
+			padding: 20px 5vw;
+		}
+		.text,
+		.number {
+			all: revert;
+			margin: 50px 0 50px 0;
+		}
+		.text > input,
+		.number > input {
+			margin-bottom: 10px;
+			background-color: rgba(255,255,255,0.07);
+			font-weight: 300;
+			border-radius: 5px;
+			border: 2px solid var(--light-gray);
+			padding: 10px;
+			color: #fff;
+			outline: none;
+			min-width: 50%;
+			-moz-box-sizing: border-box;
+			-webkit-box-sizing: border-box;
+			box-sizing: border-box;
+		}
+		.option {
+			position: relative;
+			display: flex;
+			align-items: center;
+			border-radius: 10px;
+			cursor: pointer;
+			transition: 0.3s;
+			padding: 5px 10px;
+			margin: 7px;
+		}
+
+		.option:hover{
+			background: hsla(0, 0%, 80%, .14);
+			{# scale: 1.1; #}
+		}
+
+		.option-input {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			opacity: 0;
+			z-index: 1;
+		}
+
+		.option-design {
+			width: 22px;
+			height: 22px;
+			border-radius: 100px;
+			background: linear-gradient(to right bottom, hsl(0deg 100% 75%), hsl(0deg 100% 50%));
+			position: relative;
+		}
+
+		.option-design::before {
+			content: '';
+			display: inline-block;
+			width: inherit;
+			height: inherit;
+			border-radius: inherit;
+			background: hsl(0, 0%, 90%);
+			transform: scale(1.1);
+			transition: 0.3s;
+		}
+
+		.option-input:checked+.option-design::before {
+			transform: scale(0);
+		}
+
+		.option-text {
+			color: hsl(0, 0%, 60%);
+			margin-left: 14px;
+			font-weight: 900;
+			transition: 0.3s;
+		}
+
+		.option-input:checked~.option-text {
+			color: hsl(184deg 58% 60%);
+		}
+
+		.mcq {
+			position: relative;
+			width: 100%;
+			height: fit-content;
+			margin: 25px 0px;
+			padding: 10px 0px;;
+			display: flex;
+			flex-direction: column;
+		}
+		button {
+			align-self: center;
+			margin: 15px 0;
+			width: fit-content;
+			background-color: var(--red);
+			color: white;
+			border: 0px;
+			padding: 12px 10px;
+			font-size: 18px;
+			font-weight: 600;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: 0.3s;
+		}
+	</style>
+{% endblock %}
+
+{% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js', '/socket.io/socket.io.js'] %}

@@ -4,3 +4,15 @@
 	<h1> Coming Soon... </h1>
 	<span style="font-size: 1.1em;"> Meanwhile, visit our <a href="https://kgpmask.club"> main website </a> </span>
 {% endblock %}
+
+{% block customjs %}
+	<script>
+		const socket = io();
+		
+		socket.on('start', req => {
+			window.location.href = '/live';
+		})
+	</script>
+{% endblock %}
+
+{% set scripts = ['/socket.io/socket.io.js'] %}

@@ -1,0 +1,217 @@
+{% extends '_base.njk' %}
+
+{% block pagecontent %}
+    <div class="container">
+		<div class="overlay" id="overlay" style="display:none;">
+			<button onclick="ToggleOverlay()" id="closeModal">&#10006;</button>
+			<div class="pictures">
+				{% for pic, path in pics %}
+				<div class="picture">
+					<input type="radio" name="pic" id="{{ pic }}" class="pic">
+					<img src="../assets/profile/{{ path }}">
+				</div>
+				{% endfor %}
+			</div>
+			<button class="submit" onclick="submit()">Update Pic</button>
+		</div>
+		<h1>My Profile</h1>
+        <div class="profile" style="display: block;" id="profile">
+            <div class="main-details">
+                <div class="image" style="position: relative;">
+                    <img src="./assets/profile/{{ user.image }}" onerror="this.src = './assets/profile/blank.jpeg';" id="user-image" onclick="ToggleOverlay()">
+					<svg fill="#ffffff" version="1.1" id="edit-ico" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20px" height="20px" viewBox="-211.56 -211.56 952.02 952.02" xml:space="preserve" stroke="#ffffff" stroke-width="0.00528899"><g id="SVGRepo_bgCarrier" stroke-width="0" transform="translate(0,0), scale(1)"><rect x="-211.56" y="-211.56" width="952.02" height="952.02" rx="476.01" fill="#d61f35" strokewidth="0"></rect></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="23.271556"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M328.883,89.125l107.59,107.589l-272.34,272.34L56.604,361.465L328.883,89.125z M518.113,63.177l-47.981-47.981 c-18.543-18.543-48.653-18.543-67.259,0l-45.961,45.961l107.59,107.59l53.611-53.611 C532.495,100.753,532.495,77.559,518.113,63.177z M0.3,512.69c-1.958,8.812,5.998,16.708,14.811,14.565l119.891-29.069 L27.473,390.597L0.3,512.69z"></path> </g> </g></svg>
+                </div>
+                <div class="user">
+                    <p class="details">Name : {{ user.name }}</p>
+                    <p class="details" style="width: 100%">Username : {{ user.username }}</p>
+                </div>
+            </div>
+            <div class="details-container">
+                <p class="details">Roll : {{ user.roll }}</p>
+                <p class="details">Phone : {{ user.phone }}</p>
+                <p class="details">Email : {{ user.email }}</p>
+            </div>
+        </div>
+		{% if not user.image %}
+			<div style="color: var(--red); font-size: 12px; font-weight: 900; margin-top: 20px;">*Click on the profile picture to change it</div>
+		{% endif %}
+    </div>
+{% endblock %}
+
+{% block customcss %}
+    <style>
+		#closeModal {
+			font-size: 2em;
+			position: fixed;
+			top: 0;
+			right: 0;
+			z-index: -1;
+			background: transparent;
+			color: var(--light-gray);
+			outline: none;
+			border: none;
+			margin: min(2vw, 20px);
+			transition: 0.5s all ease;
+		}
+		#closeModal:hover {
+			font-size: 2.3em;
+		}
+		#edit-ico {
+			position: absolute;
+			bottom: 16.5px;
+			right: -7px;
+			margin: 5px;
+			transition: 0.3s all ease-out
+		}
+		#user-image:hover ~ #edit-ico,
+		#edit-ico:hover {
+			height: 27px;
+			width: 27px;
+			margin: 1.5px;
+		}
+		.main-details {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+		.details {
+			font-weight: 150;
+			font-size: 20px;
+			padding: 4px 1%;
+		}
+        .container {
+            display: flex;
+			flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .profile {
+            position: relative;
+            width: min(380px, 70%);
+            background: rgba(20, 20, 20, 0.3);
+            border: 3px solid;
+            border-color: var(--dark-gray);
+            border-top-color: var(--red);
+            border-bottom-color: var(--red);
+            border-radius: 5px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 20px rgba(0, 0, 0, .5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            padding: 20px 1%;
+        }
+		.image {
+			padding: 30px 2%;
+			position: relative;
+			display: flex;
+			justify-content: center;
+			align-items: flex-end;
+		}
+        .image > img {
+            height: 100px;
+            width: 100px;
+			border: outset var(--light-gray);
+			border-radius: 10px;
+			box-shadow: 0px 0px 30px var(--tinted-gray);
+        }
+		.image > img:hover {
+			cursor: pointer;
+		}
+		.overlay {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+			z-index: 100;
+			width: 100%;
+			height: 100%;
+			position: fixed;
+			top: 0;
+			left: 0;
+			backdrop-filter: blur(5px);
+			background: rgba(0, 0, 0, 0.4);
+		}
+		.pictures {
+			display: flex;
+			overflow-y: auto;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-content: flex-start;
+			width: max(295px, 60vw);
+			max-height: max(300px, 60vh);
+			backdrop-filter: blur(10px);
+			background: rgba(0, 0, 0, 0.6);
+			padding: min(20px, 10vw);
+			box-shadow: 0px 0px 30px var(--tinted-gray);
+			border-radius: 6px;
+		}
+		.picture {
+			background: transparent;
+			position: relative;
+			outline: none;
+			border: none;
+		}
+		.picture > img {
+			height: max(75px, 6vw);
+			width: max(75px, 6vw);
+			margin: min(2vw, 10px);
+			transition: 0.3s all ease;
+		}
+		.pic {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			opacity: 0;
+			z-index: 2;
+		}
+		.pic:checked ~ img,
+		.pic:hover ~ img {
+			height: max(85px, calc(6vw + 10px));
+			width: max(85px, calc(6vw + 10px));
+			margin: min(5px, calc(2vw - 5px));
+		}
+		.pic:checked ~ img {
+			border: 1px solid var(--red);
+		}
+		.submit {
+			align-self: center;
+			margin: 15px 0px;
+			width: max(280px, 60vw);
+			background-color: var(--red);
+			color: white;
+			border: 0px;
+			padding: 12px 0;
+			font-size: 18px;
+			font-weight: 600;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: 0.3s;
+		}
+
+		.submit:hover {
+			background-color: #c90c0c;
+}
+    </style>
+{% endblock %}
+
+{% block customjs %}
+	<script>
+		async function submit() {
+			const character = document.getElementsByClassName('pictures')[0].querySelectorAll('input:checked')[0].id;
+			console.log(character);
+			const res = await axios.post('/edit-profile', { character });
+			setTimeout(() => window.location.href = window.location.href, 2000);
+		}
+
+		function ToggleOverlay() {
+			const pfp_overlay = document.getElementById('overlay');
+			pfp_overlay.style.display === 'none' ? pfp_overlay.style.display = 'flex' : pfp_overlay.style.display = 'none';
+		}
+	</script>
+{% endblock %}
+
+{% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}

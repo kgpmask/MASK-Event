@@ -1,0 +1,67 @@
+{% extends '_base.njk' %}
+
+{% block pagecontent %}
+	<h1>Live Quiz Results</h1>
+	<table style="width: 80vw; margin: auto;">
+		<tr>
+			<th style="width:15%;">Rank</th>
+			<th style="width:35%;">Name</th>
+			<th style="width:35%;">Username</th>
+			<th style="width:15%;">Points</th>
+		</tr>
+		{% for result in results %}
+			<tr>
+				<td>{{ loop.index }}</td>
+				<td>{{ userMap[result.userId][1] }}</td>
+				<td>{{ userMap[result.userId][0] }}</td>
+				<td>{{ result.points }}</td>
+			</tr>
+		{% endfor %}
+	</table>
+	{% if admin %}
+		<button onclick="recheck();">Recheck</button>
+	{% endif %}
+{% endblock %}
+
+{% block customcss %}
+	<style>
+		th, td {
+			border: 1px solid var(--tinted-gray);
+			background-color: transparent;
+			backdrop-filter: blur(10px);
+			padding: 10px 20px;
+		}
+		th {
+			font-size: 18px;
+			font-weight: 600;
+		}
+		button {
+			margin: 20px 0px;
+			width: 30%;
+			background-color: var(--red);
+			color: white;
+			border: 0px;
+			padding: 12px 0;
+			font-size: 18px;
+			font-weight: 600;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: 0.3s;
+		}
+
+		button:hover {
+			background-color: #c90c0c;
+		}
+	</style>
+{% endblock %}
+
+{% block customjs %}
+	<script>
+		async function recheck() {
+			const res = await axios.post('/live/recheck');
+			setTimeout(() => window.location.href = window.location.href, 3000);
+		}
+	</script>
+{% endblock %}
+
+{% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
