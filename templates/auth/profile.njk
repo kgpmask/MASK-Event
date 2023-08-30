@@ -19,7 +19,7 @@
             <div class="main-details">
                 <div class="image" style="position: relative;">
                     <img src="./assets/profile/{{ user.image }}" onerror="this.src = './assets/profile/blank.jpeg';" id="user-image" onclick="ToggleOverlay()">
-					<svg fill="#ffffff" version="1.1" id="edit-ico" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20px" height="20px" viewBox="0 0 528.899 528.899" xml:space="preserve" stroke="#a9a9a9"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M328.883,89.125l107.59,107.589l-272.34,272.34L56.604,361.465L328.883,89.125z M518.113,63.177l-47.981-47.981 c-18.543-18.543-48.653-18.543-67.259,0l-45.961,45.961l107.59,107.59l53.611-53.611 C532.495,100.753,532.495,77.559,518.113,63.177z M0.3,512.69c-1.958,8.812,5.998,16.708,14.811,14.565l119.891-29.069 L27.473,390.597L0.3,512.69z"></path> </g> </g></svg>
+					<svg fill="#ffffff" version="1.1" id="edit-ico" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20px" height="20px" viewBox="-211.56 -211.56 952.02 952.02" xml:space="preserve" stroke="#ffffff" stroke-width="0.00528899"><g id="SVGRepo_bgCarrier" stroke-width="0" transform="translate(0,0), scale(1)"><rect x="-211.56" y="-211.56" width="952.02" height="952.02" rx="476.01" fill="#d61f35" strokewidth="0"></rect></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="23.271556"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M328.883,89.125l107.59,107.589l-272.34,272.34L56.604,361.465L328.883,89.125z M518.113,63.177l-47.981-47.981 c-18.543-18.543-48.653-18.543-67.259,0l-45.961,45.961l107.59,107.59l53.611-53.611 C532.495,100.753,532.495,77.559,518.113,63.177z M0.3,512.69c-1.958,8.812,5.998,16.708,14.811,14.565l119.891-29.069 L27.473,390.597L0.3,512.69z"></path> </g> </g></svg>
                 </div>
                 <div class="user">
                     <p class="details">Name : {{ user.name }}</p>
@@ -58,15 +58,16 @@
 		}
 		#edit-ico {
 			position: absolute;
-			bottom: 32px;
-			right: 8px;
+			bottom: 16.5px;
+			right: -7px;
 			margin: 5px;
 			transition: 0.3s all ease-out
 		}
-		#user-image:hover ~ #edit-ico {
-			height: 22px;
-			width: 22px;
-			margin: 4px;
+		#user-image:hover ~ #edit-ico,
+		#edit-ico:hover {
+			height: 27px;
+			width: 27px;
+			margin: 1.5px;
 		}
 		.main-details {
 			display: flex;
