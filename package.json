@@ -1,6 +1,6 @@
 {
 	"name": "mask-event",
-	"version": "0.2.0",
+	"version": "1.0.0",
 	"description": "A lighter site made for events using github.com/kgpmask/MASK as a base",
 	"main": "src/server.js",
 	"directories": {
