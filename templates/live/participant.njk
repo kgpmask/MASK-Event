@@ -8,28 +8,28 @@
 		<div id="instructions">
 			<div id="instruction-body">
 				<h1 id="rules" style="text-align: center; margin: 15px;">Rules</h1>
-				<h2 id="general-rules">General Rules</h2>
+				<h2 id="general-rules"><imp>General Rules</imp></h2>
 				<ul>
 					<li>There are 60 questions over 6 rounds, i.e., 6 rounds with 10 questions each.</li>
-					<li>After each two rounds, you will be having breaks.</li>
+					<li>After every two rounds, you will be having breaks.</li>
 					<li>There are two types of questions: Multiple Choice Questions (MCQ) and Text-Based Questions. The time taken and marking scheme is mentioned below.</li>
 					<li>Questions and the options (if any) will be displayed on the presentation before being shared here.</li>
 					<li>The video and audio clips will only be played once.</li>
 					<li>After the timer on the screen runs out, the answer will be automatically submitted. However, we recommend that you manually submit the answer instead.</li>
 				</ul>
 				<br>
-				<p><imp>DO NOT REFRESH THE PAGE IN THE MIDDLE OF A QUESTION!</imp> Each question is received once during the whole quiz. If the page is refreshed while the question is started or while the question is running, you will lose your chances to attempt the question. </p>
+				<p><imp>DO NOT REFRESH THE PAGE IN THE MIDDLE OF A QUESTION!</imp> Each question is received once during the whole quiz. If the page is refreshed while the question is started or while the question is running, you will lose your chance to attempt that question. </p>
 				<br><br>
-				<h2 id="question-schematics">Question Schematics</h2>
+				<h2 id="question-schematics"><imp>Question Schematics</imp></h2>
 				<br>
-				<h3 id="multiple-choice-questions-">Multiple-Choice Questions:</h3>
+				<h3 id="multiple-choice-questions-" style="color: var(--off-white);">Multiple-Choice Questions:</h3>
 				<ul>
 					<li>Each question carries 100 marks and you will have 10 seconds to attempt them.</li>
 					<li>There is only one correct option among the four options.</li>
 					<li>There is neither partial marking nor negative marking.</li>
 				</ul>
 				<br>
-				<h3 id="text-based-questions-">Text-Based Questions:</h3>
+				<h3 id="text-based-questions-" style="color: var(--off-white);">Text-Based Questions:</h3>
 				<ul>
 					<li>Each question carries 200 marks and you will have 20 seconds to attempt them.</li>
 					<li>The answers accepted are not case sensitive.</li>
@@ -340,14 +340,12 @@
 			display: flex;
 			flex-direction: column;
 			align-items: center;
-			font-size: 1.3em;
 		}
 		#instruction-body {
 			width: max(260px, 70%);
 			overflow-y: auto;
 			max-height: 60vh;
-			backdrop-filter:blur(10px);
-			background: rgba(50, 50, 50, 0.5);
+			background: var(--abyss);
 			border-radius: 6px;
 			text-align: left;
 			padding: 30px;
