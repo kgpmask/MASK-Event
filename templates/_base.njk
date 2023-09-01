@@ -1,6 +1,6 @@
 {% set navlinks = [
-	{ name: 'Main Website', href: 'https://kgpmask.club' },
-	{ name: 'Information', href: 'information' }
+	{ name: 'Information', href: 'information' },
+	{ name: 'Quiz Portal', href: 'live' }
 ] %}
 {# array elements: { name, href } #}
 
@@ -56,7 +56,7 @@
 							<span class="navbar-line">&nbsp;</span>
 							<div class="navbar-container">
 								{% for link in navlinks %}
-									<li><a href="{{ '/' if loop.index0 }}{{ link.href }}" {% if link.href === thispage %} class="active-page" {% endif %} target="_self">{{ link.name }}</a></li>
+									<li><a href="{{ link.href }}" {% if link.href === thispage %} class="active-page" {% endif %} target="_self">{{ link.name }}</a></li>
 								{% endfor %}
 							</div>
 							<div style="float:right;" id="dropdown">
