@@ -68,7 +68,7 @@ router.post('/start-q', (req, res) => {
 				if (points) return await dbh.updateLiveResult(userId, handlerContext.quiz._id, points);
 			});
 		}, 2000);
-	}, type === 'mcq' ? 12000 : 17000);
+	}, type === 'mcq' ? 12000 : 22000);
 	return res.send('question-live');
 });
 

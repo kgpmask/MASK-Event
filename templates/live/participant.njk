@@ -38,7 +38,7 @@
 						<ol>
 							<li>You will get full marks in case you do not have any spelling errors.</li>
 							<li>If the &#39;distance&#39; is less than 20% of the total length, you will get 150 marks.</li>
-							<li>If the &#39;distance&#39; is less than 50% but greater than 20%, you will get 100 marks.</li>
+							<li>If the &#39;distance&#39; is less than 40% but greater than 20%, you will get 100 marks.</li>
 							<li>For any more errors than that, you will get 0 marks.</li>
 						</ol>
 					</li>
@@ -130,7 +130,7 @@
 			}
 			document.getElementById('question-container').replaceChildren(div);
 			state = 'running';
-			timer(type === 'mcq' ? 10 : 15);
+			timer(type === 'mcq' ? 10 : 20);
 		}
 
 		async function submit() {
@@ -165,7 +165,6 @@
 				state = 'showing-question';
 				quesCounter = req.qNum;
 				console.log(quesCounter);
-				quesCounter++;
 				showQuestion(req.type, req.options);
 			}
 		});
@@ -342,13 +341,14 @@
 			align-items: center;
 		}
 		#instruction-body {
-			width: max(260px, 70%);
+			line-height: 20px;
+			width: max(280px, 75%);
 			overflow-y: auto;
 			max-height: 60vh;
 			background: var(--abyss);
 			border-radius: 6px;
 			text-align: left;
-			padding: 30px;
+			padding: 20px;
 		}
 		#instructions ul,
 		#instructions p {
@@ -360,7 +360,21 @@
 		}
 		#instructions ul,
 		#instructions ol{
-			padding: revert;
+			padding-left: 40px;
+		}
+		@media only screen and (max-width: 500px) {
+			#instruction-body {
+				text-align: justify;
+			}
+			#instruction-body > h2,
+			#instruction-body > h3 {
+				text-align: center;
+			}
+			#instructions ul,
+			#instructions ol,
+			#instructions li{
+				padding-left: 4px;
+			}
 		}
 	</style>
 {% endblock %}

@@ -12,7 +12,7 @@
 				</div>
 				{% endfor %}
 			</div>
-			<button class="submit" onclick="submit()">Update Pic</button>
+			<button class="submit" id="submit" onclick="submit()">Update Pic</button>
 		</div>
 		<h1>My Profile</h1>
         <div class="profile" style="display: block;" id="profile">
@@ -194,13 +194,17 @@
 
 		.submit:hover {
 			background-color: #c90c0c;
-}
+		}
+		.submit:disabled {
+			background-color: var(--off-white);
+		}
     </style>
 {% endblock %}
 
 {% block customjs %}
 	<script>
 		async function submit() {
+			document.getElementById('submit').disabled = true;
 			const character = document.getElementsByClassName('pictures')[0].querySelectorAll('input:checked')[0].id;
 			console.log(character);
 			const res = await axios.post('/edit-profile', { character });

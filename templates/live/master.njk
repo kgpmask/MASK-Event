@@ -111,7 +111,7 @@
 			startButton.disabled = true;
 			prevButton.disabled = true;
 			nextButton.disabled = true;
-			timeLeft = document.getElementById(`qbox-${currentQues + 1}`).children[1].innerHTML.split(" ")[1].toLowerCase() === 'mcq' ? 10 : 15;
+			timeLeft = document.getElementById(`qbox-${currentQues + 1}`).children[1].innerHTML.split(" ")[1].toLowerCase() === 'mcq' ? 10 : 20;
 			while(timeLeft>0){
 				await new Promise((resolve) => setTimeout(resolve, 1000));
 				displayTime(--timeLeft);

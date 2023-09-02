@@ -14,6 +14,6 @@ exports.checkLive = function checkLive (answer, type, solution) {
 				else return 0;
 			}));
 		default:
-			return answer === soution[0] && typeof answer === typeof solution[0] ? 10 : 0;
+			return answer === solution[0] && typeof answer === typeof solution[0] ? 10 : 0;
 	}
 };
