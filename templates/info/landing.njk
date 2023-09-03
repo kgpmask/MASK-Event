@@ -44,7 +44,7 @@
 			const timerElement = document.querySelector('#timer');
 			const timer = () => {
 				let seconds, minutes, hours, days;
-				const timeLeftInSeconds = Math.floor((new Date('2023-09-03T14:00:00+0000').getTime() - new Date().getTime()) / 1000);
+				const timeLeftInSeconds = Math.floor((new Date('2023-09-03T14:00:00+0530').getTime() - new Date().getTime()) / 1000);
 				if (timeLeftInSeconds <= 0) {
 					timerElement.innerHTML = `<a href="/live" class="start-quiz-button">
 						Join the Quiz!!
