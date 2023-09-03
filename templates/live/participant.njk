@@ -7,7 +7,43 @@
 	<div class="container">
 		<div id="instructions">
 			<div id="instruction-body">
-				<p>Test</p>
+				<h1 id="rules" style="text-align: center; margin: 15px;">Rules</h1>
+				<h2 id="general-rules"><imp>General Rules</imp></h2>
+				<ul>
+					<li>There are 60 questions over 6 rounds, i.e., 6 rounds with 10 questions each.</li>
+					<li>After every two rounds, you will be having breaks.</li>
+					<li>There are two types of questions: Multiple Choice Questions (MCQ) and Text-Based Questions. The time taken and marking scheme is mentioned below.</li>
+					<li>Questions and the options (if any) will be displayed on the presentation before being shared here.</li>
+					<li>The video and audio clips will only be played once.</li>
+					<li>After the timer on the screen runs out, the answer will be automatically submitted. However, we recommend that you manually submit the answer instead.</li>
+				</ul>
+				<br>
+				<p><imp>DO NOT REFRESH THE PAGE IN THE MIDDLE OF A QUESTION!</imp> Each question is received once during the whole quiz. If the page is refreshed while the question is started or while the question is running, you will lose your chance to attempt that question. </p>
+				<br><br>
+				<h2 id="question-schematics"><imp>Question Schematics</imp></h2>
+				<br>
+				<h3 id="multiple-choice-questions-" style="color: var(--off-white);">Multiple-Choice Questions:</h3>
+				<ul>
+					<li>Each question carries 100 marks and you will have 10 seconds to attempt them.</li>
+					<li>There is only one correct option among the four options.</li>
+					<li>There is neither partial marking nor negative marking.</li>
+				</ul>
+				<br>
+				<h3 id="text-based-questions-" style="color: var(--off-white);">Text-Based Questions:</h3>
+				<ul>
+					<li>Each question carries 200 marks and you will have 20 seconds to attempt them.</li>
+					<li>The answers accepted are not case sensitive.</li>
+					<li>There may be multiple acceptable answers. For example: ATTACK ON TITAN, AOT, SHINGEKI NO KYOJIN, SNK are all acceptable for a question whose answer is Attack On Titan.</li>
+					<li>There is no negative marking. However, the number of marks you will receive will change with the number of spelling errors (calculated using an <a href="https://www.geeksforgeeks.org/damerau-levenshtein-distance/">algorithm</a> which gives a value called &#39;distance&#39;)
+						<ol>
+							<li>You will get full marks in case you do not have any spelling errors.</li>
+							<li>If the &#39;distance&#39; is less than 20% of the total length, you will get 150 marks.</li>
+							<li>If the &#39;distance&#39; is less than 40% but greater than 20%, you will get 100 marks.</li>
+							<li>For any more errors than that, you will get 0 marks.</li>
+						</ol>
+					</li>
+				</ul>
+
 			</div>
 			<button onclick="userConfirm()">Start Attempt</button>
 		</div>
@@ -94,7 +130,7 @@
 			}
 			document.getElementById('question-container').replaceChildren(div);
 			state = 'running';
-			timer(type === 'mcq' ? 10 : 15);
+			timer(type === 'mcq' ? 10 : 20);
 		}
 
 		async function submit() {
@@ -129,7 +165,6 @@
 				state = 'showing-question';
 				quesCounter = req.qNum;
 				console.log(quesCounter);
-				quesCounter++;
 				showQuestion(req.type, req.options);
 			}
 		});
@@ -154,6 +189,16 @@
 
 {% block customcss %}
 	<style>
+		::-webkit-scrollbar {
+			width: 6px;
+		}
+		::-webkit-scrollbar-track {
+			background: transparent;
+		}
+		::-webkit-scrollbar-thumb {
+			background: var(--red);
+			border-radius: 3px;
+		}
 		.message {
 			padding:60px;
 		}
@@ -166,7 +211,9 @@
 		}
 		.container {
 			position: absolute;
-			top: 0;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, calc(-50% - 0.5px));
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
@@ -183,6 +230,9 @@
 		fieldset {
 			width: 70%;
 			padding: 20px 5vw;
+		}
+		legend {
+			margin-inline: auto;
 		}
 		.text,
 		.number {
@@ -274,7 +324,7 @@
 		button {
 			align-self: center;
 			margin: 15px 0;
-			width: fit-content;
+			width: min(50vw, 300px);
 			background-color: var(--red);
 			color: white;
 			border: 0px;
@@ -284,6 +334,47 @@
 			border-radius: 5px;
 			cursor: pointer;
 			transition: 0.3s;
+		}
+		#instructions {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+		#instruction-body {
+			line-height: 20px;
+			width: max(280px, 75%);
+			overflow-y: auto;
+			max-height: 60vh;
+			background: var(--abyss);
+			border-radius: 6px;
+			text-align: left;
+			padding: 20px;
+		}
+		#instructions ul,
+		#instructions p {
+			margin: min(15px, 2vw);
+		}
+		imp {
+			color: var(--red);
+			font-weight: 600;
+		}
+		#instructions ul,
+		#instructions ol{
+			padding-left: 40px;
+		}
+		@media only screen and (max-width: 500px) {
+			#instruction-body {
+				text-align: justify;
+			}
+			#instruction-body > h2,
+			#instruction-body > h3 {
+				text-align: center;
+			}
+			#instructions ul,
+			#instructions ol,
+			#instructions li{
+				padding-left: 4px;
+			}
 		}
 	</style>
 {% endblock %}

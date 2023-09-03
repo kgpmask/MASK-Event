@@ -44,8 +44,13 @@
 			const timerElement = document.querySelector('#timer');
 			const timer = () => {
 				let seconds, minutes, hours, days;
-				const timeLeftInSeconds = Math.floor((new Date('2023-09-03T14:00:00.000+0530').getTime() - new Date().getTime()) / 1000);
-				if (timeLeftInSeconds <= 0) return false;
+				const timeLeftInSeconds = Math.floor((new Date('2023-09-03T14:00:00+0000').getTime() - new Date().getTime()) / 1000);
+				if (timeLeftInSeconds <= 0) {
+					timerElement.innerHTML = `<a href="/live" class="start-quiz-button">
+						Join the Quiz!!
+					</a>`;
+					return false;
+				}
 				seconds = (timeLeftInSeconds % 60).toLocaleString('en-us', { minimumIntegerDigits: 2 });
 				minutes = (Math.floor(timeLeftInSeconds / 60) % 60).toLocaleString('en-us', { minimumIntegerDigits: 2 });
 				hours = (Math.floor(timeLeftInSeconds / 3600) % 24).toLocaleString('en-us', { minimumIntegerDigits: 2 });
@@ -54,7 +59,7 @@
 				setTimeout(timer, 1000);
 				return true;
 			};
-			if (!timer()) timerElement.innerHTML = 'Quiz Live Now!!!';
+			timer();
 		});
 	</script>
 	{% block extrajs %}
@@ -66,7 +71,8 @@
 		#timer {
 			color: color-mix(in hsl, var(--dark-red) 50%, var(--error-red) 70%);
 			font-size: 2.5em;
-			font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+			font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', fantasy, sans-serif;
+			padding: 20px;
 		}
 
 		#location {
@@ -281,6 +287,21 @@
 
 		.redirect-link:active, .redirect-link:hover {
 			background-color: var(--shadow-gray);
+		}
+
+		.start-quiz-button {
+			border: solid 2px var(--light-gray);
+			border-radius: 10px;
+			padding: 10px;
+			text-decoration: none;
+			/* font-family: Ubuntu, Roboto, Arial, Open Sans, sans-serif; */
+			background-color: var(--red);
+			color: var(--off-white);
+		}
+
+		.start-quiz-button:hover {
+			background-color: var(--abyss);
+			color: var(--red);
 		}
 	</style>
 {% endblock %}

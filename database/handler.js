@@ -158,7 +158,7 @@ async function updateLiveResult (userId, quizId, points) {
 			userId,
 			quizId
 		});
-		data.points = 10;
+		data.points = points;
 		await data.save();
 		return data.toObject();
 	}

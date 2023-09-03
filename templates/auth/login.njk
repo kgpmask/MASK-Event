@@ -31,10 +31,12 @@
 		axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
 
 		function login() {
+			document.getElementById('submit').disabled = true;
 			const data = getData();
 			axios.post('/login', data)
 			.then(() => window.location.href = '/')
 			.catch(err => {
+				document.getElementById('submit').disabled = false;
 				console.log(err);
 				return alert(err.response.data);
 			});

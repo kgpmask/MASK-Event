@@ -7,7 +7,7 @@
 			<legend>&nbsp;&nbsp;Registered Users: {{ users | length }}&nbsp;&nbsp;</legend><br/>
 			{% for user in users %}
 				<div class="card">
-					<img src="{{ user.image }}" onerror="this.src='../assets/logo.jpeg'"/>
+					<img src="../assets/profile/{{ user.image }}" onerror="this.src='../assets/profile/blank.jpeg'"/>
 					<div class="details">
 						<p>Name : {{ user.name }}</p>
 						<p>Username: {{ user.username }}</p>

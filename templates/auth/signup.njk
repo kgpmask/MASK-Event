@@ -36,6 +36,7 @@
 		axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
 
 		function signup() {
+			document.getElementById('submit').disabled = true;
 			const data = getData();
 			data.roll = data.roll.toUpperCase();
 			if (data.password === data.confirmpassword) {
@@ -43,11 +44,13 @@
 				axios.post('/signup', data)
 				.then(() => window.location.href = '/')
 				.catch(e => {
+					document.getElementById('submit').disabled = false;
 					console.log(e);
 					return alert(e.response.data);
 				});	
 			}
 			else {
+				document.getElementById('submit').disabled = false;
 				return alert('Pasword and confirm password doesnot match');
 			}
 		}
