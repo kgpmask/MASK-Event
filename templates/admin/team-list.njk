@@ -33,7 +33,7 @@
 			</div>
 
 			<div class="card2">
-				<button class="editT" onclick="editTeam(`{{team.ID}}`)">Edit</button>
+				<button class="editT" onclick="editTeam(`{{team.id}}`)">Edit</button>
 			</div>
 		</div>
 	{% endfor %}
@@ -55,6 +55,7 @@
 			align-self:center;
 		}
 		.card1{
+            margin: auto;
 			flex:80%;
 			width:40%;
 			padding-left:5px;
@@ -146,7 +147,8 @@
 {% block customjs %}
 <script>
     function editTeam(teamID) {
-        window.location.href = `/live/edit-team?teamID=${teamID}`;
+        console.log(teamID);
+        window.location.href = `/admin/edit-team?teamID=${teamID}`;
     }
 </script>
 {% endblock %}
