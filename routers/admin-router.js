@@ -71,40 +71,7 @@ router.patch('/edit-team', [
 		.notEmpty().withMessage('No ID Provided'),
 	body('teamName')
 		.trim()
-		.notEmpty().withMessage('No Name Provided'),
-	body('name1')
-		.trim()
-		.notEmpty().withMessage('No Name Provided'),
-	body('name2')
-		.trim()
-		.notEmpty().withMessage('No Name Provided'),
-	body('name3')
-		.trim()
-		.notEmpty().withMessage('No Name Provided'),
-	body('email1')
-		.trim()
-		.notEmpty().withMessage('No Email Provided')
-		.isEmail().withMessage('Please provide a valid email'),
-	body('email2')
-		.trim()
-		.notEmpty().withMessage('No Email Provided')
-		.isEmail().withMessage('Please provide a valid email'),
-	body('email3')
-		.trim()
-		.notEmpty().withMessage('No Email Provided')
-		.isEmail().withMessage('Please provide a valid email'),
-	body('phone1')
-		.trim()
-		.notEmpty().withMessage('No Phone Number Provided')
-		.isMobilePhone('en-IN').withMessage('Please provide a valid phone number'),
-	body('phone2')
-		.trim()
-		.notEmpty().withMessage('No Phone Number Provided')
-		.isMobilePhone('en-IN').withMessage('Please provide a valid phone number'),
-	body('phone3')
-		.trim()
-		.notEmpty().withMessage('No Phone Number Provided')
-		.isMobilePhone('en-IN').withMessage('Please provide a valid phone number')
+		.notEmpty().withMessage('No Name Provided')
 ], async (req, res) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {

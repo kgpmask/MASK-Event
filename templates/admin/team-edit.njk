@@ -61,8 +61,8 @@
 			const data = getData();
             try {
                 const response = await axios.patch('/admin/edit-team', data);
-                console.log(response);
                 if (response.status === 200) {
+                    alert('Team updated successfully!');
                     window.location.href = '/live';
                 } else {
                     console.error('Error updating team:', response);
