@@ -1,0 +1,85 @@
+{% extends '_base.njk' %}
+{% import '_form.njk' as forms %}
+
+{% set thispage = 'events' %}
+{% set pagetitle = 'Treasure Hunt' %}
+
+{% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
+
+{% block pagecontent %}
+    <div class="container">
+        <div class="interface_container">
+            <h1 class="title">Treasure Hunt</h2>
+                <div class="team-info">
+                    <h2 id="team-id">Team ID: {{ team.ID }}</p>
+                    <h2 id="team-name">Team Name: {{ team.name }}</p>
+                </div>
+                <div class="question">
+                    <h3>Question</h3>
+                    <p id="question">{{ location_question.question }}</p>
+                </div>
+                {% call forms.form() %}
+                    {{ forms.field('_id','TeamID', _id, type='hidden')}}
+                    {{ forms.field('answer','Answer')}}
+                    <button id="submit" onclick="submit()">Submit</button>
+                {% endcall %}
+        </div>
+        <div id="message" style="display: none; ">
+            bruh
+        </div>
+        
+        
+    </div>
+{% endblock %}
+
+{% block customcss %}
+	<style>
+        .container {
+            margin: auto;
+            width : 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .interface_container {
+            margin: 0px 20px;
+        }
+        .team-info {
+            margin-top: 20px;
+        }
+        .question {
+            margin: 20px 0px;
+            width: 378px;
+            border-style: solid;
+            border-width: 3px;
+            border-top-color: #D61F35;
+            border-right-color: #373737;
+            border-bottom-color: #D61F35;
+            border-left-color: #373737;
+            border-radius: 20px 0px 20px 0px;
+            background-color: black;
+            padding: 20px; 
+        }
+        .question h3 {
+            margin: 0px 0px 10px 0px;
+            color: #8b0000;
+        }
+    </style>
+    {{ forms.formCss() }}
+{% endblock %}
+
+{% block customjs %}
+    {{ forms.formFunction() }}
+    <script>
+        axios.defaults.withCredentials = true;
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
+
+        async function submit() {
+            event.preventDefault();
+            const data = getData();
+            data.answer = data.answer.toUpperCase();
+            console.log(data.answer);
+        }
+    </script>
+{% endblock %}

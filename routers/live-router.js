@@ -12,19 +12,21 @@ router.use((req, res, next) => {
 
 router.get('/', async (req, res) => {
 	if (req.isAdmin) {
-		handlerContext.quiz = await dbh.getLiveQuiz('2023-09-03');
-		handlerContext.quizTitle = handlerContext.quiz.title;
-		handlerContext.quizId = handlerContext.quiz._id;
-		const questions = handlerContext.quiz.questions;
-		return res.renderFile('live/master.njk', {
-			questions,
-			qAmt: questions.length,
-			id: 'live'
+		return res.renderFile('admin/team-list.njk', {
+			teams
 		});
 	} else {
-		if (!handlerContext.quizStarted) return res.redirect('/');
-		return res.renderFile('live/participant.njk');
+		// if (!handlerContext.quizStarted) return res.redirect('/');
+		return res.renderFile('live/interface.njk', {
+			team,
+			locationQuestion
+		});
+		// return res.renderFile('live/interface.njk');
 	}
+});
+
+router.get('/timeout', async (req, res) => {
+	return res.renderFile('live/timeout.njk');
 });
 
 router.get('/results', async (req, res) => {

@@ -1,0 +1,152 @@
+{% extends 'admin/_admin.njk' %}
+
+{% set thispage = 'teamlist' %}
+{% set pagetitle = 'Team Management' %}
+
+{% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
+
+{% block pagecontent %}
+	<h1>Teams Management Page</h1>
+    <legend>&nbsp;&nbsp;Registered Teams: {{ teams | length }}&nbsp;&nbsp;</legend><br/>
+	{% for team in teams %}
+		<div class="container">
+			<div class="card1">
+				{% for key, value in team %}
+                    {% if key == 'members' %}
+                    <div class="members-list">
+                            <b> {{ key | capitalize }}: </b>
+                            <div class="members">
+                                {% for member in value %}
+                                <div class="member">
+                                    Name: {{ member.name }} <br>
+                                    Email: {{ member.email }} <br>
+                                    Phone: {{ member.phone }} <br>
+                                </div>
+                            {% endfor %}
+                            </div>
+                            
+                        </div>
+                    {% else %}
+                        <b> {{ key | capitalize }}: </b>  {{ value }} <br>
+                    {% endif %}
+				{% endfor %}
+			</div>
+
+			<div class="card2">
+				<button class="editT" onclick="editTeam(`{{team.ID}}`)">Edit</button>
+			</div>
+		</div>
+	{% endfor %}
+
+{% endblock %}
+
+{% block customcss %}
+	<style>
+		.container {
+			margin: 3rem auto;
+			display:flex;
+			flex-direction:row;
+			border: 2px solid rgba(255,255,255,0.1);
+			border-radius: 8px;
+			padding: 20px 5px;
+			width: 80%;
+			background-color: rgba(255,255,255,0.13);
+			backdrop-filter: blur(5px);
+			align-self:center;
+		}
+		.card1{
+			flex:80%;
+			width:40%;
+			padding-left:5px;
+			word-wrap: break-word;
+			text-align: left;
+		}
+
+        .members-list{
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .members {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .member {
+            margin: 0px 0px 10px 10px;
+        }
+		.card2{
+			flex:20%;
+			display:flex;
+			flex-direction:column;
+			justify-content: center;
+			align-items: center;
+		}
+		.editT {
+			border-radius: 4px;
+			color:white;
+			cursor: pointer;
+			border: 0px;
+			padding: 2% 3%;
+			margin: 10px
+		}
+		button{
+			background-color: var(--red);
+			width: 7em;
+			height: 2.5em;
+		}
+		@media (max-width: 600px) {
+			button{
+				width:4rem;
+			}
+			.container{
+				margin-left:3rem;
+			}
+		}
+
+		@media (max-width: 500px) {
+			.container {
+				flex-direction:column;
+			}
+			.card1{
+				width:95%;
+			}
+			.card2{
+				flex-direction:row;
+			}
+			button{
+				margin-right:5rem;
+			}
+			.editP{
+				margin:1rem 3rem;
+			}
+			.deleteP{
+				margin:1rem 2rem;
+			}
+			.container{
+				margin-left:2rem;
+			}
+		}
+		@media (max-width:300px){
+			.editP{
+				margin-right:1rem;
+				margin-left:2rem;
+			}
+			.deleteP{
+				margin-left:1rem;
+			}
+			.container{
+				margin-left:1.5rem;
+			}
+		}
+		
+	</style>
+{% endblock %}
+
+{% block customjs %}
+<script>
+    function editTeam(teamID) {
+        window.location.href = `/live/edit-team?teamID=${teamID}`;
+    }
+</script>
+{% endblock %}
