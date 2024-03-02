@@ -7,34 +7,84 @@
 {% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
 
 {% block pagecontent %}
-    <div class="container">
-        <div class="interface_container">
-            <h1 class="title">Treasure Hunt</h2>
+        <div class="message-cover" id="message-cover">
+            <div class="message-box" id="message-box"></div>
+        </div>
+        <div id="container">
+            <div id="timeout">
+                <h1>Wrong Answer!</h1>
+                <h3 id="countdown-header">Try again in <span id="countdown"></span></h3>
+            </div>
+            <div id="interface-container">
+                <h1 class="title">Treasure Hunt</h1>
                 <div class="team-info">
-                    <h2 id="team-id">Team ID: {{ team.ID }}</p>
+                    <h2 id="team-id">Team ID: {{ team.id }}</p>
                     <h2 id="team-name">Team Name: {{ team.name }}</p>
                 </div>
                 <div class="question">
                     <h3>Question</h3>
                     <p id="question">{{ locationQuestion.question }}</p>
                 </div>
-                {% call forms.form() %}
-                    {{ forms.field('_id','TeamID', _id, type='hidden')}}
-                    {{ forms.field('answer','Answer')}}
-                    <button id="submit" onclick="submit()">Submit</button>
-                {% endcall %}
+                <div class="form-box">
+                    <div id="location-form">
+                        {% call forms.form() %}
+                            {{ forms.field('id','TeamID', team.id , type='hidden')}}
+                            {{ forms.field('name', 'Team Name', team.name, type='hidden') }}
+                            {{ forms.field('question', 'Question', locationQuestion.id, type='hidden') }}
+                            {{ forms.field('locationanswer','Answer') }}
+                            {{ forms.field('location','Location', locationQuestion.location, type='hidden') }}
+                            {{ forms.field('locationcode', "Location Code") }}
+                            <button id="location-submit-button">Submit</button>
+                        {% endcall %}
+                    </div>
+                    <div id="riddle-form">
+                        {% call forms.form() %}
+                            {{ forms.field('id','TeamID', team.id , type='hidden')}}
+                            {{ forms.field('name', 'Team Name', team.name, type='hidden') }}
+                            {{ forms.field('question', 'Question', locationQuestion.id, type='hidden') }}
+                            {{ forms.field('riddleanswer','Answer') }}
+                            <button id="riddle-submit-button">Submit</button>
+                        {% endcall %}
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="message" style="display: none; ">
-            bruh
-        </div>
-        
-        
-    </div>
 {% endblock %}
 
 {% block customcss %}
 	<style>
-        .container {
+        .message-cover{
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            background-color: black;
+            opacity: 0.3;
+            display: none;
+            z-index: 2;
+        }
+        .message-box {
+            margin: auto;
+            width: fit-content;
+            padding: 10px;
+            background-color: black;
+            font-size: 18px;
+            border-radius: 5px;
+            z-index: 3;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 100%;
+        }
+        .correct{
+            color: green;
+            font-size: 50px;
+        }
+        .incorrect{
+            color: red;
+            font-size: 50px;
+        }
+        #container {
             margin: auto;
             width : 350px;
             display: flex;
@@ -42,7 +92,7 @@
             align-items: center;
             justify-content: center;
         }
-        .interface_container {
+        #interface-container {
             margin: 0px 20px;
         }
         .team-info {
@@ -58,13 +108,37 @@
             border-bottom-color: #D61F35;
             border-left-color: #373737;
             border-radius: 20px 0px 20px 0px;
-            background-color: black;
-            padding: 20px; 
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            backdrop-filter: blur(10px);
         }
         .question h3 {
             margin: 0px 0px 10px 0px;
             color: #8b0000;
         }
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #location-form {
+            display: block;
+        }
+        #riddle-form {
+            display: none;
+        }
+        #timeout {
+            margin: 0px 20px;
+            display: none;
+        }
+        #timeout h1 {
+            color: #D61F35;
+        }
+        #timeout h3 {
+            margin-top: 20px;
+        }
+        
     </style>
     {{ forms.formCss() }}
 {% endblock %}
@@ -75,11 +149,108 @@
         axios.defaults.withCredentials = true;
         axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
 
+        let state = localStorage.getItem('state') || 'location-question';
+        localStorage.setItem('state', state);
+        
+        function renderForm() {
+            const locationForm = document.getElementById('location-form');
+            const riddleForm = document.getElementById('riddle-form');
+            const messageBox = document.getElementById("message-box");
+            const messageCover = document.getElementById("message-cover");
+            const countdown = document.getElementById("countdown");
+            const timeoutContainer = document.getElementById('timeout');
+            const interfaceContainer = document.getElementById('interface-container');
+
+            interfaceContainer.style.display = state.includes('question') ? 'block' : 'none';
+            locationForm.style.display = state === 'location-question' ? 'block' : 'none';
+            riddleForm.style.display = state === 'riddle-question' ? 'block' : 'none';
+            messageBox.innerHTML = '';
+            messageCover.style.display = 'none';
+            timeoutContainer.style.display = 'none';
+            
+
+            if (state === 'location-timeout' || state === 'riddle-timeout') {
+                interfaceContainer.style.display = 'none';
+                timeoutContainer.style.display = 'block';
+                let timeleft = localStorage.getItem('timeleft') || 120;
+                timeleft = parseInt(timeleft);
+                const countdownInterval = setInterval(() => {
+                    if (timeleft <= 0) {
+                        clearInterval(countdownInterval);
+                        localStorage.removeItem('timeleft');
+                        state = state.includes('location') ? 'location-question' : 'riddle-question';
+                        localStorage.setItem('state', state);
+                        renderForm();
+                    } else {
+                        const minutes = Math.floor(timeleft / 60);
+                        const seconds = timeleft % 60;
+                        countdown.textContent = (minutes === 0 ? "" : minutes + " min ") + (seconds === 0 ? "" : seconds + " s");
+                        timeleft -= 1;
+                        localStorage.setItem('timeleft', timeleft);
+                    }
+                }, 1000);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            renderForm();
+            document.getElementById("location-submit-button").addEventListener("click", function(event) {
+                event.preventDefault();
+                submit();
+            });
+            document.getElementById("riddle-submit-button").addEventListener("click", function(event) {
+                event.preventDefault();
+                submit();
+            });
+        });
+
         async function submit() {
-            event.preventDefault();
             const data = getData();
-            data.answer = data.answer.toUpperCase();
-            console.log(data.answer);
+            try {
+                let response;
+                if (state === 'location-question') {
+                    response = await axios.patch('/live/location-submit-answer', data);
+                } else if (state === 'riddle-question') {
+                    response = await axios.patch('/live/riddle-submit-answer', data);
+                }
+                
+                if (response && response.status === 200) {
+                    const messageBox = document.getElementById("message-box");
+                    messageBox.innerHTML = '<h2 class="correct">Correct Answer!</h2>';
+                    const messageCover = document.getElementById("message-cover");
+                    messageCover.style.display = 'block';
+                    setTimeout(() => {
+                        messageCover.style.display = "none";
+                        state = state === 'location-question' ? 'riddle-question' : 'location-question';
+                        localStorage.setItem('state', state);
+                        renderForm();
+                    }, 10000);
+                }
+            } catch (error) {
+                console.error(error);
+                if (error.response && error.response.data === 'incorrect answer') {
+                    const messageBox = document.getElementById("message-box");
+                    messageBox.innerHTML = '<h2 class="incorrect">Incorrect Answer!</h2>';
+                    const messageCover = document.getElementById("message-cover");
+                    messageCover.style.display = 'block';
+                    setTimeout(() => {
+                        messageCover.style.display = "none";
+                        state = state.includes('location') ? 'location-timeout' : 'riddle-timeout';
+                        localStorage.setItem('state', state);
+                        renderForm();
+                    }, 10000);
+                } else if (error.response && error.response.data === 'incorrect location') {
+                    const messageBox = document.getElementById("message-box");
+                    messageBox.innerHTML = '<h2 class="incorrect">Incorrect Location Code!</h2>';
+                    const messageCover = document.getElementById("message-cover");
+                    messageCover.style.display = 'block';
+                    setTimeout(() => {
+                        messageCover.style.display = "none";
+                    }, 10000);
+                    state = 'location-question';
+                    localStorage.setItem('state', state);
+                }
+            }
         }
     </script>
 {% endblock %}

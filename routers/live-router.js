@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const dbh = require('../database/handler');
-
+const { body, validationResult } = require('express-validator');
 const checker = require('../src/checker.js');
 
 const handlerContext = {};
@@ -48,7 +48,8 @@ const team = {
 const locationQuestion = {
 	id: 1,
 	question: 'Where is the best waifu',
-	answer: 'Oregairu'
+	answer: 'Oregairu',
+	location: 'ABC123'
 };
 
 const riddleQuestion = {
@@ -72,8 +73,46 @@ router.get('/', async (req, res) => {
 	}
 });
 
-router.get('/timeout', async (req, res) => {
-	return res.renderFile('live/timeout.njk');
+router.patch('/location-submit-answer', async (req, res) => {
+	const teamID = parseInt(req.body.id);
+	const questionID = parseInt(req.body.question);
+	const answer = req.body.locationanswer;
+	const location = req.body.locationcode;
+
+	// console.log(teamID);
+	// console.log(questionID);
+	// console.log(answer);
+	// console.log(location);
+
+	// FIND QUESTION WITH ID IN LOCAL STORAGE
+	const question = locationQuestion;
+	if (question.answer === answer && question.location === location) {
+	// MARK QUESTION AS COMPLETED FOR TEAM BY FINDING TEAM BY ID AND ADDING QUESTION TO COMPLETED QUESTIONS LIST
+		return res.send('correct');
+	} else if (question.answer !== answer) {
+		return res.status(400).send('incorrect answer');
+	} else {
+		return res.status(400).send('incorrect location');
+	}
+});
+
+router.patch('/riddle-submit-answer', async (req, res) => {
+	const teamID = parseInt(req.body.id);
+	const questionID = parseInt(req.body.question);
+	const answer = req.body.riddleanswer;
+
+	// console.log(teamID);
+	// console.log(questionID);
+	// console.log(answer);
+
+	// FIND QUESTION WITH ID IN LOCAL STORAGE
+	const question = riddleQuestion;
+	if (question.answer === answer) {
+	// MARK QUESTION AS COMPLETED FOR TEAM BY FINDING TEAM BY ID AND ADDING QUESTION TO COMPLETED QUESTIONS LIST
+		return res.send('correct');
+	} else {
+		return res.status(400).send('incorrect answer');
+	}
 });
 
 router.get('/results', async (req, res) => {
