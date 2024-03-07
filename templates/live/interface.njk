@@ -299,5 +299,14 @@
             }
         }
     }
+    window.onload = async () => {
+        if (!localStorage.getItem('questions')) {
+            const response = await axios.post('/live/get-questions', {teamID: {{ team._id }}})
+            console.log(response.data);
+            if(response.status === 200) {
+                localStorage.setItem('questions', JSON.stringify(response.data));
+            }
+        }
+    }
 </script>
 {% endblock %}

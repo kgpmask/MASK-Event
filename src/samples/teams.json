@@ -1,0 +1,89 @@
+[
+	{
+		"_id": 1,
+		"name": "Team 1",
+		"members": [
+			{
+				"name": "Alice",
+				"email": "alice@example.com",
+				"phone": "1234567890"
+			},
+			{
+				"name": "Bob",
+				"email": "bob@example.com",
+				"phone": "0987654321"
+			},
+			{
+				"name": "Charlie",
+				"email": "charlie@example.com",
+				"phone": "5551234567"
+			},
+			{
+				"name": "Diana",
+				"email": "diana@example.com",
+				"phone": "9876543210"
+			}
+		],
+		"status": "finding",
+		"questionsAttempted": 0,
+		"questions": [1, 4, 7]
+	},
+	{
+		"_id": 2,
+		"name": "Team 2",
+		"members": [
+			{
+				"name": "Eva",
+				"email": "eva@example.com",
+				"phone": "9876543211"
+			},
+			{
+				"name": "Frank",
+				"email": "frank@example.com",
+				"phone": "1234567891"
+			},
+			{
+				"name": "Grace",
+				"email": "grace@example.com",
+				"phone": "5551234568"
+			},
+			{
+				"name": "Henry",
+				"email": "henry@example.com",
+				"phone": "1239874560"
+			}
+		],
+		"status": "finding",
+		"questionsAttempted": 0,
+		"questions": [2, 5, 8]
+	},
+	{
+		"_id": 3,
+		"name": "Team 3",
+		"members": [
+			{
+				"name": "Ivy",
+				"email": "ivy@example.com",
+				"phone": "1234567892"
+			},
+			{
+				"name": "Jack",
+				"email": "jack@example.com",
+				"phone": "0987654322"
+			},
+			{
+				"name": "Kevin",
+				"email": "kevin@example.com",
+				"phone": "5551234569"
+			},
+			{
+				"name": "Linda",
+				"email": "linda@example.com",
+				"phone": "7894561230"
+			}
+		],
+		"status": "finding",
+		"questionsAttempted": 0,
+		"questions": [3, 6, 9]
+	}
+]

@@ -3,6 +3,9 @@ const dbh = require('../database/handler');
 const { body, validationResult } = require('express-validator');
 const checker = require('../src/checker.js');
 
+const teams = require('../src/samples/teams.json');
+const riddleQuestions = require('../src/samples/riddleQuestions.json');
+
 const handlerContext = {};
 
 router.use((req, res, next) => {
@@ -10,40 +13,7 @@ router.use((req, res, next) => {
 	return next();
 });
 
-const teams = [
-	{
-		id: 1,
-		name: 'Team 1',
-		members: [
-			{ name: 'User 1', email: 'user4@example.com', phone: '123-456-7890' },
-			{ name: 'User 2', email: 'user5@example.com', phone: '987-654-3210' },
-			{ name: 'User 3', email: 'user6@example.com', phone: '555-555-5555' }
-		]
-	},
-	{
-		id: 2,
-		name: 'Team 2',
-		members: [
-			{ name: 'User 4', email: 'user4@example.com', phone: '123-456-7890' },
-			{ name: 'User 5', email: 'user5@example.com', phone: '987-654-3210' },
-			{ name: 'User 6', email: 'user6@example.com', phone: '555-555-5555' }
-		]
-	},
-	{
-		id: 3,
-		name: 'Team 3',
-		members: [
-			{ name: 'User 7', email: 'user7@example.com', phone: '111-222-3333' },
-			{ name: 'User 8', email: 'user8@example.com', phone: '444-555-6666' },
-			{ name: 'User 9', email: 'user9@example.com', phone: '777-888-9999' }
-		]
-	}
-];
-
-const team = {
-	id: 1,
-	name: 'Team 1'
-};
+const team = teams[1];
 
 const locationQuestion = {
 	id: 1,
@@ -51,11 +21,7 @@ const locationQuestion = {
 	answer: 'Oregairu'
 };
 
-const riddleQuestion = {
-	id: 1,
-	question: 'Who is the best waifu',
-	answer: 'Shizuka Hiratsuka'
-};
+const riddleQuestion = riddleQuestions[0];
 
 const locationCode = 'ABC123';
 
@@ -73,6 +39,14 @@ router.get('/', async (req, res) => {
 		});
 		// return res.renderFile('live/interface.njk');
 	}
+});
+
+router.post('/get-questions', (req, res) => {
+	const teamID = req.body.teamID;
+	console.log(teamID);
+	return res.status(200).send(JSON.stringify(
+		teams.find((e) => e._id === teamID).questions.map((id) => riddleQuestions.find((q) => q.id === id))
+	));
 });
 
 router.patch('/location-code', async (req, res) => {

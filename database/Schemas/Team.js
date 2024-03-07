@@ -11,7 +11,7 @@ const teamSchema = new mongoose.Schema({
 		}
 	],
 	status: { type: String, required: true },
-	questionsAttempted: { type: Number, required: true },
+	questionsAttempted: { type: Number, required: true, default: 0 },
 	questions: [
 		{
 			type: Number,
