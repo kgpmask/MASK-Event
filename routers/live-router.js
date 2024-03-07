@@ -48,8 +48,7 @@ const team = {
 const locationQuestion = {
 	id: 1,
 	question: 'Where is the best waifu',
-	answer: 'Oregairu',
-	location: 'ABC123'
+	answer: 'Oregairu'
 };
 
 const riddleQuestion = {
@@ -57,6 +56,8 @@ const riddleQuestion = {
 	question: 'Who is the best waifu',
 	answer: 'Shizuka Hiratsuka'
 };
+
+const locationCode = 'ABC123';
 
 router.get('/', async (req, res) => {
 	if (req.isAdmin) {
@@ -74,6 +75,20 @@ router.get('/', async (req, res) => {
 	}
 });
 
+router.patch('/location-code', async (req, res) => {
+	const teamID = parseInt(req.body.id);
+	const location = req.body.locationcode;
+	// console.log(teamID);
+	// console.log(location);
+	// FIND TEAM BY ID IN LOCAL STORAGE
+	// MARK TEAM AS COMPLETED FOR LOCATION BY FINDING TEAM BY ID AND ADDING LOCATION TO COMPLETED LOCATIONS LIST
+	if (location === locationCode) {
+		return res.send('correct');
+	} else {
+		return res.status(400).send('incorrect location');
+	}
+});
+
 router.patch('/location-submit-answer', async (req, res) => {
 	const teamID = parseInt(req.body.id);
 	const questionID = parseInt(req.body.question);
@@ -87,13 +102,11 @@ router.patch('/location-submit-answer', async (req, res) => {
 
 	// FIND QUESTION WITH ID IN LOCAL STORAGE
 	const question = locationQuestion;
-	if (question.answer === answer && question.location === location) {
+	if (question.answer === answer) {
 	// MARK QUESTION AS COMPLETED FOR TEAM BY FINDING TEAM BY ID AND ADDING QUESTION TO COMPLETED QUESTIONS LIST
 		return res.send('correct');
-	} else if (question.answer !== answer) {
-		return res.status(400).send('incorrect answer');
 	} else {
-		return res.status(400).send('incorrect location');
+		return res.status(400).send('incorrect answer');
 	}
 });
 
