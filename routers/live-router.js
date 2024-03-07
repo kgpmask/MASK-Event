@@ -67,7 +67,8 @@ router.get('/', async (req, res) => {
 		// if (!handlerContext.quizStarted) return res.redirect('/');
 		return res.renderFile('live/interface.njk', {
 			team,
-			locationQuestion
+			locationQuestion,
+			started: handlerContext.huntStarted
 		});
 		// return res.renderFile('live/interface.njk');
 	}
@@ -114,6 +115,20 @@ router.patch('/riddle-submit-answer', async (req, res) => {
 		return res.status(400).send('incorrect answer');
 	}
 });
+
+router.post('/start-hunt', (req, res) => {
+	if (!req.isAdmin) return res.status(403).send('Forbidden: Admin permissions not detected.');
+	handlerContext.huntStarted = true;
+	return res.send('Hunt Started');
+});
+
+router.post('/end-hunt', (req, res) => {
+	if (!req.isAdmin) return res.status(403).send('Forbidden: Admin permissions not detected.');
+	handlerContext.huntStarted = false;
+	return res.send('Hunt Ended');
+});
+
+// ---------------------------------------------------------------------
 
 router.get('/results', async (req, res) => {
 	if (req.isAdmin) {

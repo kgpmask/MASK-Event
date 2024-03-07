@@ -101,14 +101,14 @@ router.get('/list-users', async (req, res) => {
 	res.renderFile('admin/user-list.njk', { users });
 });
 
-router.get('/edit-user', async (req, res) => {
-	const username = req.query.username;
-	if (!username) return res.redirect('/admin/list-users');
-	const data = (await dbh.getUserByUsername(username)).toObject();
-	delete data.salt;
-	delete data.hash;
-	res.renderFile('admin/user-edit.njk', { ...data });
-});
+// router.get('/edit-user', async (req, res) => {
+// 	const username = req.query.username;
+// 	if (!username) return res.redirect('/admin/list-users');
+// 	const data = (await dbh.getUserByUsername(username)).toObject();
+// 	delete data.salt;
+// 	delete data.hash;
+// 	res.renderFile('admin/user-edit.njk', { ...data });
+// });
 
 router.patch('/edit-user', [
 	body('name')

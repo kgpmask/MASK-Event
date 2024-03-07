@@ -21,31 +21,36 @@
                     <h2 id="team-id">Team ID: {{ team.id }}</p>
                     <h2 id="team-name">Team Name: {{ team.name }}</p>
                 </div>
-                <div class="question">
-                    <h3>Question</h3>
-                    <p id="question">{{ locationQuestion.question }}</p>
+                <div class="question-container" {% if not started %} style="display: none;" {% endif %}>
+                    <div class="question">
+                        <h3>Question</h3>
+                        <p id="question">{{ locationQuestion.question }}</p>
+                    </div>
+                    <div class="form-box">
+                        <div id="location-form">
+                            {% call forms.form() %}
+                                {{ forms.field('id','TeamID', team.id , type='hidden')}}
+                                {{ forms.field('name', 'Team Name', team.name, type='hidden') }}
+                                {{ forms.field('question', 'Question', locationQuestion.id, type='hidden') }}
+                                {{ forms.field('locationanswer','Answer') }}
+                                {{ forms.field('location','Location', locationQuestion.location, type='hidden') }}
+                                {{ forms.field('locationcode', "Location Code") }}
+                                <button id="location-submit-button">Submit</button>
+                            {% endcall %}
+                        </div>
+                        <div id="riddle-form">
+                            {% call forms.form() %}
+                                {{ forms.field('id','TeamID', team.id , type='hidden')}}
+                                {{ forms.field('name', 'Team Name', team.name, type='hidden') }}
+                                {{ forms.field('question', 'Question', locationQuestion.id, type='hidden') }}
+                                {{ forms.field('riddleanswer','Answer') }}
+                                <button id="riddle-submit-button">Submit</button>
+                            {% endcall %}
+                        </div>
+                    </div>
                 </div>
-                <div class="form-box">
-                    <div id="location-form">
-                        {% call forms.form() %}
-                            {{ forms.field('id','TeamID', team.id , type='hidden')}}
-                            {{ forms.field('name', 'Team Name', team.name, type='hidden') }}
-                            {{ forms.field('question', 'Question', locationQuestion.id, type='hidden') }}
-                            {{ forms.field('locationanswer','Answer') }}
-                            {{ forms.field('location','Location', locationQuestion.location, type='hidden') }}
-                            {{ forms.field('locationcode', "Location Code") }}
-                            <button id="location-submit-button">Submit</button>
-                        {% endcall %}
-                    </div>
-                    <div id="riddle-form">
-                        {% call forms.form() %}
-                            {{ forms.field('id','TeamID', team.id , type='hidden')}}
-                            {{ forms.field('name', 'Team Name', team.name, type='hidden') }}
-                            {{ forms.field('question', 'Question', locationQuestion.id, type='hidden') }}
-                            {{ forms.field('riddleanswer','Answer') }}
-                            <button id="riddle-submit-button">Submit</button>
-                        {% endcall %}
-                    </div>
+                <div {% if started %} style="display: none;" {% endif %} class="start-message">
+                    <h3>Please Wait for the Event to Start</h3>
                 </div>
             </div>
         </div>
@@ -136,6 +141,9 @@
             color: #D61F35;
         }
         #timeout h3 {
+            margin-top: 20px;
+        }
+        .start-message {
             margin-top: 20px;
         }
         

@@ -8,6 +8,7 @@
 {% block pagecontent %}
 	<h1>Teams Management Page</h1>
     <legend>&nbsp;&nbsp;Registered Teams: {{ teams | length }}&nbsp;&nbsp;</legend><br/>
+	<button class="editT" id="control-btn" onclick="control()">Start Event</button>
 	{% for team in teams %}
 		<div class="container">
 			<div class="card1">
@@ -96,6 +97,24 @@
 			width: 7em;
 			height: 2.5em;
 		}
+		#control-btn {
+			align-self: center;
+			margin: 15px 0px;
+			width: 50%;
+			background-color: var(--red);
+			color: white;
+			border: 0px;
+			padding: 12px 0;
+			font-size: 18px;
+			font-weight: 600;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: 0.3s;
+		}
+
+		#control-btn:hover {
+			background-color: #c90c0c;
+		}
 		@media (max-width: 600px) {
 			button{
 				width:4rem;
@@ -146,6 +165,16 @@
 
 {% block customjs %}
 <script>
+	function control () {
+		const controlBtn = document.getElementById('control-btn');
+		if (controlBtn.innerHTML.split(' ')[0].toLowerCase() === 'start') {
+			controlBtn.innerHTML = "End Event"
+			axios.post('/live/start-hunt');
+		} else {
+			controlBtn.innerHTML = "Start Event"
+			axios.post('/live/end-hunt');
+		}
+	}
     function editTeam(teamID) {
         console.log(teamID);
         window.location.href = `/admin/edit-team?teamID=${teamID}`;

@@ -33,6 +33,9 @@
         .members {
             margin: 20px 0px;
         }
+        .form-container {
+            width: 80%;
+        }
     </style>
 {% endblock %}
 
@@ -43,23 +46,40 @@
 		axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
 
         function addMember() {
+            const count = document.getElementsByClassName('members').length;
+            if (count >= 4) {
+                return;
+            }
             const member = document.createElement('div');
+            member.className = 'members';
             member.innerHTML = `
-                {{ forms.field('name','Name', '', type='text')}}
-                {{ forms.field('email','Email', '', type='email')}}
-                {{ forms.field('phone','Phone number', '', type='text')}}
+                {{ forms.field('name${count+1}','Name', '', type='text')}}
+                {{ forms.field('email${count+1}','Email', '', type='email')}}
+                {{ forms.field('phone${count+1}','Phone number', '', type='text')}}
+                <button onclick="removeMember(this)">Remove Member</button>
             `;
             document.querySelector('form').insertBefore(member, document.getElementById('addmember'));
         }
 
         function removeMember(e) {
             e.parentElement.remove();
+            updateIds();
+        }
+
+        function updateIds () {
+            // if a member oher then last member is removed, the id's might get messy
+            [...document.getElementsByClassName('members')].map((ele, index) => {
+                [...ele.children].slice(0, -1).map((e) => {
+                    e.children[0].id = e.children[0].id.slice(0, -1) + (index + 1);
+                });
+            })
         }
 
 		async function update() {
             event.preventDefault();
 			const data = getData();
-            try {
+            console.log(data);
+            {# try {
                 const response = await axios.patch('/admin/edit-team', data);
                 if (response.status === 200) {
                     alert('Team updated successfully!');
@@ -70,7 +90,7 @@
             } catch (error) {
                 console.error('Error updating team:', error);
                 return alert(error.response.data);
-            }
+            } #}
 		}
 	</script>
 {% endblock %}
