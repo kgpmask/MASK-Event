@@ -23,15 +23,6 @@
         </div>
         <div class="form-box">
             <div id="location-code">
-                {% call forms.form() %}
-                    {{ forms.heading('h2', 'Enter the Location Code') }}
-                    {{ forms.field('id','TeamID', team.id , type='hidden')}}
-                    {{ forms.field('name', 'Team Name', team.name, type='hidden') }}
-                    {{ forms.field('locationcode','Location Code') }}
-                    <button id="location-code-submit-button">Submit</button>
-                {% endcall %}
-            </div>
-            <div id="location-form">
                 <div class="question">
                     <h3>Question</h3>
                     <p id="question">{{ locationQuestion.question }}</p>
@@ -40,7 +31,7 @@
                     {{ forms.field('id','TeamID', team.id , type='hidden')}}
                     {{ forms.field('name', 'Team Name', team.name, type='hidden') }}
                     {{ forms.field('question', 'Question', locationQuestion.id, type='hidden') }}
-                    {{ forms.field('locationanswer','Answer') }}
+                    {{ forms.field('locationcode', 'Location Code') }}
                     {{ forms.field('location','Location', locationQuestion.location, type='hidden') }}
                 <button id="location-submit-button">Submit</button>
                 {% endcall %}
@@ -48,12 +39,12 @@
             <div id="riddle-form">
                 <div class="question">
                     <h3>Question</h3>
-                    <p id="question">{{ locationQuestion.question }}</p>
+                    <p id="riddle-question"></p>
                 </div>
                 {% call forms.form() %}
                 {{ forms.field('id','TeamID', team.id , type='hidden')}}
                 {{ forms.field('name', 'Team Name', team.name, type='hidden') }}
-                {{ forms.field('question', 'Question', locationQuestion.id, type='hidden') }}
+                {{ forms.field('riddlequestion', 'Question', locationQuestion.id, type='hidden') }}
                 {{ forms.field('riddleanswer','Answer') }}
                 <button id="riddle-submit-button">Submit</button>
                 {% endcall %}
@@ -182,7 +173,6 @@
 
     function renderForm() {
         const locationCode = document.getElementById('location-code');
-        const locationForm = document.getElementById('location-form');
         const riddleForm = document.getElementById('riddle-form');
         const messageBox = document.getElementById("message-box");
         const messageCover = document.getElementById("message-cover");
@@ -190,9 +180,13 @@
         const timeoutContainer = document.getElementById('timeout');
         const interfaceContainer = document.getElementById('interface-container');
 
+        const riddleQuestion = JSON.parse(localStorage.getItem('questions'))[0];
+        if (riddleQuestion) {
+            document.getElementById('riddle-question').textContent = riddleQuestion.question;
+        }
+
         interfaceContainer.style.display = (state.includes('question') || state.includes('code')) ? 'block' : 'none';
         locationCode.style.display = state === 'location-code' ? 'block' : 'none';
-        locationForm.style.display = state === 'location-question' ? 'block' : 'none';
         riddleForm.style.display = state === 'riddle-question' ? 'block' : 'none';
         messageBox.innerHTML = '';
         messageCover.style.display = 'none';
@@ -223,7 +217,6 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        renderForm();
         document.getElementById("location-submit-button").addEventListener("click", function (event) {
             event.preventDefault();
             submit();
@@ -232,71 +225,69 @@
             event.preventDefault();
             submit();
         });
-        document.getElementById("location-code-submit-button").addEventListener("click", function (event) {
-            event.preventDefault();
-            submit();
-        });
+        renderForm();
     });
 
     async function submit() {
         const data = getData();
+        const answer = document.getElementById('riddleanswer').value;
         try {
             let response;
-            if (state === 'location-question') {
-                response = await axios.patch('/live/location-submit-answer', data);
-            } else if (state === 'riddle-question') {
-                response = await axios.patch('/live/riddle-submit-answer', data);
-            } else if (state === 'location-code') {
-                response = await axios.patch('/live/location-code', data);
-            }
+            if (state === 'location-code') {
+                try {
+                    response = await axios.patch('/live/location-code', data);
 
-            if (response && response.status === 200) {
-                if (state == 'location-question' || state == 'riddle-question') {
+                    if (response && response.status === 200) {
+                        const messageBox = document.getElementById("message-box");
+                        messageBox.innerHTML = '<h2 class="correct">Correct Location!</h2>';
+                        const messageCover = document.getElementById("message-cover");
+                        messageCover.style.display = 'block';
+                        setTimeout(() => {
+                            messageCover.style.display = "none";
+                            state = 'riddle-question';
+                            localStorage.setItem('state', state);
+                            renderForm();
+                        }, 10000);
+                    }
+                } catch (error) {
+                    if (error.response && error.response.status === 400) {
+                        const messageBox = document.getElementById("message-box");
+                        messageBox.innerHTML = '<h2 class="incorrect">Incorrect Location Code!</h2>';
+                        const messageCover = document.getElementById("message-cover");
+                        messageCover.style.display = 'block';
+                        setTimeout(() => {
+                            messageCover.style.display = "none";
+                        }, 10000);
+                    }
+                }
+            } else {
+                const riddleQuestion = JSON.parse(localStorage.getItem('questions'))[0];
+                if(answer === riddleQuestion.answer) {
                     const messageBox = document.getElementById("message-box");
                     messageBox.innerHTML = '<h2 class="correct">Correct Answer!</h2>';
                     const messageCover = document.getElementById("message-cover");
                     messageCover.style.display = 'block';
                     setTimeout(() => {
                         messageCover.style.display = "none";
-                    if (state === 'location-question') {
-                        state = 'riddle-question';
-                    } else if (state === 'riddle-question') {
                         state = 'location-code';
-                    }
-                    localStorage.setItem('state', state);
-                    renderForm();
+                        localStorage.setItem('state', state);
+                        renderForm();
+                    }, 10000);
+                } else {
+                    const messageBox = document.getElementById("message-box");
+                    messageBox.innerHTML = '<h2 class="incorrect">Incorrect Answer!</h2>';
+                    const messageCover = document.getElementById("message-cover");
+                    messageCover.style.display = 'block';
+                    setTimeout(() => {
+                        messageCover.style.display = "none";
+                        state = 'riddle-timeout';
+                        localStorage.setItem('state', state);
+                        renderForm();
                     }, 10000);
                 }
-                 else {
-                    state = 'location-question'
-                    localStorage.setItem('state', state);
-                    renderForm();
-                }
-            }  
+            }
         }  catch (error) {
             console.error(error);
-            if (error.response && error.response.data === 'incorrect answer') {
-                const messageBox = document.getElementById("message-box");
-                messageBox.innerHTML = '<h2 class="incorrect">Incorrect Answer!</h2>';
-                const messageCover = document.getElementById("message-cover");
-                messageCover.style.display = 'block';
-                setTimeout(() => {
-                    messageCover.style.display = "none";
-                    state = state.includes('location') ? 'location-question' : 'riddle-timeout';
-                    localStorage.setItem('state', state);
-                    renderForm();
-                }, 10000);
-            } else if (error.response && error.response.data === 'incorrect location') {
-                const messageBox = document.getElementById("message-box");
-                messageBox.innerHTML = '<h2 class="incorrect">Incorrect Location Code!</h2>';
-                const messageCover = document.getElementById("message-cover");
-                messageCover.style.display = 'block';
-                setTimeout(() => {
-                    messageCover.style.display = "none";
-                }, 10000);
-                state = 'location-code';
-                localStorage.setItem('state', state);
-            }
         }
     }
     window.onload = async () => {

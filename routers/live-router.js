@@ -63,46 +63,6 @@ router.patch('/location-code', async (req, res) => {
 	}
 });
 
-router.patch('/location-submit-answer', async (req, res) => {
-	const teamID = parseInt(req.body.id);
-	const questionID = parseInt(req.body.question);
-	const answer = req.body.locationanswer;
-	const location = req.body.locationcode;
-
-	// console.log(teamID);
-	// console.log(questionID);
-	// console.log(answer);
-	// console.log(location);
-
-	// FIND QUESTION WITH ID IN LOCAL STORAGE
-	const question = locationQuestion;
-	if (question.answer === answer) {
-	// MARK QUESTION AS COMPLETED FOR TEAM BY FINDING TEAM BY ID AND ADDING QUESTION TO COMPLETED QUESTIONS LIST
-		return res.send('correct');
-	} else {
-		return res.status(400).send('incorrect answer');
-	}
-});
-
-router.patch('/riddle-submit-answer', async (req, res) => {
-	const teamID = parseInt(req.body.id);
-	const questionID = parseInt(req.body.question);
-	const answer = req.body.riddleanswer;
-
-	// console.log(teamID);
-	// console.log(questionID);
-	// console.log(answer);
-
-	// FIND QUESTION WITH ID IN LOCAL STORAGE
-	const question = riddleQuestion;
-	if (question.answer === answer) {
-	// MARK QUESTION AS COMPLETED FOR TEAM BY FINDING TEAM BY ID AND ADDING QUESTION TO COMPLETED QUESTIONS LIST
-		return res.send('correct');
-	} else {
-		return res.status(400).send('incorrect answer');
-	}
-});
-
 router.post('/start-hunt', (req, res) => {
 	if (!req.isAdmin) return res.status(403).send('Forbidden: Admin permissions not detected.');
 	handlerContext.huntStarted = true;
