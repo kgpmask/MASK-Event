@@ -24,11 +24,11 @@
         <div class="form-box">
             <div id="location-code">
                 {% call forms.form() %}
-                {{ forms.heading('h2', 'Enter the Location Code') }}
-                {{ forms.field('id','TeamID', team.id , type='hidden')}}
-                {{ forms.field('name', 'Team Name', team.name, type='hidden') }}
-                {{ forms.field('locationcode','Location Code') }}
-                <button id="location-code-submit-button">Submit</button>
+                    {{ forms.heading('h2', 'Enter the Location Code') }}
+                    {{ forms.field('id','TeamID', team.id , type='hidden')}}
+                    {{ forms.field('name', 'Team Name', team.name, type='hidden') }}
+                    {{ forms.field('locationcode','Location Code') }}
+                    <button id="location-code-submit-button">Submit</button>
                 {% endcall %}
             </div>
             <div id="location-form">
@@ -37,11 +37,11 @@
                     <p id="question">{{ locationQuestion.question }}</p>
                 </div>
                 {% call forms.form() %}
-                {{ forms.field('id','TeamID', team.id , type='hidden')}}
-                {{ forms.field('name', 'Team Name', team.name, type='hidden') }}
-                {{ forms.field('question', 'Question', locationQuestion.id, type='hidden') }}
-                {{ forms.field('locationanswer','Answer') }}
-                {{ forms.field('location','Location', locationQuestion.location, type='hidden') }}
+                    {{ forms.field('id','TeamID', team.id , type='hidden')}}
+                    {{ forms.field('name', 'Team Name', team.name, type='hidden') }}
+                    {{ forms.field('question', 'Question', locationQuestion.id, type='hidden') }}
+                    {{ forms.field('locationanswer','Answer') }}
+                    {{ forms.field('location','Location', locationQuestion.location, type='hidden') }}
                 <button id="location-submit-button">Submit</button>
                 {% endcall %}
             </div>

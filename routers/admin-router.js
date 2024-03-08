@@ -3,52 +3,8 @@ const dbh = require('../database/handler');
 const { body, validationResult } = require('express-validator');
 const checkAdmin = require('./check-admin');
 
-const teams = [
-	{
-		id: 1,
-		name: 'Team 1',
-		members: [
-			{ name: 'User 1', email: 'user4@example.com', phone: '123-456-7890' },
-			{ name: 'User 2', email: 'user5@example.com', phone: '987-654-3210' },
-			{ name: 'User 3', email: 'user6@example.com', phone: '555-555-5555' }
-		]
-	},
-	{
-		id: 2,
-		name: 'Team 2',
-		members: [
-			{ name: 'User 4', email: 'user4@example.com', phone: '123-456-7890' },
-			{ name: 'User 5', email: 'user5@example.com', phone: '987-654-3210' },
-			{ name: 'User 6', email: 'user6@example.com', phone: '555-555-5555' }
-		]
-	},
-	{
-		id: 3,
-		name: 'Team 3',
-		members: [
-			{ name: 'User 7', email: 'user7@example.com', phone: '111-222-3333' },
-			{ name: 'User 8', email: 'user8@example.com', phone: '444-555-6666' },
-			{ name: 'User 9', email: 'user9@example.com', phone: '777-888-9999' }
-		]
-	}
-];
-
-const team = {
-	id: 1,
-	name: 'Team 1'
-};
-
-const locationQuestion = {
-	id: 1,
-	question: 'Where is the best waifu',
-	answer: 'Oregairu'
-};
-
-const riddleQuestion = {
-	id: 1,
-	question: 'Who is the best waifu',
-	answer: 'Shizuka Hiratsuka'
-};
+const teams = require('../src/samples/teams.json');
+const riddleQuestions = require('../src/samples/riddleQuestions.json');
 
 router.use('/', checkAdmin);
 
@@ -58,7 +14,7 @@ router.get('/', (req, res) => {
 
 router.get('/edit-team', async (req, res) => {
 	const teamID = parseInt(req.query.teamID);
-	const team = teams.find(team => team.id === teamID);
+	const team = teams.find(team => team._id === teamID);
 	return res.renderFile('admin/team-edit.njk', {
 		team
 	});

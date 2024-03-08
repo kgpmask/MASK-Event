@@ -12,10 +12,16 @@ const teamSchema = new mongoose.Schema({
 	],
 	status: { type: String, required: true },
 	questionsAttempted: { type: Number, required: true, default: 0 },
-	questions: [
+	order: [
 		{
-			type: Number,
-			required: true
+			location: {
+				type: Number,
+				required: true
+			},
+			question: {
+				type: Number,
+				required: true
+			}
 		}
 	]
 }, { collection: 'event-teams' });
