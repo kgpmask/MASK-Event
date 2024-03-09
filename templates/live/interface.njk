@@ -7,66 +7,70 @@
 {% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
 
 {% block pagecontent %}
-<div class="message-cover" id="message-cover">
-    {% call forms.form() %}
-        <div class="message-box" id="message-box"></div>
-    {% endcall %}
-</div>
-<div id="instructions" style="display: none;">
-    {% call forms.form() %}
-        <p> Dummy </p>
-        <button type="button" id="continue" onclick="start()">Continue</button>
-    {% endcall %}
-</div>
-{{ loadingscreen('instructions') }}
-<div id="done-cover" style="display: none;">
-    {% call forms.form() %}
-    <div class="done-container">
-        <h1 id="done" style="color:var(--red)">Congratulations!</h1>
-        <p style="font-size: 22px;">You have completed the treasure hunt. Head over to Gymkhana to grab your prizes!</p>
-    </div>  
-    {% endcall %}
-</div>
+{% if started %}
+    <div class="message-cover" id="message-cover">
+        {% call forms.form() %}
+            <div class="message-box" id="message-box"></div>
+        {% endcall %}
+    </div>
+    <div id="instructions" style="display: none;">
+        {% call forms.form() %}
+            <p> Dummy </p>
+            <button type="button" id="continue" onclick="start()">Continue</button>
+        {% endcall %}
+    </div>
+    {{ loadingscreen('instructions') }}
+    <div id="done-cover" style="display: none;">
+        {% call forms.form() %}
+        <div class="done-container">
+            <h1 id="done" style="color:var(--red)">Congratulations!</h1>
+            <p style="font-size: 22px;">You have completed the treasure hunt. Head over to Gymkhana to grab your prizes!</p>
+        </div>  
+        {% endcall %}
+    </div>
 
-<div id="container" style="display: none;">
-    <div id="timeout">
-        <h1>Wrong Answer!</h1>
-        <h3 id="countdown-header">Try again in <span id="countdown"></span></h3>
-    </div>
-    <div id="interface-container">
-        <h1 class="title">Treasure Hunt</h1>
-        <div class="team-info">
-            <p id="team-id" style="font-size: 25px; font-weight: bold;">Team ID: <span style="font-weight: lighter;">{{ team._id }}</span></p>
-            <p id="team-name" style="font-size: 25px; font-weight: bold;">Team Name: <span style="font-weight: lighter;">{{ team.name }}</span></p>
+    <div id="container" style="display: none;">
+        <div id="timeout">
+            <h1>Wrong Answer!</h1>
+            <h3 id="countdown-header">Try again in <span id="countdown"></span></h3>
         </div>
-        <div class="form-box">
-            <div id="location-code">
-                {% call forms.form() %}
-                <div class="question">
-                    <h3>Question</h3>
-                    <p id="location-question"></p>
-                </div>
-                    {{ forms.field('locationcode', 'Location Code') }}
-                <button id="location-submit-button">Submit</button>
-                {% endcall %}
+        <div id="interface-container">
+            <h1 class="title">Treasure Hunt</h1>
+            <div class="team-info">
+                <p id="team-id" style="font-size: 25px; font-weight: bold;">Team ID: <span style="font-weight: lighter;">{{ team._id }}</span></p>
+                <p id="team-name" style="font-size: 25px; font-weight: bold;">Team Name: <span style="font-weight: lighter;">{{ team.name }}</span></p>
             </div>
-            <div id="riddle-form">
-                {% call forms.form() %}
-                <div class="question">
-                    <h3>Question</h3>
-                    <p id="riddle-question"></p>
+            <div class="form-box">
+                <div id="location-code">
+                    {% call forms.form() %}
+                    <div class="question">
+                        <h3>Question</h3>
+                        <p id="location-question"></p>
+                    </div>
+                        {{ forms.field('locationcode', 'Location Code') }}
+                    <button id="location-submit-button">Submit</button>
+                    {% endcall %}
                 </div>
-                {# {{ forms.field('riddleanswer','Answer') }} #}
-                <div class="item select" style="margin: 0;">
-		            <label style="top: -8px;"></label>
-                    <select name="riddleanswer" id="riddleanswer" style="height: 40px; font-size: 17px; font-weight: 400;"></select>
+                <div id="riddle-form">
+                    {% call forms.form() %}
+                    <div class="question">
+                        <h3>Question</h3>
+                        <p id="riddle-question"></p>
+                    </div>
+                    {# {{ forms.field('riddleanswer','Answer') }} #}
+                    <div class="item select" style="margin: 0;">
+                        <label style="top: -8px;"></label>
+                        <select name="riddleanswer" id="riddleanswer" style="height: 40px; font-size: 17px; font-weight: 400;"></select>
+                    </div>
+                    <button id="riddle-submit-button">Submit</button>
+                    {% endcall %}
                 </div>
-                <button id="riddle-submit-button">Submit</button>
-                {% endcall %}
             </div>
         </div>
     </div>
-</div>
+{% else %}
+<div> Not Started </div>
+{% endif %}
 {% endblock %}
 
 {% block customcss %}

@@ -13,6 +13,11 @@ router.use((req, res, next) => {
 	return next();
 });
 
+router.use((req, res, next) => {
+	if (handlerContext.huntStarted) return next();
+	return req.method === 'GET' ? res.redirect('/') : res.status(400).send('Hunt not started');
+});
+
 // const team = teams[1];
 
 // const locationQuestion = {
