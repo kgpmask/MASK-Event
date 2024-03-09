@@ -14,7 +14,7 @@ router.use((req, res, next) => {
 });
 
 router.use((req, res, next) => {
-	if (handlerContext.huntStarted) return next();
+	if (handlerContext.huntStarted || req.isAdmin) return next();
 	return req.method === 'GET' ? res.redirect('/') : res.status(400).send('Hunt not started');
 });
 
