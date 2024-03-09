@@ -332,12 +332,11 @@
 
     async function submit() {
         const response = await axios.post('/live/get-state', {teamID: {{ team._id }}});
-        console.log('Actual state: ', response.data, 'Local state: ', state);
         const actualState = response.data;
         if (actualState !== state) {
-            state = actualState;
-            localStorage.setItem('state', state);
+            localStorage.setItem('state', actualState);
             renderForm();
+            return;
         }
         const data = getData();
         // const answer = document.getElementById('riddleanswer').value;
