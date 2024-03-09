@@ -65,11 +65,11 @@ router.post('/get-timeout', async (req, res) => {
 
 router.post('/update-status', async (req, res) => {
 	await dbh.updateTeamStatus({ _id: req.team._id, status: req.body.status, questionNo: req.body.questionNo });
-	return req.status(200).send('Updated Successfully');
+	return res.status(200).send('Updated Successfully');
 });
 router.post('/update-attempted', async (req, res) => {
 	await dbh.updateTeamStatus({ _id: req.team._id, status: req.body.status, questionNo: req.body.questionNo });
-	return req.status(200).send('Updated Successfully');
+	return res.status(200).send('Updated Successfully');
 });
 
 // router.patch('/location-code', async (req, res) => {
