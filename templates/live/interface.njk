@@ -230,11 +230,7 @@
 	}
 
     function renderForm() {
-        axios.post('/live/update-status').then((res) => {
-            if (res.status === 200) {
-                console.log(res.data);
-            }
-        });
+        axios.post('/live/update-status', {status: localStorage.getItem('state'), questionNo: parseInt(localStorage.getItem('attempted'))}).then((res) => console.log(res.data));
         const locationCode = document.getElementById('location-code');
         const riddleForm = document.getElementById('riddle-form');
         const messageBox = document.getElementById("message-box");
