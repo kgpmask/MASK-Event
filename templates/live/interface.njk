@@ -265,7 +265,7 @@
                 if (!localStorage.getItem('endOfTimeout')) {
                     localStorage.setItem('endOfTimeout', Date.now() + 120 * 1000);
                 }
-                let timeleft = Math.floor((localStorage.getItem('endOfTimeout') - Date.now())/1000);
+                let timeleft = Math.floor((new Date(localStorage.getItem('endOfTimeout')) - Date.now())/1000);
                 const countdownInterval = setInterval(() => {
                     if (timeleft <= 0) {
                         clearInterval(countdownInterval);
