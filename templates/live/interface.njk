@@ -28,7 +28,7 @@
     <div id="interface-container">
         <h1 class="title">Treasure Hunt</h1>
         <div class="team-info">
-            <p id="team-id" style="font-size: 25px; font-weight: bold;">Team ID: <span style="font-weight: lighter;">{{ team.id }}</span></p>
+            <p id="team-id" style="font-size: 25px; font-weight: bold;">Team ID: <span style="font-weight: lighter;">{{ team._id }}</span></p>
             <p id="team-name" style="font-size: 25px; font-weight: bold;">Team Name: <span style="font-weight: lighter;">{{ team.name }}</span></p>
         </div>
         <div class="form-box">
@@ -38,8 +38,6 @@
                     <h3>Question</h3>
                     <p id="location-question"></p>
                 </div>
-                    {{ forms.field('id','TeamID', team._id , type='hidden')}}
-                    {{ forms.field('name', 'Team Name', team.name, type='hidden') }}
                     {{ forms.field('locationcode', 'Location Code') }}
                 <button id="location-submit-button">Submit</button>
                 {% endcall %}
@@ -50,9 +48,11 @@
                     <h3>Question</h3>
                     <p id="riddle-question"></p>
                 </div>
-                {{ forms.field('id','TeamID', team._id , type='hidden')}}
-                {{ forms.field('name', 'Team Name', team.name, type='hidden') }}
-                {{ forms.field('riddleanswer','Answer') }}
+                {# {{ forms.field('riddleanswer','Answer') }} #}
+                <div class="item select" style="margin: 0;">
+		            <label style="top: -8px;"></label>
+                    <select name="riddleanswer" id="riddleanswer" style="height: 40px; font-size: 17px; font-weight: 400;"></select>
+                </div>
                 <button id="riddle-submit-button">Submit</button>
                 {% endcall %}
             </div>
@@ -178,6 +178,7 @@
     axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
 
     let questions = 3;
+    let tries = 0
 
     let state = localStorage.getItem('state') || 'location-code';
     localStorage.setItem('state', state);
@@ -192,7 +193,7 @@
 		const current = JSON.parse(localStorage.getItem('team')).order[parseInt(localStorage.getItem('attempted'))]
 		const location = JSON.parse(localStorage.getItem('locations'))[parseInt(localStorage.getItem('attempted'))];
 		const q = location.questions[current.question];
-		return { question: q.question, answer: location.keywords[q.answer]};
+		return { question: q.question, answer: q.answer, keywords: location.keywords };
 	}
 
     function getLocationQuestion () {
@@ -224,7 +225,7 @@
                 const riddleButton = document.getElementById('riddle-submit-button');
                 riddleButton.disabled = true;
                 if (!localStorage.getItem('endOfTimeout')) {
-                    localStorage.setItem('endOfTimeout', Date.now() + 120 * 1000);
+                    localStorage.setItem('endOfTimeout', Date.now() + 5 * 1000);
                 }
                 let timeleft = Math.floor((localStorage.getItem('endOfTimeout') - Date.now())/1000);
                 const countdownInterval = setInterval(() => {
@@ -249,6 +250,9 @@
                 if (riddleQuestion) {
                     document.getElementById('riddle-question').textContent = riddleQuestion.question;
                 }
+                document.getElementById('riddleanswer').innerHTML = riddleQuestion.keywords.map((keyword, index) => {
+                    return `<option value="${ index }">${ keyword }</option>`
+                }).join(' ')
             }
         }
     }
@@ -281,8 +285,7 @@
 
     async function submit() {
         const data = getData();
-        console.log(data);
-        const answer = document.getElementById('riddleanswer').value;
+        // const answer = document.getElementById('riddleanswer').value;
         try {
             let response;
             if (state === 'location-code') {
@@ -308,7 +311,7 @@
                 }
             } else {
                 const riddleQuestion = getRiddleQuestion();
-                if(answer === riddleQuestion.answer) {
+                if(parseInt(data.riddleanswer) === riddleQuestion.answer) {
                     const messageBox = document.getElementById("message-box");
                     messageBox.innerHTML = '<h2 class="correct">Correct Answer!</h2>';
                     const messageCover = document.getElementById("message-cover");

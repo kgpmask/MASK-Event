@@ -4,8 +4,7 @@ const { body, validationResult } = require('express-validator');
 const checker = require('../src/checker.js');
 
 const teams = require('../src/samples/teams.json');
-const locations = require('../src/samples/locations.json');
-const riddleQuestions = require('../src/samples/riddleQuestions.json');
+// const locations = require('../src/samples/locations.json');
 
 const handlerContext = {};
 
@@ -14,7 +13,7 @@ router.use((req, res, next) => {
 	return next();
 });
 
-const team = teams[1];
+// const team = teams[1];
 
 // const locationQuestion = {
 // 	id: 1,
@@ -35,26 +34,37 @@ router.get('/', async (req, res) => {
 	} else {
 		// if (!handlerContext.quizStarted) return res.redirect('/');
 		return res.renderFile('live/interface.njk', {
-			team,
+			team: req.team,
 			started: handlerContext.huntStarted
 		});
 		// return res.renderFile('live/interface.njk');
 	}
 });
 
-router.post('/get-data', (req, res) => {
+router.post('/get-data', async (req, res) => {
 	const teamID = req.body.teamID;
-	const team = teams.find((e) => e._id === teamID);
+	if (teamID !== req.team._id) return res.status(500).send('WHy you hax');
+	const locations = await dbh.getLocations();
 	return res.status(200).send(JSON.stringify({
-		team,
-		locations: team.order.map((o) => locations.find((l) => l._id === o.location))
+		team: req.team,
+		locations: req.team.order.map((o) => locations.find((l) => l._id === o.location))
 	}));
 });
 
 router.post('/get-attempted', (req, res) => {
 	const teamID = req.body.teamID;
-	return res.status(200).send(teams.find((e) => e._id === teamID).questionsAttempted);
+	if (teamID !== req.team._id) return res.status(500).send('WHy you hax');
+	return res.status(200).send(req.team.questionsAttempted);
 });
+router.post('/get-timeout', async (req, res) => {
+	if (req.team.status === 'riddle-timeout') {
+		return res.status(200).send(req.team.timeout);
+	}
+	return res.status(400).send(false);
+});
+
+router.post('/update-status', (req, res) => {});
+router.post('/update-attempted', (req, res) => {});
 
 // router.patch('/location-code', async (req, res) => {
 // 	const teamID = parseInt(req.body.id);
