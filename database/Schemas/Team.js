@@ -15,16 +15,12 @@ const teamSchema = new mongoose.Schema({
 	questionsAttempted: { type: Number, required: true, default: 0 },
 	order: [
 		{
-			location: {
-				type: Number,
-				required: true
-			},
-			question: {
-				type: Number,
-				required: true
-			}
+			location: { type: Number, required: true },
+			pointer: { type: Number, required: true },
+			question: { type: Number, required: true }
 		}
-	]
+	],
+	timeout: { type: [Date, null] }
 }, { collection: 'event-teams' });
 
 module.exports = mongoose.model('Team', teamSchema);

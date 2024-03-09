@@ -4,6 +4,10 @@ const Session = require('./Schemas/Session');
 const Questions = require('./Schemas/Questions');
 const Records = require('./Schemas/Records');
 const Results = require('./Schemas/Results');
+// Treasure Hunt stuff
+const Location = require('./Schemas/Location');
+const Team = require('./Schemas/Team');
+const TeamSession = require('./Schemas/TeamSession');
 
 async function createUser (userData) {
 	const _id = userData.userID ?? (await User.find({ _id: { '$gt': 10000 } })).length + 10001;
@@ -171,6 +175,60 @@ async function getLiveResults (quizId) {
 	return await Results.find({ quizId }).lean().sort({ 'points': -1 });
 }
 
+// Treasure Hunt Methods
+
+async function getLocations () {
+	return await Location.find();
+}
+
+async function getTeams () {
+	return await Team.find();
+}
+
+async function getTeamById (_id) {
+	return await Team.findById(_id);
+}
+
+async function updateTeamStatus (ctx) {
+	const { _id, status } = ctx;
+	const team = await Team.findById(_id);
+	team.status = status;
+	if (status === 'riddle-timeout') {
+		team.timeout = new Date(Date.now() + 120 * 1000);
+		setTimeout(async () => {
+			team.timeout = null;
+			await team.save();
+		}, 120 * 1000);
+	} else if (status === 'location-code') {
+		team.questionsAttempted = ctx.questionNo;
+	}
+	await team.save();
+}
+
+async function getTeamFromSessionID (sessionId) {
+	const session = await TeamSession.findById(sessionId);
+	const team = await Team.findById(session.teamId);
+	if (!team) throw new Error('Team Not Found');
+	else return team;
+}
+
+async function createTeamSession (teamId) {
+	// 3327: You Are My Special
+	const sessionId = [3, 3, 2, 7].map(i => (Math.random() + 1).toString(36).substring(2, 2 + i)).join('-');
+	const session = new TeamSession({
+		_id: sessionId,
+		teamId: teamId
+	});
+	await session.save();
+	return sessionId;
+}
+
+async function removeTeamSession (sessionId) {
+	// Use this if we want to remove sessions after logout
+	await Session.findByIdAndDelete(sessionId);
+}
+
+
 module.exports = {
 	createUser,
 	editUser,
@@ -190,5 +248,12 @@ module.exports = {
 	addLiveRecord,
 	addLiveResult,
 	updateLiveResult,
-	getLiveResults
+	getLiveResults,
+	getLocations,
+	getTeams,
+	getTeamById,
+	updateTeamStatus,
+	getTeamFromSessionID,
+	createTeamSession,
+	removeTeamSession
 };
