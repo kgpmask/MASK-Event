@@ -213,7 +213,7 @@
     function start() {
         document.getElementById('instructions').style.display='none'
         document.getElementById('container').style.display='block'
-        renderForm();
+        renderForm(isOnload = true);
     }
 
 	function getRiddleQuestion () {
@@ -229,8 +229,8 @@
 		return location.pointerQuestion[current.pointer];
 	}
 
-    function renderForm() {
-        axios.post('/live/update-status', {status: localStorage.getItem('state'), questionNo: parseInt(localStorage.getItem('attempted'))}).then((res) => console.log(res.data));
+    function renderForm(isOnload) {
+        if(!isOnload) axios.post('/live/update-status', {status: localStorage.getItem('state'), questionNo: parseInt(localStorage.getItem('attempted'))}).then((res) => console.log(res.data));
         const locationCode = document.getElementById('location-code');
         const riddleForm = document.getElementById('riddle-form');
         const messageBox = document.getElementById("message-box");
@@ -324,7 +324,7 @@
                 localStorage.setItem('endOfTimeout', res.data);
                 state = 'riddle-timeout';
                 localStorage.setItem('state', state);
-                renderForm();
+                renderForm(isOnload = true);
             }
         });
     });
