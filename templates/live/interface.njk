@@ -263,7 +263,7 @@
                 const riddleButton = document.getElementById('riddle-submit-button');
                 riddleButton.disabled = true;
                 if (!localStorage.getItem('endOfTimeout')) {
-                    localStorage.setItem('endOfTimeout', Date.now() + 120 * 1000);
+                    localStorage.setItem('endOfTimeout', new Date(Date.now() + 120 * 1000));
                 }
                 let timeleft = Math.floor((new Date(localStorage.getItem('endOfTimeout')) - Date.now())/1000);
                 const countdownInterval = setInterval(() => {
@@ -345,6 +345,7 @@
             localStorage.setItem('state', actualState);
             state = actualState;
             renderForm();
+            return;
         }
         const data = getData();
         // const answer = document.getElementById('riddleanswer').value;
