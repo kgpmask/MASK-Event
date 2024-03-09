@@ -318,6 +318,14 @@
             document.getElementById('continue').textContent = 'Continue'
         }
 		axios.post('/live/get-attempted', {teamID: {{ team._id }}}).then((res) => localStorage.setItem('attempted', res.data));
+        axios.post('/live/get-timeout').then((res) => {
+            if (res.status === 200) {
+                localStorage.setItem('endOfTimeout', res.data);
+                state = 'riddle-timeout';
+                localStorage.setItem('state', state);
+                renderForm();
+            }
+        });
     });
 
     async function submit() {
