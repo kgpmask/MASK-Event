@@ -10,7 +10,7 @@
 	{% call forms.form() %}
 		{{ forms.heading('h1','Edit Team') }}
         <label>Team ID:</label><br>
-		{{ forms.field('id','ID', team.id)}}
+		{{ forms.field('id','ID', team._id)}}
         <label>Team Name:</label><br>
 		{{ forms.field('teamName','Name', team.name)}}
         <label>Members:</label><br>
