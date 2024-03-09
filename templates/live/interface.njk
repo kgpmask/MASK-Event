@@ -15,11 +15,19 @@
 <div id="instructions" style="display: none;">
     {% call forms.form() %}
         <p> Dummy </p>
-        <button type="button" id="continue" onclick="start()"></button>
+        <button type="button" id="continue" onclick="start()">Continue</button>
     {% endcall %}
-    
 </div>
 {{ loadingscreen('instructions') }}
+<div id="done-cover" style="display: none;">
+    {% call forms.form() %}
+    <div class="done-container">
+        <h1 id="done" style="color:var(--red)">Congratulations!</h1>
+        <p style="font-size: 22px;">You have completed the treasure hunt. Head over to Gymkhana to grab your prizes!</p>
+    </div>  
+    {% endcall %}
+</div>
+
 <div id="container" style="display: none;">
     <div id="timeout">
         <h1>Wrong Answer!</h1>
@@ -167,6 +175,25 @@
     .form-box {
         margin-top: 20px;
     }
+
+    .done-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #done-cover {
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
 </style>
 {{ forms.formCss() }}
 {% endblock %}
@@ -185,8 +212,8 @@
 
     function start() {
         document.getElementById('instructions').style.display='none'
-        renderForm();
         document.getElementById('container').style.display='block'
+        renderForm();
     }
 
 	function getRiddleQuestion () {
@@ -218,14 +245,24 @@
         timeoutContainer.style.display = 'none';
 
         if (parseInt(localStorage.getItem('attempted')) >= questions) {
-            console.log('done');
+            state='done';
+            localStorage.setItem('state', state);
+            document.getElementById('container').style.display = 'none';
+            document.getElementById('done-cover').style.display = 'flex';
         }
         else {
             if (state === 'riddle-timeout') {
+                const riddleQuestion = getRiddleQuestion();
+                if (riddleQuestion) {
+                    document.getElementById('riddle-question').textContent = riddleQuestion.question;
+                }
+                document.getElementById('riddleanswer').innerHTML = '<option value="" selected disabled hidden>Choose an answer</option>' + riddleQuestion.keywords.map((keyword, index) => {
+                    return `<option value="${ index }">${ keyword }</option>`
+                }).join(' ')
                 const riddleButton = document.getElementById('riddle-submit-button');
                 riddleButton.disabled = true;
                 if (!localStorage.getItem('endOfTimeout')) {
-                    localStorage.setItem('endOfTimeout', Date.now() + 5 * 1000);
+                    localStorage.setItem('endOfTimeout', Date.now() + 120 * 1000);
                 }
                 let timeleft = Math.floor((localStorage.getItem('endOfTimeout') - Date.now())/1000);
                 const countdownInterval = setInterval(() => {
@@ -250,7 +287,7 @@
                 if (riddleQuestion) {
                     document.getElementById('riddle-question').textContent = riddleQuestion.question;
                 }
-                document.getElementById('riddleanswer').innerHTML = riddleQuestion.keywords.map((keyword, index) => {
+                document.getElementById('riddleanswer').innerHTML = '<option value="" selected disabled hidden>Choose an answer</option>' + riddleQuestion.keywords.map((keyword, index) => {
                     return `<option value="${ index }">${ keyword }</option>`
                 }).join(' ')
             }
@@ -321,6 +358,7 @@
                         if (parseInt(localStorage.getItem('attempted')) < questions) {
                             localStorage.setItem('attempted', parseInt(localStorage.getItem('attempted')) + 1);
                         }
+                        document.getElementById('locationcode').value= '';
                         state = 'location-code';
                         localStorage.setItem('state', state);
                         renderForm();
