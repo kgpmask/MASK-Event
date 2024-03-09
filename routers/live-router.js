@@ -63,9 +63,14 @@ router.post('/get-timeout', async (req, res) => {
 	return res.status(400).send(false);
 });
 
-router.post('/update-status', (req, res) => {
+router.post('/update-status', async (req, res) => {
+	await dbh.updateTeamStatus({ _id: req.team._id, status: req.body.status, questionNo: req.body.questionNo });
+	return req.status(200).send('Updated Successfully');
 });
-router.post('/update-attempted', (req, res) => {});
+router.post('/update-attempted', async (req, res) => {
+	await dbh.updateTeamStatus({ _id: req.team._id, status: req.body.status, questionNo: req.body.questionNo });
+	return req.status(200).send('Updated Successfully');
+});
 
 // router.patch('/location-code', async (req, res) => {
 // 	const teamID = parseInt(req.body.id);
