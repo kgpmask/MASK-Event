@@ -189,6 +189,13 @@ async function getTeamById (_id) {
 	return await Team.findById(_id);
 }
 
+async function validateTeam ({ username: teamId, password }) {
+	const team = await Team.findById(~~teamId);
+	if (!team) throw new Error('Team could not be found');
+	if (team.password === password) return team._id;
+	else throw new Error('Password does not match');
+}
+
 async function updateTeamStatus (ctx) {
 	const { _id, status } = ctx;
 	const team = await Team.findById(_id);
@@ -252,6 +259,7 @@ module.exports = {
 	getLocations,
 	getTeams,
 	getTeamById,
+	validateTeam,
 	updateTeamStatus,
 	getTeamFromSessionID,
 	createTeamSession,

@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const teamSchema = new mongoose.Schema({
 	_id: { type: Number, required: true },
 	name: { type: String, required: true },
+	isAdmin: Boolean,
 	password: { type: String, requred: true },
 	members: [
 		{

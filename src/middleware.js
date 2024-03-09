@@ -8,13 +8,13 @@ module.exports = function initMiddleware (app) {
 	app.use(express.urlencoded({ extended: true }));
 	app.use(cookieParser());
 	app.use('/assets', express.static(path.join(__dirname, '..', 'assets')));
-
+	// Login
 	app.use(async (req, res, next) => {
 		try {
 			const { sessionID } = req.cookies;
 			if (!sessionID) return next();
-			req.user = await dbh.getUserFromSessionID(sessionID);
-			req.isAdmin = req.user?.isAdmin;
+			req.team = await dbh.getTeamFromSessionID(sessionID);
+			req.isAdmin = req.team?.isAdmin;
 		} catch (err) {
 			res.clearCookie('sessionID');
 		}
@@ -62,8 +62,8 @@ module.exports = function initMiddleware (app) {
 
 	app.use((req, res, next) => {
 		res.locals.mongoless = PARAMS.mongoless;
-		req.loggedIn = res.locals.loggedIn = Boolean(req.user);
-		req.isAdmin = res.locals.isAdmin = req.user?.isAdmin;
+		req.loggedIn = res.locals.loggedIn = Boolean(req.team);
+		req.isAdmin = res.locals.isAdmin = req.team?.isAdmin;
 		next();
 	});
 };
