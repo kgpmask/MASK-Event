@@ -178,7 +178,7 @@ async function getLiveResults (quizId) {
 // Treasure Hunt Methods
 
 async function getLocations () {
-	return await Location.find();
+	return await Location.find().lean();
 }
 
 async function getTeams () {

@@ -63,7 +63,8 @@ router.post('/get-timeout', async (req, res) => {
 	return res.status(400).send(false);
 });
 
-router.post('/update-status', (req, res) => {});
+router.post('/update-status', (req, res) => {
+});
 router.post('/update-attempted', (req, res) => {});
 
 // router.patch('/location-code', async (req, res) => {
