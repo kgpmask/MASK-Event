@@ -56,6 +56,11 @@ router.post('/get-attempted', (req, res) => {
 	if (teamID !== req.team._id) return res.status(500).send('WHy you hax');
 	return res.status(200).send(req.team.questionsAttempted);
 });
+router.post('/get-state', (req, res) => {
+	const teamID = req.body.teamID;
+	if (teamID !== req.team._id) return res.status(500).send('WHy you hax');
+	return res.status(200).send(req.team.state);
+});
 router.post('/get-timeout', async (req, res) => {
 	if (req.team.status === 'riddle-timeout') {
 		return res.status(200).send(req.team.timeout);

@@ -327,6 +327,7 @@
                 renderForm(isOnload = true);
             }
         });
+		axios.post('/live/get-state', {teamID: {{ team._id }}}).then((res) => localStorage.setItem('state', res.data));
     });
 
     async function submit() {
