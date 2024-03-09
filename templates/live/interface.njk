@@ -331,12 +331,20 @@
     });
 
     async function submit() {
-        const response = await axios.post('/live/get-state', {teamID: {{ team._id }}});
-        const actualState = response.data;
+        const attemptedresponse = await axios.post('/live/get-attempted', {teamID: {{ team._id }}});
+        const attempted = parseInt(attemptedresponse.data);
+        localStorage.setItem('attempted', attempted);
+
+        const stateresponse = await axios.post('/live/get-state', {teamID: {{ team._id }}});
+        const actualState = stateresponse.data;
         if (actualState !== state) {
+            if(actualState === 'riddle-timeout') {
+                const timeoutresponse = await axios.post('/live/get-timeout');
+                localStorage.setItem('endOfTimeout', timeoutresponse.data);
+            }
             localStorage.setItem('state', actualState);
+            state = actualState;
             renderForm();
-            return;
         }
         const data = getData();
         // const answer = document.getElementById('riddleanswer').value;
