@@ -17,7 +17,7 @@
 						transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
 				</g>
 			</svg>
-			Raman Auditorium
+			Technology Students' Gymkhana
 		</div>
 		<div id="content">
 			<p class="quote"> Konnichiwa, minna-san!!! </p>
@@ -29,12 +29,12 @@
 			<p> For more info, check out the <a href="/information">Information</a> page. Stay tuned for more updates. </p>
 			<p class="quote"> Limited Seats Only! Register Soon!!! </p>
 		</div>
-		<div id="button-container">
+		{# <div id="button-container">
 			<a href="/information" class="redirect-link"> Information </a>
 			<a href="/live" class="redirect-link"> Quiz Portal </a>
 			<a href="{{ '/profile' if loggedIn else '/login' }}" class="redirect-link"> {{ 'Profile' if loggedIn else
 				'Login' }} </a>
-		</div>
+		</div> #}
 	</div>
 {% endblock %}
 
@@ -47,7 +47,7 @@
 				const timeLeftInSeconds = Math.floor((new Date('2023-09-03T14:00:00+0000').getTime() - new Date().getTime()) / 1000);
 				if (timeLeftInSeconds <= 0) {
 					timerElement.innerHTML = `<a href="/live" class="start-quiz-button">
-						Join the Quiz!!
+						Coming Soon
 					</a>`;
 					return false;
 				}
