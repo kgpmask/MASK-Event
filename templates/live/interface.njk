@@ -230,6 +230,11 @@
 	}
 
     function renderForm() {
+        axios.post('/live/update-status').then((res) => {
+            if (res.status === 200) {
+                console.log(res.data);
+            }
+        });
         const locationCode = document.getElementById('location-code');
         const riddleForm = document.getElementById('riddle-form');
         const messageBox = document.getElementById("message-box");
@@ -365,6 +370,7 @@
                         messageCover.style.display = "none";
                         if (parseInt(localStorage.getItem('attempted')) < questions) {
                             localStorage.setItem('attempted', parseInt(localStorage.getItem('attempted')) + 1);
+                            axios.post('/live/update-attempted', {status: localStorage.getItem('state'), questionNo: parseInt(localStorage.getItem('attempted'))});
                         }
                         document.getElementById('locationcode').value= '';
                         state = 'location-code';
