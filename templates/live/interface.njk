@@ -10,7 +10,11 @@
 <div class="message-cover" id="message-cover">
     <div class="message-box" id="message-box"></div>
 </div>
-<div id="container">
+<div id="instructions">
+    <p> Dummy </p>
+</div>
+{{ loadingscreen('container') }}
+<div id="container" style="display: none">
     <div id="timeout">
         <h1>Wrong Answer!</h1>
         <h3 id="countdown-header">Try again in <span id="countdown"></span></h3>
@@ -23,28 +27,25 @@
         </div>
         <div class="form-box">
             <div id="location-code">
+                {% call forms.form() %}
                 <div class="question">
                     <h3>Question</h3>
-                    <p id="question">{{ locationQuestion.question }}</p>
+                    <p id="location-question"></p>
                 </div>
-                {% call forms.form() %}
-                    {{ forms.field('id','TeamID', team.id , type='hidden')}}
+                    {{ forms.field('id','TeamID', team._id , type='hidden')}}
                     {{ forms.field('name', 'Team Name', team.name, type='hidden') }}
-                    {{ forms.field('question', 'Question', locationQuestion.id, type='hidden') }}
                     {{ forms.field('locationcode', 'Location Code') }}
-                    {{ forms.field('location','Location', locationQuestion.location, type='hidden') }}
                 <button id="location-submit-button">Submit</button>
                 {% endcall %}
             </div>
             <div id="riddle-form">
+                {% call forms.form() %}
                 <div class="question">
                     <h3>Question</h3>
                     <p id="riddle-question"></p>
                 </div>
-                {% call forms.form() %}
-                {{ forms.field('id','TeamID', team.id , type='hidden')}}
+                {{ forms.field('id','TeamID', team._id , type='hidden')}}
                 {{ forms.field('name', 'Team Name', team.name, type='hidden') }}
-                {{ forms.field('riddlequestion', 'Question', locationQuestion.id, type='hidden') }}
                 {{ forms.field('riddleanswer','Answer') }}
                 <button id="riddle-submit-button">Submit</button>
                 {% endcall %}
@@ -56,6 +57,13 @@
 
 {% block customcss %}
 <style>
+    #loading {
+        top: 50%;
+        left: 50%;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        font-size: 20px;
+    }
     .message-cover {
         position: absolute;
         top: 0;
@@ -99,7 +107,10 @@
     }
 
     #interface-container {
-        margin: 0px 20px;
+        top: 50%;
+        left: 50%;
+        position: absolute;
+        transform: translate(-50%, -50%);
     }
 
     .team-info {
@@ -107,19 +118,8 @@
     }
 
     .question {
-        margin: 20px 0px;
-        width: 378px;
-        border-style: solid;
-        border-width: 3px;
-        border-top-color: #D61F35;
-        border-right-color: #373737;
-        border-bottom-color: #D61F35;
-        border-left-color: #373737;
-        border-radius: 20px 0px 20px 0px;
-        background-color: rgba(0, 0, 0, 0.7);
-        padding: 20px;
-        backdrop-filter: blur(10px);
         font-size: 20px;
+        margin-bottom: 30px;
     }
 
     .question h3 {
@@ -171,6 +171,19 @@
     let state = localStorage.getItem('state') || 'location-code';
     localStorage.setItem('state', state);
 
+	function getRiddleQuestion () {
+		const current = JSON.parse(localStorage.getItem('team')).order[localStorage.getItem('attempted')]
+		const location = JSON.parse(localStorage.getItem('locations'))[localStorage.getItem('attempted')];
+		const q = location.questions[current.question];
+		return { question: q.question, answer: location.keywords[q.answer]};
+	}
+
+    function getLocationQuestion () {
+		const current = JSON.parse(localStorage.getItem('team')).order[localStorage.getItem('attempted')]
+		const location = JSON.parse(localStorage.getItem('locations'))[localStorage.getItem('attempted')];
+		return location.pointerQuestion[current.pointer];
+	}
+
     function renderForm() {
         const locationCode = document.getElementById('location-code');
         const riddleForm = document.getElementById('riddle-form');
@@ -179,11 +192,6 @@
         const countdown = document.getElementById("countdown");
         const timeoutContainer = document.getElementById('timeout');
         const interfaceContainer = document.getElementById('interface-container');
-
-        const riddleQuestion = JSON.parse(localStorage.getItem('questions'))[0];
-        if (riddleQuestion) {
-            document.getElementById('riddle-question').textContent = riddleQuestion.question;
-        }
 
         interfaceContainer.style.display = (state.includes('question') || state.includes('code')) ? 'block' : 'none';
         locationCode.style.display = state === 'location-code' ? 'block' : 'none';
@@ -213,10 +221,18 @@
                     localStorage.setItem('timeleft', timeleft);
                 }
             }, 1000);
+        } else if (state === 'location-code') {
+            document.getElementById('location-question').textContent = getLocationQuestion();
+        } else if (state === 'riddle-question') {
+            const riddleQuestion = getRiddleQuestion();
+            if (riddleQuestion) {
+                document.getElementById('riddle-question').textContent = riddleQuestion.question;
+            }
         }
     }
 
     document.addEventListener("DOMContentLoaded", function () {
+        //loadingAnimation();
         document.getElementById("location-submit-button").addEventListener("click", function (event) {
             event.preventDefault();
             submit();
@@ -225,43 +241,51 @@
             event.preventDefault();
             submit();
         });
-        renderForm();
+        if (!localStorage.getItem('team')) {
+            axios.post('/live/get-data', {teamID: {{ team._id }}}).then((res) =>  {
+                console.log(res.data);
+                if(res.status === 200) {
+                    localStorage.setItem('team', JSON.stringify(res.data.team));
+                    localStorage.setItem('locations', JSON.stringify(res.data.locations));
+                }
+            })
+        }
+		axios.post('/live/get-attempted', {teamID: {{ team._id }}}).then((res) => localStorage.setItem('attempted', res.data));
+        setTimeout(() => {
+            renderForm();
+        }, 4000);
+        
     });
 
     async function submit() {
         const data = getData();
+        console.log(data);
         const answer = document.getElementById('riddleanswer').value;
         try {
             let response;
             if (state === 'location-code') {
-                try {
-                    response = await axios.patch('/live/location-code', data);
-
-                    if (response && response.status === 200) {
-                        const messageBox = document.getElementById("message-box");
-                        messageBox.innerHTML = '<h2 class="correct">Correct Location!</h2>';
-                        const messageCover = document.getElementById("message-cover");
-                        messageCover.style.display = 'block';
-                        setTimeout(() => {
-                            messageCover.style.display = "none";
-                            state = 'riddle-question';
-                            localStorage.setItem('state', state);
-                            renderForm();
-                        }, 10000);
-                    }
-                } catch (error) {
-                    if (error.response && error.response.status === 400) {
-                        const messageBox = document.getElementById("message-box");
-                        messageBox.innerHTML = '<h2 class="incorrect">Incorrect Location Code!</h2>';
-                        const messageCover = document.getElementById("message-cover");
-                        messageCover.style.display = 'block';
-                        setTimeout(() => {
-                            messageCover.style.display = "none";
-                        }, 10000);
-                    }
+                if (data.locationcode === JSON.parse(localStorage.getItem('locations'))[localStorage.getItem('attempted')].code) {
+                    const messageBox = document.getElementById("message-box");
+                    messageBox.innerHTML = '<h2 class="correct">Correct Location!</h2>';
+                    const messageCover = document.getElementById("message-cover");
+                    messageCover.style.display = 'block';
+                    setTimeout(() => {
+                        messageCover.style.display = "none";
+                        state = 'riddle-question';
+                        localStorage.setItem('state', state);
+                        renderForm();
+                    }, 2000);
+                } else {
+                    const messageBox = document.getElementById("message-box");
+                    messageBox.innerHTML = '<h2 class="incorrect">Incorrect Location Code!</h2>';
+                    const messageCover = document.getElementById("message-cover");
+                    messageCover.style.display = 'block';
+                    setTimeout(() => {
+                        messageCover.style.display = "none";
+                    }, 2000);
                 }
             } else {
-                const riddleQuestion = JSON.parse(localStorage.getItem('questions'))[0];
+                const riddleQuestion = getRiddleQuestion();
                 if(answer === riddleQuestion.answer) {
                     const messageBox = document.getElementById("message-box");
                     messageBox.innerHTML = '<h2 class="correct">Correct Answer!</h2>';
@@ -288,15 +312,6 @@
             }
         }  catch (error) {
             console.error(error);
-        }
-    }
-    window.onload = async () => {
-        if (!localStorage.getItem('questions')) {
-            const response = await axios.post('/live/get-questions', {teamID: {{ team._id }}})
-            console.log(response.data);
-            if(response.status === 200) {
-                localStorage.setItem('questions', JSON.stringify(response.data));
-            }
         }
     }
 </script>

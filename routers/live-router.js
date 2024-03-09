@@ -4,6 +4,7 @@ const { body, validationResult } = require('express-validator');
 const checker = require('../src/checker.js');
 
 const teams = require('../src/samples/teams.json');
+const locations = require('../src/samples/locations.json');
 const riddleQuestions = require('../src/samples/riddleQuestions.json');
 
 const handlerContext = {};
@@ -15,15 +16,15 @@ router.use((req, res, next) => {
 
 const team = teams[1];
 
-const locationQuestion = {
-	id: 1,
-	question: 'Where is the best waifu',
-	answer: 'Oregairu'
-};
+// const locationQuestion = {
+// 	id: 1,
+// 	question: 'Where is the best waifu',
+// 	answer: 'Oregairu'
+// };
 
-const riddleQuestion = riddleQuestions[0];
+// const riddleQuestion = riddleQuestions[0];
 
-const locationCode = 'ABC123';
+// const locationCode = 'ABC123';
 
 router.get('/', async (req, res) => {
 	if (req.isAdmin) {
@@ -34,34 +35,39 @@ router.get('/', async (req, res) => {
 		// if (!handlerContext.quizStarted) return res.redirect('/');
 		return res.renderFile('live/interface.njk', {
 			team,
-			locationQuestion,
 			started: handlerContext.huntStarted
 		});
 		// return res.renderFile('live/interface.njk');
 	}
 });
 
-router.post('/get-questions', (req, res) => {
+router.post('/get-data', (req, res) => {
 	const teamID = req.body.teamID;
-	console.log(teamID);
-	return res.status(200).send(JSON.stringify(
-		teams.find((e) => e._id === teamID).questions.map((id) => riddleQuestions.find((q) => q.id === id))
-	));
+	const team = teams.find((e) => e._id === teamID);
+	return res.status(200).send(JSON.stringify({
+		team,
+		locations: team.order.map((o) => locations.find((l) => l._id === o.location))
+	}));
 });
 
-router.patch('/location-code', async (req, res) => {
-	const teamID = parseInt(req.body.id);
-	const location = req.body.locationcode;
-	// console.log(teamID);
-	// console.log(location);
-	// FIND TEAM BY ID IN LOCAL STORAGE
-	// MARK TEAM AS COMPLETED FOR LOCATION BY FINDING TEAM BY ID AND ADDING LOCATION TO COMPLETED LOCATIONS LIST
-	if (location === locationCode) {
-		return res.send('correct');
-	} else {
-		return res.status(400).send('incorrect location');
-	}
+router.post('/get-attempted', (req, res) => {
+	const teamID = req.body.teamID;
+	return res.status(200).send(teams.find((e) => e._id === teamID).questionsAttempted);
 });
+
+// router.patch('/location-code', async (req, res) => {
+// 	const teamID = parseInt(req.body.id);
+// 	const location = req.body.locationcode;
+// 	// console.log(teamID);
+// 	// console.log(location);
+// 	// FIND TEAM BY ID IN LOCAL STORAGE
+// 	// MARK TEAM AS COMPLETED FOR LOCATION BY FINDING TEAM BY ID AND ADDING LOCATION TO COMPLETED LOCATIONS LIST
+// 	if (location === locationCode) {
+// 		return res.send('correct');
+// 	} else {
+// 		return res.status(400).send('incorrect location');
+// 	}
+// });
 
 router.post('/start-hunt', (req, res) => {
 	if (!req.isAdmin) return res.status(403).send('Forbidden: Admin permissions not detected.');

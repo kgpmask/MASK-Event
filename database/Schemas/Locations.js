@@ -7,7 +7,6 @@ const locationSchema = new mongoose.Schema({
 	code: { type: String, required: true },
 	questions: [
 		{
-			number: { type: Number, required: true },
 			question: { type: String, required: true },
 			answer: { type: Number, required: true }
 		}
