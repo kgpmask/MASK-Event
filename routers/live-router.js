@@ -74,6 +74,7 @@ router.post('/get-timeout', async (req, res) => {
 });
 
 router.post('/update-status', async (req, res) => {
+	// if (req.body.questionNo !== req.team.questionsAttempted) return;
 	await dbh.updateTeamStatus({ _id: req.team._id, status: req.body.status, questionNo: req.body.questionNo });
 	return res.status(200).send('Updated Successfully');
 });

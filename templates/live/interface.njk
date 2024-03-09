@@ -15,7 +15,7 @@
     </div>
     <div id="instructions" style="display: none;">
         {% call forms.form() %}
-            <p> Dummy </p>
+            <p> Click the button to proceed. </p>
             <button type="button" id="continue" onclick="start()">Continue</button>
         {% endcall %}
     </div>
@@ -208,7 +208,7 @@
     axios.defaults.withCredentials = true;
     axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
 
-    let questions = 3;
+    let questions = 6;
     let tries = 0
 
     let state = localStorage.getItem('state') || 'location-code';
@@ -234,7 +234,8 @@
 	}
 
     function renderForm(isOnload) {
-        if(!isOnload) axios.post('/live/update-status', {status: localStorage.getItem('state'), questionNo: parseInt(localStorage.getItem('attempted'))}).then((res) => console.log(res.data));
+        // if(!isOnload) axios.post('/live/update-status', {status: localStorage.getItem('state'), questionNo: parseInt(localStorage.getItem('attempted'))}).then((res) => console.log(res.data));
+        state = localStorage.getItem('state');
         const locationCode = document.getElementById('location-code');
         const riddleForm = document.getElementById('riddle-form');
         const messageBox = document.getElementById("message-box");
@@ -252,6 +253,7 @@
         if (parseInt(localStorage.getItem('attempted')) >= questions) {
             state='done';
             localStorage.setItem('state', state);
+            axios.post('/live/update-status', {status: 'completed', questionNo: parseInt(localStorage.getItem('attempted'))}).then((res) => console.log(res.data));
             document.getElementById('container').style.display = 'none';
             document.getElementById('done-cover').style.display = 'flex';
         }
@@ -276,6 +278,7 @@
                         localStorage.removeItem('endOfTimeout');
                         state = 'riddle-question';
                         localStorage.setItem('state', state);
+                        axios.post('/live/update-status', {status: localStorage.getItem('state'), questionNo: parseInt(localStorage.getItem('attempted'))}).then((res) => console.log(res.data));
                         riddleButton.textContent = 'Submit';
                         riddleButton.disabled = false;
                     } else {
@@ -309,6 +312,12 @@
             event.preventDefault();
             submit();
         });
+        if (localStorage.getItem('encountered-error')) {
+            const p = document.querySelector('#instructions p');
+            p.innerHTML = 'You a-hole. You ruined our sleep goddamnit!!! <br> Hit the goddamn button before we smack the shit out of you. (Trust us, we know)';
+            localStorage.removeItem('encountered-error');
+        }
+
         if (!localStorage.getItem('team')) {
             document.getElementById('continue').textContent = 'Start'
             axios.post('/live/get-data', {teamID: {{ team._id }}}).then((res) =>  {
@@ -342,13 +351,9 @@
         const stateresponse = await axios.post('/live/get-state', {teamID: {{ team._id }}});
         const actualState = stateresponse.data;
         if (actualState !== state) {
-            if(actualState === 'riddle-timeout') {
-                const timeoutresponse = await axios.post('/live/get-timeout');
-                localStorage.setItem('endOfTimeout', timeoutresponse.data);
-            }
-            localStorage.setItem('state', actualState);
             state = actualState;
-            renderForm();
+            localStorage.setItem('encountered-error', true);
+            location.reload();
             return;
         }
         const data = getData();
@@ -361,10 +366,11 @@
                     messageBox.innerHTML = '<h2 class="correct">Correct Location!</h2>';
                     const messageCover = document.getElementById("message-cover");
                     messageCover.style.display = 'block';
+                    state = 'riddle-question';
+                    localStorage.setItem('state', state);
+                    axios.post('/live/update-status', {status: 'riddle-question', questionNo: parseInt(localStorage.getItem('attempted'))}).then((res) => console.log(res.data));
                     setTimeout(() => {
                         messageCover.style.display = "none";
-                        state = 'riddle-question';
-                        localStorage.setItem('state', state);
                         renderForm();
                     }, 2000);
                 } else {
@@ -383,15 +389,16 @@
                     messageBox.innerHTML = '<h2 class="correct">Correct Answer!</h2>';
                     const messageCover = document.getElementById("message-cover");
                     messageCover.style.display = 'block';
+                    state = 'location-code';
+                    localStorage.setItem('state', state);
+                    if (parseInt(localStorage.getItem('attempted')) < questions) {
+                        localStorage.setItem('attempted', parseInt(localStorage.getItem('attempted')) + 1);
+                        axios.post('/live/update-attempted', {status: 'riddle-question', questionNo: parseInt(localStorage.getItem('attempted'))});
+                    }
+                    axios.post('/live/update-status', {status: 'location-code', questionNo: parseInt(localStorage.getItem('attempted'))}).then((res) => console.log(res.data));
                     setTimeout(() => {
                         messageCover.style.display = "none";
-                        if (parseInt(localStorage.getItem('attempted')) < questions) {
-                            localStorage.setItem('attempted', parseInt(localStorage.getItem('attempted')) + 1);
-                            axios.post('/live/update-attempted', {status: localStorage.getItem('state'), questionNo: parseInt(localStorage.getItem('attempted'))});
-                        }
                         document.getElementById('locationcode').value= '';
-                        state = 'location-code';
-                        localStorage.setItem('state', state);
                         renderForm();
                     }, 5000);
                 } else {
@@ -399,10 +406,11 @@
                     messageBox.innerHTML = '<h2 class="incorrect">Incorrect Answer!</h2>';
                     const messageCover = document.getElementById("message-cover");
                     messageCover.style.display = 'block';
+                    state = 'riddle-timeout';
+                    localStorage.setItem('state', state);
+                    axios.post('/live/update-status', {status: localStorage.getItem('state'), questionNo: parseInt(localStorage.getItem('attempted'))}).then((res) => console.log(res.data));
                     setTimeout(() => {
                         messageCover.style.display = "none";
-                        state = 'riddle-timeout';
-                        localStorage.setItem('state', state);
                         renderForm();
                     }, 5000);
                 }
