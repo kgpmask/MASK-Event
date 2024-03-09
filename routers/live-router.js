@@ -28,8 +28,9 @@ const team = teams[1];
 
 router.get('/', async (req, res) => {
 	if (req.isAdmin) {
+		const teamList = await dbh.getTeams();
 		return res.renderFile('admin/team-list.njk', {
-			teams
+			teams: teamList
 		});
 	} else {
 		// if (!handlerContext.quizStarted) return res.redirect('/');

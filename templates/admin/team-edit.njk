@@ -76,7 +76,7 @@
             event.preventDefault();
 			const data = getData();
             console.log(data);
-            {# try {
+            try {
                 const response = await axios.patch('/admin/edit-team', data);
                 if (response.status === 200) {
                     alert('Team updated successfully!');
@@ -87,7 +87,7 @@
             } catch (error) {
                 console.error('Error updating team:', error);
                 return alert(error.response.data);
-            } #}
+            }
 		}
 	</script>
 {% endblock %}

@@ -14,10 +14,8 @@ router.get('/', (req, res) => {
 
 router.get('/edit-team', async (req, res) => {
 	const teamID = parseInt(req.query.teamID);
-	const team = teams.find(team => team._id === teamID);
-	return res.renderFile('admin/team-edit.njk', {
-		team
-	});
+	const team = await dbh.getTeamById(teamID);
+	return res.renderFile('admin/team-edit.njk', { team });
 });
 
 router.patch('/edit-team', [
@@ -34,20 +32,21 @@ router.patch('/edit-team', [
 		const errorMessages = errors.array().map(error => error.msg);
 		throw new Error(errorMessages[0]);
 	}
-	// const team = {
-	// 	id: req.body.id,
-	// 	name: req.body.teamName,
-	// 	members: [
-	// 		{ name: req.body.name1, email: req.body.email1, phone: req.body.phone1 },
-	// 		{ name: req.body.name2, email: req.body.email2, phone: req.body.phone2 },
-	// 		{ name: req.body.name3, email: req.body.email3, phone: req.body.phone3 }
-	// 	]
-	// };
+	const team = {
+		id: req.body.id,
+		name: req.body.teamName,
+		members: [
+			{ name: req.body.name1, email: req.body.email1, phone: req.body.phone1 },
+			{ name: req.body.name2, email: req.body.email2, phone: req.body.phone2 },
+			{ name: req.body.name3, email: req.body.email3, phone: req.body.phone3 },
+			{ name: req.body.name4, email: req.body.email4, phone: req.body.phone4 }
+		].filter(i => i.name)
+	};
 	// const teamIndex = teams.findIndex(t => t.id === team.id);
 	// if (teamIndex === -1) {
 	// 	teams.push(team);
 	// }
-	// teams[teamIndex] = team;
+	await dbh.updateTeamDetails(team);
 	return res.status(200).send('Edited Successfully');
 });
 

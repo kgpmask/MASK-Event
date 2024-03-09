@@ -182,7 +182,7 @@ async function getLocations () {
 }
 
 async function getTeams () {
-	return await Team.find();
+	return await Team.find({ isAdmin: [undefined, false] }).lean();
 }
 
 async function getTeamById (_id) {
@@ -196,6 +196,14 @@ async function validateTeam ({ username: teamId, password }) {
 	else throw new Error('Password does not match');
 }
 
+async function updateTeamDetails (ctx) {
+	const { id, name, members } = ctx;
+	const team = await Team.findById(id);
+	team.name = name;
+	team.members = members;
+	return await team.save();
+}
+
 async function updateTeamStatus (ctx) {
 	const { _id, status } = ctx;
 	const team = await Team.findById(_id);
@@ -203,13 +211,14 @@ async function updateTeamStatus (ctx) {
 	if (status === 'riddle-timeout') {
 		team.timeout = new Date(Date.now() + 120 * 1000);
 		setTimeout(async () => {
+			team.status = 'riddle-question';
 			team.timeout = null;
 			await team.save();
 		}, 120 * 1000);
 	} else if (status === 'location-code') {
 		team.questionsAttempted = ctx.questionNo;
 	}
-	await team.save();
+	return await team.save();
 }
 
 async function getTeamFromSessionID (sessionId) {
@@ -260,6 +269,7 @@ module.exports = {
 	getTeams,
 	getTeamById,
 	validateTeam,
+	updateTeamDetails,
 	updateTeamStatus,
 	getTeamFromSessionID,
 	createTeamSession,

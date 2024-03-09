@@ -12,25 +12,27 @@
 	{% for team in teams %}
 		<div class="container">
 			<div class="card1">
-				{% for key, value in team %}
-                    {% if key == 'members' %}
-                    <div class="members-list">
-                            <b> {{ key | capitalize }}: </b>
-                            <div class="members">
-                                {% for member in value %}
-                                <div class="member">
-                                    Name: {{ member.name }} <br>
-                                    Email: {{ member.email }} <br>
-                                    Phone: {{ member.phone }} <br>
-                                </div>
-                            {% endfor %}
-                            </div>
-                            
-                        </div>
-                    {% else %}
-                        <b> {{ key | capitalize }}: </b>  {{ value }} <br>
-                    {% endif %}
-				{% endfor %}
+				<b> ID: </b> {{ team._id }} <br>
+				<b> Team Name: </b> {{ team.name }} <br>
+				
+				<div class="members-list"> <b>Members:</b>
+					<div class="members">
+						<br>
+						{% for member in team.members %}
+							<div class="member">
+								Name: {{ member.name }} <br>
+								Email: {{ member.email }} <br>
+								Phone: {{ member.phone }} <br>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+				<br>
+				<b> Current Status: </b> {{ team.status }} <br>
+				<b> Questions Attempted: </b> {{ team.questionsAttempted }} <br>
+				<b> Order: </b>  {% for element in team.order %}
+					 {{ element.location }}-{{ element.pointer }}-{{ element.question }} 
+				{% endfor %} <br>
 			</div>
 
 			<div class="card2">
