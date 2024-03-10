@@ -1,0 +1,93 @@
+{% extends 'admin/_admin.njk' %}
+{% import '_form.njk' as forms %}
+
+{% set thispage = 'editteam' %}
+{% set pagetitle = 'Edit Team' %}
+
+{% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
+
+{% block pagecontent %}
+	{% call forms.form() %}
+		{{ forms.heading('h1','Edit Team') }}
+        <label>Team ID:</label><br>
+		{{ forms.field('id','ID', team._id)}}
+        <label>Team Name:</label><br>
+		{{ forms.field('teamName','Name', team.name)}}
+        <label>Members:</label><br>
+        {% for member in team.members %}
+            <div class="members">
+                {{ forms.field('name'+loop.index,'Name', member.name)}}
+                {{ forms.field('email'+loop.index,'Email', member.email, type='email')}}
+                {{ forms.field('phone'+loop.index,'Phone number', member.phone)}}
+                <button onclick="removeMember(this)">Remove Member</button>
+            </div>
+        {% endfor %}
+        <button id="addmember" onclick="addMember()">Add Member</button>
+        <button onclick="update()">Update</button>
+	{% endcall %}
+{% endblock %}
+
+{% block customcss %}
+	{{ forms.formCss() }}
+    <style>
+        .members {
+            margin: 20px 0px;
+        }
+    </style>
+{% endblock %}
+
+{% block customjs %}
+	{{ forms.formFunction() }}
+	<script>
+		axios.defaults.withCredentials = true;
+		axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
+
+        function addMember() {
+            const count = document.getElementsByClassName('members').length;
+            if (count >= 4) {
+                return;
+            }
+            const member = document.createElement('div');
+            member.className = 'members';
+            member.innerHTML = `
+                {{ forms.field('name${count+1}','Name', '', type='text')}}
+                {{ forms.field('email${count+1}','Email', '', type='email')}}
+                {{ forms.field('phone${count+1}','Phone number', '', type='text')}}
+                <button onclick="removeMember(this)">Remove Member</button>
+            `;
+            document.querySelector('form').insertBefore(member, document.getElementById('addmember'));
+        }
+
+        function removeMember(e) {
+            e.parentElement.remove();
+            updateIds();
+        }
+
+        function updateIds () {
+            // if a member oher then last member is removed, the id's might get messy
+            [...document.getElementsByClassName('members')].map((ele, index) => {
+                [...ele.children].slice(0, -1).map((e) => {
+                    e.children[0].id = e.children[0].id.slice(0, -1) + (index + 1);
+                });
+            })
+        }
+
+		async function update() {
+            event.preventDefault();
+			const data = getData();
+            console.log(data);
+            try {
+                const response = await axios.patch('/admin/edit-team', data);
+                if (response.status === 200) {
+                    alert('Team updated successfully!');
+                    window.location.href = '/live';
+                } else {
+                    console.error('Error updating team:', response);
+                }
+            } catch (error) {
+                console.error('Error updating team:', error);
+                return alert(error.response.data);
+            }
+		}
+	</script>
+{% endblock %}
