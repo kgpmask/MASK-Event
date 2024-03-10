@@ -3,25 +3,67 @@ const dbh = require('../database/handler');
 const { body, validationResult } = require('express-validator');
 const checkAdmin = require('./check-admin');
 
+const teams = require('../src/samples/teams.json');
+const riddleQuestions = require('../src/samples/riddleQuestions.json');
+
 router.use('/', checkAdmin);
 
 router.get('/', (req, res) => {
 	res.renderFile('admin/_admin.njk');
 });
 
+router.get('/edit-team', async (req, res) => {
+	const teamID = parseInt(req.query.teamID);
+	const team = await dbh.getTeamById(teamID);
+	return res.renderFile('admin/team-edit.njk', { team });
+});
+
+router.patch('/edit-team', [
+	body('id')
+		.isNumeric()
+		.trim()
+		.notEmpty().withMessage('No ID Provided'),
+	body('teamName')
+		.trim()
+		.notEmpty().withMessage('No Name Provided')
+], async (req, res) => {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		const errorMessages = errors.array().map(error => error.msg);
+		throw new Error(errorMessages[0]);
+	}
+	const team = {
+		id: req.body.id,
+		name: req.body.teamName,
+		members: [
+			{ name: req.body.name1, email: req.body.email1, phone: req.body.phone1 },
+			{ name: req.body.name2, email: req.body.email2, phone: req.body.phone2 },
+			{ name: req.body.name3, email: req.body.email3, phone: req.body.phone3 },
+			{ name: req.body.name4, email: req.body.email4, phone: req.body.phone4 }
+		].filter(i => i.name)
+	};
+	// const teamIndex = teams.findIndex(t => t.id === team.id);
+	// if (teamIndex === -1) {
+	// 	teams.push(team);
+	// }
+	await dbh.updateTeamDetails(team);
+	return res.status(200).send('Edited Successfully');
+});
+
+
 router.get('/list-users', async (req, res) => {
 	const users = await dbh.getUsers();
 	res.renderFile('admin/user-list.njk', { users });
 });
 
-router.get('/edit-user', async (req, res) => {
-	const username = req.query.username;
-	if (!username) return res.redirect('/admin/list-users');
-	const data = (await dbh.getUserByUsername(username)).toObject();
-	delete data.salt;
-	delete data.hash;
-	res.renderFile('admin/user-edit.njk', { ...data });
-});
+// router.get('/edit-user', async (req, res) => {
+// 	const username = req.query.username;
+// 	if (!username) return res.redirect('/admin/list-users');
+// 	const data = (await dbh.getUserByUsername(username)).toObject();
+// 	delete data.salt;
+// 	delete data.hash;
+// 	res.renderFile('admin/user-edit.njk', { ...data });
+// });
 
 router.patch('/edit-user', [
 	body('name')

@@ -1,0 +1,52 @@
+[
+	{
+		"id": 1,
+		"question": "Who is the protagonist of 'Attack on Titan'?",
+		"answer": "Eren"
+	},
+	{
+		"id": 2,
+		"question": "What is the name of Naruto's sensei?",
+		"answer": "Kakashi"
+	},
+	{
+		"id": 3,
+		"question": "Which anime features a character named Luffy?",
+		"answer": "One Piece"
+	},
+	{
+		"id": 4,
+		"question": "In 'Death Note', who is the main antagonist?",
+		"answer": "Light"
+	},
+	{
+		"id": 5,
+		"question": "What is the name of the academy in 'My Hero Academia'?",
+		"answer": "UA"
+	},
+	{
+		"id": 6,
+		"question": "Who is the creator of 'Fullmetal Alchemist'?",
+		"answer": "Arakawa"
+	},
+	{
+		"id": 7,
+		"question": "What is the name of the protagonist in 'Dragon Ball Z'?",
+		"answer": "Goku"
+	},
+	{
+		"id": 8,
+		"question": "Which anime features a character named Pikachu?",
+		"answer": "Pokémon"
+	},
+	{
+		"id": 9,
+		"question": "What is the title of the anime about a shinigami named Ryuk?",
+		"answer": "Death Note"
+	},
+	{
+		"id": 10,
+		"question": "Who is the main character in 'Sword Art Online'?",
+		"answer": "Kirito"
+	}
+]

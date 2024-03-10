@@ -1,0 +1,185 @@
+{% extends 'admin/_admin.njk' %}
+
+{% set thispage = 'teamlist' %}
+{% set pagetitle = 'Team Management' %}
+
+{% set scripts = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'] %}
+
+{% block pagecontent %}
+	<h1>Teams Management Page</h1>
+    <legend>&nbsp;&nbsp;Registered Teams: {{ teams | length }}&nbsp;&nbsp;</legend><br/>
+	<button class="editT" id="control-btn" onclick="control()">Start Event</button>
+	{% for team in teams %}
+		<div class="container">
+			<div class="card1">
+				<b> ID: </b> {{ team._id }} <br>
+				<b> Team Name: </b> {{ team.name }} <br>
+				
+				<div class="members-list"> <b>Members:</b>
+					<div class="members">
+						<br>
+						{% for member in team.members %}
+							<div class="member">
+								Name: {{ member.name }} <br>
+								Email: {{ member.email }} <br>
+								Phone: {{ member.phone }} <br>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+				<br>
+				<b> Current Status: </b> {{ team.status }} <br>
+				<b> Questions Attempted: </b> {{ team.questionsAttempted }} <br>
+				<b> Order: </b>  {% for element in team.order %}
+					 {{ element.location }}-{{ element.pointer }}-{{ element.question }} 
+				{% endfor %} <br>
+			</div>
+
+			<div class="card2">
+				<button class="editT" onclick="editTeam(`{{team._id}}`)">Edit</button>
+			</div>
+		</div>
+	{% endfor %}
+
+{% endblock %}
+
+{% block customcss %}
+	<style>
+		.container {
+			margin: 3rem auto;
+			display:flex;
+			flex-direction:row;
+			border: 2px solid rgba(255,255,255,0.1);
+			border-radius: 8px;
+			padding: 20px 5px;
+			width: 80%;
+			background-color: rgba(255,255,255,0.13);
+			backdrop-filter: blur(5px);
+			align-self:center;
+		}
+		.card1{
+            margin: auto;
+			flex:80%;
+			width:40%;
+			padding-left:5px;
+			word-wrap: break-word;
+			text-align: left;
+		}
+
+        .members-list{
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .members {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .member {
+            margin: 0px 0px 10px 10px;
+        }
+		.card2{
+			flex:20%;
+			display:flex;
+			flex-direction:column;
+			justify-content: center;
+			align-items: center;
+		}
+		.editT {
+			border-radius: 4px;
+			color:white;
+			cursor: pointer;
+			border: 0px;
+			padding: 2% 3%;
+			margin: 10px
+		}
+		button{
+			background-color: var(--red);
+			width: 7em;
+			height: 2.5em;
+		}
+		#control-btn {
+			align-self: center;
+			margin: 15px 0px;
+			width: 50%;
+			background-color: var(--red);
+			color: white;
+			border: 0px;
+			padding: 12px 0;
+			font-size: 18px;
+			font-weight: 600;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: 0.3s;
+		}
+
+		#control-btn:hover {
+			background-color: #c90c0c;
+		}
+		@media (max-width: 600px) {
+			button{
+				width:4rem;
+			}
+			.container{
+				margin-left:3rem;
+			}
+		}
+
+		@media (max-width: 500px) {
+			.container {
+				flex-direction:column;
+			}
+			.card1{
+				width:95%;
+			}
+			.card2{
+				flex-direction:row;
+			}
+			button{
+				margin-right:5rem;
+			}
+			.editP{
+				margin:1rem 3rem;
+			}
+			.deleteP{
+				margin:1rem 2rem;
+			}
+			.container{
+				margin-left:2rem;
+			}
+		}
+		@media (max-width:300px){
+			.editP{
+				margin-right:1rem;
+				margin-left:2rem;
+			}
+			.deleteP{
+				margin-left:1rem;
+			}
+			.container{
+				margin-left:1.5rem;
+			}
+		}
+		
+	</style>
+{% endblock %}
+
+{% block customjs %}
+<script>
+	function control () {
+		const controlBtn = document.getElementById('control-btn');
+		if (controlBtn.innerHTML.split(' ')[0].toLowerCase() === 'start') {
+			controlBtn.innerHTML = "End Event"
+			axios.post('/live/start-hunt');
+		} else {
+			controlBtn.innerHTML = "Start Event"
+			axios.post('/live/end-hunt');
+		}
+	}
+    function editTeam(teamID) {
+        console.log(teamID);
+        window.location.href = `/admin/edit-team?teamID=${teamID}`;
+    }
+</script>
+{% endblock %}

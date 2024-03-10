@@ -85,6 +85,10 @@ button:hover {
 	background-color: #c90c0c;
 }
 
+button:disabled {
+	background-color: var(--light-pink);
+}
+
 .item {
 	display: flex;
 	flex-direction: column;
