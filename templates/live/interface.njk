@@ -238,6 +238,10 @@
         riddleForm.style.display = ['riddle-question', 'riddle-timeout'].find((e) => e === state) ? 'block' : 'none';
         messageBox.innerHTML = '';
         messageCover.style.display = 'none';
+            if (state === 'done') {
+                document.getElementById('container').style.display = 'none';
+                document.getElementById('done-cover').style.display = 'flex';
+            }
             if (state === 'location-code') {
                 document.getElementById('location-question').textContent = await getLocationQuestion();
             } else if (state === 'riddle-question') {
@@ -307,7 +311,7 @@
         });
         if (localStorage.getItem('encountered-error')) {
             const p = document.querySelector('#instructions p');
-            p.innerHTML = 'REFINED !! You a-hole. You ruined our sleep goddamnit!!! <br> Hit the goddamn button before we smack the shit out of you. (Trust us, we know)';
+            p.innerHTML = 'You a-hole. You ruined our sleep goddamnit!!! <br> Hit the goddamn button before we smack the shit out of you. (Trust us, we know)';
             localStorage.removeItem('encountered-error');
         }
 
@@ -401,6 +405,7 @@
                     }, 2000);
                 }
                 else if ( state === 'riddle-question' ) {
+                    endOfTimeout = new Date(Date.now() + 120 * 1000);
                     const riddleButton = document.getElementById('riddle-submit-button');
                     riddleButton.disabled = true;
                     const messageBox = document.getElementById("message-box");
@@ -408,10 +413,9 @@
                     const messageCover = document.getElementById("message-cover");
                     messageCover.style.display = 'block';
                     state = 'riddle-timeout';
-                    return setTimeout(async () => {
+                    setTimeout(async () => {
                         messageCover.style.display = "none";
                         riddleButton.disabled = false;
-                        endOfTimeout = new Date(Date.now() + 10 * 1000);
                         await renderForm();
                     }, 5000);
                 }
