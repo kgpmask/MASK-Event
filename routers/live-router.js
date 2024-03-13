@@ -43,7 +43,7 @@ router.post('/get-data', (req, res) => {
 	return res.status(200).send(req.team);
 });
 
-router.post('/get-location-question', async (req, res) => {
+router.post('/get-location-question', (req, res) => {
 	const attempted = req.team.questionsAttempted;
 	if (attempted >= ques) return res.status(418).send('Completed');
 	return res.send(
@@ -53,7 +53,7 @@ router.post('/get-location-question', async (req, res) => {
 	);
 });
 
-router.post('/get-riddle-question', async (req, res) => {
+router.post('/get-riddle-question', (req, res) => {
 	const attempted = req.team.questionsAttempted;
 	if (attempted >= ques) return res.status(418).send('Completed');
 	return res.send(

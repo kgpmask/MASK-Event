@@ -214,24 +214,23 @@
     let endOfTimeout;
 
     let state;
-    axios.post('/live/get-state', {teamID: {{ team._id }}}).then((res) => state = res.data);
 
-    function start() {
+    async function start() {
         document.getElementById('instructions').style.display='none'
         document.getElementById('container').style.display='block'
-        renderForm(isOnload = true);
+        await renderForm();
     }
 
 	function getRiddleQuestion () {
 		return axios.post('/live/get-riddle-question').then((res) => res.data);
 	}
 
-    function getLocationQuestion () {
-        return axios.post('/live/get-location-question').then((res) => res.data);
+    async function getLocationQuestion () {
+        const response = await axios.post('/live/get-location-question');
+        return response.data;
     }
 
-    function renderForm() {
-        axios.post('/live/get-state', {teamID: {{ team._id }}}).then((res) => state = res.data);
+    async function renderForm() {
         const locationCode = document.getElementById('location-code');
         const riddleForm = document.getElementById('riddle-form');
         const messageBox = document.getElementById("message-box");
@@ -246,7 +245,7 @@
         messageCover.style.display = 'none';
         timeoutContainer.style.display = 'none';
             if (state === 'location-code') {
-                document.getElementById('location-question').textContent = getLocationQuestion();
+                document.getElementById('location-question').textContent = await getLocationQuestion();
             } else if (state === 'riddle-question') {
                 const riddleQuestion = getRiddleQuestion();
                 if (riddleQuestion) {
@@ -289,15 +288,15 @@
     }
     
 
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", async function () {
         //loadingAnimation();
-        document.getElementById("location-submit-button").addEventListener("click", function (event) {
+        document.getElementById("location-submit-button").addEventListener("click", async function (event) {
             event.preventDefault();
-            submit();
+            await submit();
         });
-        document.getElementById("riddle-submit-button").addEventListener("click", function (event) {
+        document.getElementById("riddle-submit-button").addEventListener("click", async function (event) {
             event.preventDefault();
-            submit();
+            await submit();
         });
         if (localStorage.getItem('encountered-error')) {
             const p = document.querySelector('#instructions p');
@@ -307,22 +306,26 @@
 
         document.getElementById('continue').textContent = 'Continue'
         
-		axios.post('/live/get-data', {teamID: {{ team._id }}}).then((res) => {
+		axios.post('/live/get-data', {teamID: {{ team._id }}}).then(async (res) => {
             if (res.data.status === "riddle-timeout") {
                 return timeout(res.data.timeout);
             }
             else{
+                //console.log each of the following
+                console.log(res.data);
                 state = res.data.status;
-                attempted = res.data.attempted;
+                attempted = res.data.questionsAttempted;
                 endOfTimeout = res.data.timeout;
-                renderForm();
+                await renderForm();
             }
         })
     });
 
     async function submit() {
         const data = getData();
-        try {
+        console.log(data);
+        console.log(state);
+        console.log(attempted);
             const response = await axios.post('/live/submit', {state: 'location-code', answer: state === 'location-code'? data.locationcode : data.riddleanswer, questionNo: attempted});
             if(response.status === 420){
                 localStorage.setItem('encountered-error', true);
@@ -335,6 +338,7 @@
             }
             else if (state === 'location-code') {
                 if (response.status === 469) {
+                    console.log('Incorrect Location Code');
                     const locationButton = document.getElementById('location-submit-button');
                     locationButton.disabled = true;
                     const messageBox = document.getElementById("message-box");
@@ -354,10 +358,10 @@
                     const messageCover = document.getElementById("message-cover");
                     messageCover.style.display = 'block';
                     state = 'riddle-question';
-                    setTimeout(() => {
+                    setTimeout(async () => {
                         messageCover.style.display = "none";
                         locationButton.disabled = false;
-                        renderForm();
+                        await renderForm();
                     }, 2000);
                 }
             } else {
@@ -370,10 +374,10 @@
                     const messageCover = document.getElementById("message-cover");
                     messageCover.style.display = 'block';
                     state = 'riddle-timeout';
-                    setTimeout(() => {
+                    setTimeout(async () => {
                         messageCover.style.display = "none";
                         riddleButton.disabled = false;
-                        renderForm();
+                        await renderForm();
                     }, 5000);
                 }
                 else {
@@ -384,17 +388,15 @@
                     const messageCover = document.getElementById("message-cover");
                     messageCover.style.display = 'block';
                     state = 'location-code';
-                    setTimeout(() => {
+                    setTimeout(async () => {
                         messageCover.style.display = "none";
                         document.getElementById('locationcode').value= '';
                         riddleButton.disabled = false;
-                        renderForm();
+                        await renderForm();
                     }, 5000);
                 }
             }
-        } catch (error) {
-            console.error(error);
-        }
+
     }
 </script>
 {% endblock %}
