@@ -209,10 +209,12 @@
     axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
 
     let questions = 6;
-    let tries = 0
+    let tries = 0;
+    let attempted = 0;
+    let endOfTimeout;
 
-    let state = localStorage.getItem('state') || 'location-code';
-    localStorage.setItem('state', state);
+    let state;
+    axios.post('/live/get-state', {teamID: {{ team._id }}}).then((res) => state = res.data);
 
     function start() {
         document.getElementById('instructions').style.display='none'
@@ -221,21 +223,15 @@
     }
 
 	function getRiddleQuestion () {
-		const current = JSON.parse(localStorage.getItem('team')).order[parseInt(localStorage.getItem('attempted'))]
-		const location = JSON.parse(localStorage.getItem('locations'))[parseInt(localStorage.getItem('attempted'))];
-		const q = location.questions[current.question];
-		return { question: q.question, answer: q.answer, keywords: location.keywords };
+		return axios.post('/live/get-riddle-question').then((res) => res.data);
 	}
 
     function getLocationQuestion () {
-		const current = JSON.parse(localStorage.getItem('team')).order[parseInt(localStorage.getItem('attempted'))]
-		const location = JSON.parse(localStorage.getItem('locations'))[parseInt(localStorage.getItem('attempted'))];
-		return location.pointerQuestion[current.pointer];
-	}
+        return axios.post('/live/get-location-question').then((res) => res.data);
+    }
 
-    function renderForm(isOnload) {
-        // if(!isOnload) axios.post('/live/update-status', {status: localStorage.getItem('state'), questionNo: parseInt(localStorage.getItem('attempted'))}).then((res) => console.log(res.data));
-        state = localStorage.getItem('state');
+    function renderForm() {
+        axios.post('/live/get-state', {teamID: {{ team._id }}}).then((res) => state = res.data);
         const locationCode = document.getElementById('location-code');
         const riddleForm = document.getElementById('riddle-form');
         const messageBox = document.getElementById("message-box");
@@ -249,46 +245,7 @@
         messageBox.innerHTML = '';
         messageCover.style.display = 'none';
         timeoutContainer.style.display = 'none';
-
-        if (parseInt(localStorage.getItem('attempted')) >= questions) {
-            state='done';
-            localStorage.setItem('state', state);
-            axios.post('/live/update-status', {status: 'completed', questionNo: parseInt(localStorage.getItem('attempted'))}).then((res) => console.log(res.data));
-            document.getElementById('container').style.display = 'none';
-            document.getElementById('done-cover').style.display = 'flex';
-        }
-        else {
-            if (state === 'riddle-timeout') {
-                const riddleQuestion = getRiddleQuestion();
-                if (riddleQuestion) {
-                    document.getElementById('riddle-question').textContent = riddleQuestion.question;
-                }
-                document.getElementById('riddleanswer').innerHTML = '<option value="" selected disabled hidden>Choose an answer</option>' + riddleQuestion.keywords.map((keyword, index) => {
-                    return `<option value="${ index }">${ keyword }</option>`
-                }).join(' ')
-                const riddleButton = document.getElementById('riddle-submit-button');
-                riddleButton.disabled = true;
-                if (!localStorage.getItem('endOfTimeout')) {
-                    localStorage.setItem('endOfTimeout', new Date(Date.now() + 120 * 1000));
-                }
-                let timeleft = Math.floor((new Date(localStorage.getItem('endOfTimeout')) - Date.now())/1000);
-                const countdownInterval = setInterval(() => {
-                    if (timeleft <= 0) {
-                        clearInterval(countdownInterval);
-                        localStorage.removeItem('endOfTimeout');
-                        state = 'riddle-question';
-                        localStorage.setItem('state', state);
-                        axios.post('/live/update-status', {status: localStorage.getItem('state'), questionNo: parseInt(localStorage.getItem('attempted'))}).then((res) => console.log(res.data));
-                        riddleButton.textContent = 'Submit';
-                        riddleButton.disabled = false;
-                    } else {
-                        const minutes = Math.floor(timeleft / 60);
-                        const seconds = timeleft % 60;
-                        riddleButton.textContent = "Please wait " + (minutes === 0 ? "" : minutes + " min ") + (seconds === 0 ? "" : seconds + " seconds");
-                        timeleft -= 1;
-                    }
-                }, 1000);
-            } else if (state === 'location-code') {
+            if (state === 'location-code') {
                 document.getElementById('location-question').textContent = getLocationQuestion();
             } else if (state === 'riddle-question') {
                 const riddleQuestion = getRiddleQuestion();
@@ -298,14 +255,43 @@
                 document.getElementById('riddleanswer').innerHTML = '<option value="" selected disabled hidden>Choose an answer</option>' + riddleQuestion.keywords.map((keyword, index) => {
                     return `<option value="${ index }">${ keyword }</option>`
                 }).join(' ')
+            } else if (state === 'riddle-timeout') {
+                return timeout();
             }
         }
+
+    const timeout = () => {
+        const countdown = document.getElementById("countdown");
+        const timeoutContainer = document.getElementById('timeout');
+        const interfaceContainer = document.getElementById('interface-container');
+        const messageBox = document.getElementById("message-box");
+        const messageCover = document.getElementById("message-cover");
+        const locationCode = document.getElementById('location-code');
+        const riddleForm = document.getElementById('riddle-form');
+        const locationButton = document.getElementById('location-submit-button');
+        const riddleButton = document.getElementById('riddle-submit-button');
+        const countdownHeader = document.getElementById('countdown-header');
+        const countdownTime = endOfTimeout - Date.now();
+        let timeleft = Math.floor((endOfTimeout - Date.now())/1000);
+        const countdownInterval = setInterval(() => {
+            if (timeleft <= 0) {
+                clearInterval(countdownInterval);
+                state = 'riddle-question';
+                riddleButton.textContent = 'Submit';
+                riddleButton.disabled = false;
+            } else {
+                const minutes = Math.floor(timeleft / 60);
+                const seconds = timeleft % 60;
+                riddleButton.textContent = "Please wait " + (minutes === 0 ? "" : minutes + " min ") + (seconds === 0 ? "" : seconds + " seconds");
+                timeleft -= 1;
+            }
+        }, 1000);
     }
+    
 
     document.addEventListener("DOMContentLoaded", function () {
-        axios.post('/live/get-question');
         //loadingAnimation();
-        {# document.getElementById("location-submit-button").addEventListener("click", function (event) {
+        document.getElementById("location-submit-button").addEventListener("click", function (event) {
             event.preventDefault();
             submit();
         });
@@ -319,113 +305,96 @@
             localStorage.removeItem('encountered-error');
         }
 
-        if (!localStorage.getItem('team')) {
-            document.getElementById('continue').textContent = 'Start'
-            axios.post('/live/get-data', {teamID: {{ team._id }}}).then((res) =>  {
-                console.log(res.data);
-                if(res.status === 200) {
-                    localStorage.setItem('team', JSON.stringify(res.data.team));
-                    localStorage.setItem('locations', JSON.stringify(res.data.locations));
-                }
-            })
-        }
-        else {
-            document.getElementById('continue').textContent = 'Continue'
-        }
-		axios.post('/live/get-attempted', {teamID: {{ team._id }}}).then((res) => localStorage.setItem('attempted', res.data));
-        axios.post('/live/get-timeout').then((res) => {
-            if (res.status === 200) {
-                localStorage.setItem('endOfTimeout', res.data);
-                state = 'riddle-timeout';
-                localStorage.setItem('state', state);
-                renderForm(isOnload = true);
+        document.getElementById('continue').textContent = 'Continue'
+        
+		axios.post('/live/get-data', {teamID: {{ team._id }}}).then((res) => {
+            if (res.data.status === "riddle-timeout") {
+                return timeout(res.data.timeout);
             }
-        });
-		axios.post('/live/get-state', {teamID: {{ team._id }}}).then((res) => localStorage.setItem('state', res.data)); #}
+            else{
+                state = res.data.status;
+                attempted = res.data.attempted;
+                endOfTimeout = res.data.timeout;
+                renderForm();
+            }
+        })
     });
 
     async function submit() {
-        const attemptedresponse = await axios.post('/live/get-attempted', {teamID: {{ team._id }}});
-        const attempted = parseInt(attemptedresponse.data);
-        localStorage.setItem('attempted', attempted);
-
-        const stateresponse = await axios.post('/live/get-state', {teamID: {{ team._id }}});
-        const actualState = stateresponse.data;
-        if (actualState !== state) {
-            state = actualState;
-            localStorage.setItem('encountered-error', true);
-            location.reload();
-            return;
-        }
         const data = getData();
-        // const answer = document.getElementById('riddleanswer').value;
         try {
-            let response;
-            if (state === 'location-code') {
-                if (data.locationcode === JSON.parse(localStorage.getItem('locations'))[parseInt(localStorage.getItem('attempted'))].code) {
-                    const messageBox = document.getElementById("message-box");
-                    messageBox.innerHTML = '<h2 class="correct">Correct Location!</h2>';
-                    const messageCover = document.getElementById("message-cover");
-                    messageCover.style.display = 'block';
-                    state = 'riddle-question';
-                    localStorage.setItem('state', state);
-                    axios.post('/live/update-status', {status: 'riddle-question', questionNo: parseInt(localStorage.getItem('attempted'))}).then((res) => console.log(res.data));
-                    setTimeout(() => {
-                        messageCover.style.display = "none";
-                        renderForm();
-                    }, 2000);
-                } else {
+            const response = await axios.post('/live/submit', {state: 'location-code', answer: state === 'location-code'? data.locationcode : data.riddleanswer, questionNo: attempted});
+            if(response.status === 420){
+                localStorage.setItem('encountered-error', true);
+                location.reload();
+            }
+            else if(response.status === 418){
+                state='done';
+                document.getElementById('container').style.display = 'none';
+                document.getElementById('done-cover').style.display = 'flex';
+            }
+            else if (state === 'location-code') {
+                if (response.status === 469) {
+                    const locationButton = document.getElementById('location-submit-button');
+                    locationButton.disabled = true;
                     const messageBox = document.getElementById("message-box");
                     messageBox.innerHTML = '<h2 class="incorrect">Incorrect Location Code!</h2>';
                     const messageCover = document.getElementById("message-cover");
                     messageCover.style.display = 'block';
                     setTimeout(() => {
                         messageCover.style.display = "none";
+                        locationButton.disabled = false;
+                    }, 2000);
+                }
+                else {
+                    const locationButton = document.getElementById('location-submit-button');
+                    locationButton.disabled = true;
+                    const messageBox = document.getElementById("message-box");
+                    messageBox.innerHTML = '<h2 class="correct">Correct Location!</h2>';
+                    const messageCover = document.getElementById("message-cover");
+                    messageCover.style.display = 'block';
+                    state = 'riddle-question';
+                    setTimeout(() => {
+                        messageCover.style.display = "none";
+                        locationButton.disabled = false;
+                        renderForm();
                     }, 2000);
                 }
             } else {
-                const riddleQuestion = getRiddleQuestion();
-                if(parseInt(data.riddleanswer) === riddleQuestion.answer) {
-                    const messageBox = document.getElementById("message-box");
-                    messageBox.innerHTML = '<h2 class="correct">Correct Answer!</h2>';
-                    const messageCover = document.getElementById("message-cover");
-                    messageCover.style.display = 'block';
-                    state = 'location-code';
-                    localStorage.setItem('state', state);
-                    if (parseInt(localStorage.getItem('attempted')) < questions) {
-                        localStorage.setItem('attempted', parseInt(localStorage.getItem('attempted')) + 1);
-                        axios.post('/live/update-attempted', {status: 'riddle-question', questionNo: parseInt(localStorage.getItem('attempted'))});
-                    }
-                    axios.post('/live/update-status', {status: 'location-code', questionNo: parseInt(localStorage.getItem('attempted'))}).then((res) => console.log(res.data));
-                    setTimeout(() => {
-                        messageCover.style.display = "none";
-                        document.getElementById('locationcode').value= '';
-                        renderForm();
-                    }, 5000);
-                } else {
+                if (response.status === 469) {
+                    endOfTimeout = new Date(Date.now() + 120 * 1000);
+                    const riddleButton = document.getElementById('riddle-submit-button');
+                    riddleButton.disabled = true;
                     const messageBox = document.getElementById("message-box");
                     messageBox.innerHTML = '<h2 class="incorrect">Incorrect Answer!</h2>';
                     const messageCover = document.getElementById("message-cover");
                     messageCover.style.display = 'block';
                     state = 'riddle-timeout';
-                    localStorage.setItem('state', state);
-                    axios.post('/live/update-status', {status: localStorage.getItem('state'), questionNo: parseInt(localStorage.getItem('attempted'))}).then((res) => console.log(res.data));
                     setTimeout(() => {
                         messageCover.style.display = "none";
+                        riddleButton.disabled = false;
+                        renderForm();
+                    }, 5000);
+                }
+                else {
+                    const riddleButton = document.getElementById('riddle-submit-button');
+                    riddleButton.disabled = true;
+                    const messageBox = document.getElementById("message-box");
+                    messageBox.innerHTML = '<h2 class="correct">Correct Answer!</h2>';
+                    const messageCover = document.getElementById("message-cover");
+                    messageCover.style.display = 'block';
+                    state = 'location-code';
+                    setTimeout(() => {
+                        messageCover.style.display = "none";
+                        document.getElementById('locationcode').value= '';
+                        riddleButton.disabled = false;
                         renderForm();
                     }, 5000);
                 }
             }
-        }  catch (error) {
+        } catch (error) {
             console.error(error);
         }
     }
-</script>
-
-<script>
-    axios.defaults.withCredentials = true;
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
-
-
 </script>
 {% endblock %}
