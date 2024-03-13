@@ -221,13 +221,12 @@
         await renderForm();
     }
 
-	function getRiddleQuestion () {
-		return axios.post('/live/get-riddle-question').then((res) => res.data);
+	async function getRiddleQuestion () {
+		return (await axios.post('/live/get-riddle-question')).data;
 	}
 
     async function getLocationQuestion () {
-        const response = await axios.post('/live/get-location-question');
-        return response.data;
+        return (await axios.post('/live/get-location-question')).data;
     }
 
     async function renderForm() {
@@ -247,7 +246,8 @@
             if (state === 'location-code') {
                 document.getElementById('location-question').textContent = await getLocationQuestion();
             } else if (state === 'riddle-question') {
-                const riddleQuestion = getRiddleQuestion();
+                const riddleQuestion = await getRiddleQuestion();
+                console.log(riddleQuestion);
                 if (riddleQuestion) {
                     document.getElementById('riddle-question').textContent = riddleQuestion.question;
                 }
@@ -306,19 +306,16 @@
 
         document.getElementById('continue').textContent = 'Continue'
         
-		axios.post('/live/get-data', {teamID: {{ team._id }}}).then(async (res) => {
-            if (res.data.status === "riddle-timeout") {
-                return timeout(res.data.timeout);
-            }
-            else{
-                //console.log each of the following
-                console.log(res.data);
-                state = res.data.status;
-                attempted = res.data.questionsAttempted;
-                endOfTimeout = res.data.timeout;
-                await renderForm();
-            }
-        })
+		const response = await axios.post('/live/get-data', {teamID: {{ team._id }}});
+        if (response.data.status === "riddle-timeout") {
+            return timeout(response.data.timeout);
+        }
+        else{
+            state = response.data.status;
+            attempted = response.data.questionsAttempted;
+            endOfTimeout = response.data.timeout;
+            await renderForm();
+        }
     });
 
     async function submit() {
@@ -326,19 +323,50 @@
         console.log(data);
         console.log(state);
         console.log(attempted);
-            const response = await axios.post('/live/submit', {state: 'location-code', answer: state === 'location-code'? data.locationcode : data.riddleanswer, questionNo: attempted});
-            if(response.status === 420){
-                localStorage.setItem('encountered-error', true);
-                location.reload();
+        try {
+            const response = await axios.post('/live/submit', {state: state, answer: state === 'location-code'? data.locationcode : data.riddleanswer, questionNo: attempted});
+            if (state === 'location-code') {
+                const locationButton = document.getElementById('location-submit-button');
+                locationButton.disabled = true;
+                const messageBox = document.getElementById("message-box");
+                messageBox.innerHTML = '<h2 class="correct">Correct Location!</h2>';
+                const messageCover = document.getElementById("message-cover");
+                messageCover.style.display = 'block';
+                state = 'riddle-question';
+                setTimeout(async () => {
+                    messageCover.style.display = "none";
+                    locationButton.disabled = false;
+                    await renderForm();
+                }, 2000);
             }
-            else if(response.status === 418){
+            else {
+                const riddleButton = document.getElementById('riddle-submit-button');
+                riddleButton.disabled = true;
+                const messageBox = document.getElementById("message-box");
+                messageBox.innerHTML = '<h2 class="correct">Correct Answer!</h2>';
+                const messageCover = document.getElementById("message-cover");
+                messageCover.style.display = 'block';
+                state = 'location-code';
+                setTimeout(async () => {
+                    messageCover.style.display = "none";
+                    document.getElementById('locationcode').value= '';
+                    riddleButton.disabled = false;
+                    await renderForm();
+                }, 5000);
+            }
+        }
+        catch ( e ) {
+            if ( e.response.status === 418 ) {
                 state='done';
                 document.getElementById('container').style.display = 'none';
                 document.getElementById('done-cover').style.display = 'flex';
             }
-            else if (state === 'location-code') {
-                if (response.status === 469) {
-                    console.log('Incorrect Location Code');
+            else if ( e.response.status === 420 ) {
+                localStorage.setItem('encountered-error', true);
+                location.reload();
+            }
+            else if ( e.response.status === 469 ) {
+                if ( state === 'location-code' ) {
                     const locationButton = document.getElementById('location-submit-button');
                     locationButton.disabled = true;
                     const messageBox = document.getElementById("message-box");
@@ -350,22 +378,7 @@
                         locationButton.disabled = false;
                     }, 2000);
                 }
-                else {
-                    const locationButton = document.getElementById('location-submit-button');
-                    locationButton.disabled = true;
-                    const messageBox = document.getElementById("message-box");
-                    messageBox.innerHTML = '<h2 class="correct">Correct Location!</h2>';
-                    const messageCover = document.getElementById("message-cover");
-                    messageCover.style.display = 'block';
-                    state = 'riddle-question';
-                    setTimeout(async () => {
-                        messageCover.style.display = "none";
-                        locationButton.disabled = false;
-                        await renderForm();
-                    }, 2000);
-                }
-            } else {
-                if (response.status === 469) {
+                else if ( state === 'riddle-question' ) {
                     endOfTimeout = new Date(Date.now() + 120 * 1000);
                     const riddleButton = document.getElementById('riddle-submit-button');
                     riddleButton.disabled = true;
@@ -380,23 +393,8 @@
                         await renderForm();
                     }, 5000);
                 }
-                else {
-                    const riddleButton = document.getElementById('riddle-submit-button');
-                    riddleButton.disabled = true;
-                    const messageBox = document.getElementById("message-box");
-                    messageBox.innerHTML = '<h2 class="correct">Correct Answer!</h2>';
-                    const messageCover = document.getElementById("message-cover");
-                    messageCover.style.display = 'block';
-                    state = 'location-code';
-                    setTimeout(async () => {
-                        messageCover.style.display = "none";
-                        document.getElementById('locationcode').value= '';
-                        riddleButton.disabled = false;
-                        await renderForm();
-                    }, 5000);
-                }
             }
-
+        }
     }
 </script>
 {% endblock %}

@@ -56,11 +56,11 @@ router.post('/get-location-question', (req, res) => {
 router.post('/get-riddle-question', (req, res) => {
 	const attempted = req.team.questionsAttempted;
 	if (attempted >= ques) return res.status(418).send('Completed');
-	return res.send(
-		req.team.order.map((o) =>
-			handlerContext.locations.find((l) => l._id === o.location)
-		)[attempted].questions[req.team.order[attempted].question].question
-	);
+	const location = req.team.order.map((o) => handlerContext.locations.find((l) => l._id === o.location))[attempted];
+	return res.send({
+		question: location.questions[req.team.order[attempted].question].question,
+		keywords: location.keywords
+	});
 });
 
 router.post('/submit', async (req, res) => {
