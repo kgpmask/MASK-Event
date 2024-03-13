@@ -215,7 +215,7 @@ async function updateTeamStatus (ctx) {
 			team.timeout = null;
 			await team.save();
 		}, 120 * 1000);
-	} else if (status === 'location-code') {
+	} else {
 		team.questionsAttempted = ctx.questionNo;
 	}
 	return await team.save();

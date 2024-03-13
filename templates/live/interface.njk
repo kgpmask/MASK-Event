@@ -303,8 +303,9 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
+        axios.post('/live/get-question');
         //loadingAnimation();
-        document.getElementById("location-submit-button").addEventListener("click", function (event) {
+        {# document.getElementById("location-submit-button").addEventListener("click", function (event) {
             event.preventDefault();
             submit();
         });
@@ -340,7 +341,7 @@
                 renderForm(isOnload = true);
             }
         });
-		axios.post('/live/get-state', {teamID: {{ team._id }}}).then((res) => localStorage.setItem('state', res.data));
+		axios.post('/live/get-state', {teamID: {{ team._id }}}).then((res) => localStorage.setItem('state', res.data)); #}
     });
 
     async function submit() {
@@ -419,5 +420,12 @@
             console.error(error);
         }
     }
+</script>
+
+<script>
+    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrfToken }}';
+
+
 </script>
 {% endblock %}
