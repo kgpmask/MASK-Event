@@ -23,7 +23,7 @@
     <div id="done-cover" style="display: none;">
         {% call forms.form() %}
         <div class="done-container">
-            <h1 id="done" style="color:var(--red)">Congratulations!</h1>
+            <h1 id="done" style="color:var(--red); margin-bottom: 10px;">Congratulations!</h1>
             <p style="font-size: 22px;">You have completed the treasure hunt. Head over to Gymkhana to grab your prizes!</p>
         </div>  
         {% endcall %}
@@ -238,9 +238,10 @@
         riddleForm.style.display = ['riddle-question', 'riddle-timeout'].find((e) => e === state) ? 'block' : 'none';
         messageBox.innerHTML = '';
         messageCover.style.display = 'none';
-            if (state === 'done') {
+            if (state === 'completed') {
                 document.getElementById('container').style.display = 'none';
                 document.getElementById('done-cover').style.display = 'flex';
+                document.getElementById('instructions').style.display = 'none';
             }
             if (state === 'location-code') {
                 document.getElementById('location-question').textContent = await getLocationQuestion();
@@ -382,7 +383,7 @@
                 attempted++;
                 setTimeout(async () => {
                     messageCover.style.display = "none";
-                    state='done';
+                    state='completed';
                     document.getElementById('container').style.display = 'none';
                     document.getElementById('done-cover').style.display = 'flex';
                 }, 5000);
