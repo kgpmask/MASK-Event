@@ -30,10 +30,6 @@
     </div>
 
     <div id="container" style="display: none;">
-        <div id="timeout">
-            <h1>Wrong Answer!</h1>
-            <h3 id="countdown-header">Try again in <span id="countdown"></span></h3>
-        </div>
         <div id="interface-container">
             <h1 class="title">Treasure Hunt</h1>
             <div class="team-info">
@@ -230,19 +226,18 @@
     }
 
     async function renderForm() {
+        console.log(state);
         const locationCode = document.getElementById('location-code');
         const riddleForm = document.getElementById('riddle-form');
         const messageBox = document.getElementById("message-box");
         const messageCover = document.getElementById("message-cover");
         const countdown = document.getElementById("countdown");
-        const timeoutContainer = document.getElementById('timeout');
         const interfaceContainer = document.getElementById('interface-container');
         
         locationCode.style.display = state === 'location-code' ? 'block' : 'none';
         riddleForm.style.display = ['riddle-question', 'riddle-timeout'].find((e) => e === state) ? 'block' : 'none';
         messageBox.innerHTML = '';
         messageCover.style.display = 'none';
-        timeoutContainer.style.display = 'none';
             if (state === 'location-code') {
                 document.getElementById('location-question').textContent = await getLocationQuestion();
             } else if (state === 'riddle-question') {
@@ -255,11 +250,11 @@
                     return `<option value="${ index }">${ keyword }</option>`
                 }).join(' ')
             } else if (state === 'riddle-timeout') {
-                return timeout();
+                return await timeout();
             }
         }
 
-    const timeout = () => {
+    const timeout = async () => {
         const countdown = document.getElementById("countdown");
         const timeoutContainer = document.getElementById('timeout');
         const interfaceContainer = document.getElementById('interface-container');
@@ -270,14 +265,26 @@
         const locationButton = document.getElementById('location-submit-button');
         const riddleButton = document.getElementById('riddle-submit-button');
         const countdownHeader = document.getElementById('countdown-header');
-        const countdownTime = endOfTimeout - Date.now();
-        let timeleft = Math.floor((endOfTimeout - Date.now())/1000);
-        const countdownInterval = setInterval(() => {
+
+        const riddleQuestion = await getRiddleQuestion();
+        console.log(riddleQuestion);
+        if (riddleQuestion) {
+            document.getElementById('riddle-question').textContent = riddleQuestion.question;
+        }
+        riddleButton.disabled = true;
+        document.getElementById('riddleanswer').innerHTML = '<option value="" selected disabled hidden>Choose an answer</option>' + riddleQuestion.keywords.map((keyword, index) => {
+                    return `<option value="${ index }">${ keyword }</option>`
+        }).join(' ')
+
+        riddleForm.style.display = 'block';
+        let timeleft = Math.floor((new Date(endOfTimeout) - Date.now())/1000);
+        const countdownInterval = setInterval(async () => {
             if (timeleft <= 0) {
                 clearInterval(countdownInterval);
                 state = 'riddle-question';
                 riddleButton.textContent = 'Submit';
                 riddleButton.disabled = false;
+                await renderForm();
             } else {
                 const minutes = Math.floor(timeleft / 60);
                 const seconds = timeleft % 60;
@@ -308,7 +315,10 @@
         
 		const response = await axios.post('/live/get-data', {teamID: {{ team._id }}});
         if (response.data.status === "riddle-timeout") {
-            return timeout(response.data.timeout);
+            state = response.data.status;
+            attempted = response.data.questionsAttempted;
+            endOfTimeout = response.data.timeout;
+            await timeout();
         }
         else{
             state = response.data.status;
@@ -347,6 +357,7 @@
                 const messageCover = document.getElementById("message-cover");
                 messageCover.style.display = 'block';
                 state = 'location-code';
+                attempted++;
                 setTimeout(async () => {
                     messageCover.style.display = "none";
                     document.getElementById('locationcode').value= '';
@@ -357,9 +368,20 @@
         }
         catch ( e ) {
             if ( e.response.status === 418 ) {
-                state='done';
-                document.getElementById('container').style.display = 'none';
-                document.getElementById('done-cover').style.display = 'flex';
+                const riddleButton = document.getElementById('riddle-submit-button');
+                riddleButton.disabled = true;
+                const messageBox = document.getElementById("message-box");
+                messageBox.innerHTML = '<h2 class="correct">Correct Answer!</h2>';
+                const messageCover = document.getElementById("message-cover");
+                messageCover.style.display = 'block';
+                state = 'location-code';
+                attempted++;
+                setTimeout(async () => {
+                    messageCover.style.display = "none";
+                    state='done';
+                    document.getElementById('container').style.display = 'none';
+                    document.getElementById('done-cover').style.display = 'flex';
+                }, 5000);
             }
             else if ( e.response.status === 420 ) {
                 localStorage.setItem('encountered-error', true);

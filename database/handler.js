@@ -214,7 +214,7 @@ async function updateTeamStatus (ctx) {
 			team.status = 'riddle-question';
 			team.timeout = null;
 			await team.save();
-		}, 120 * 1000);
+		}, 110 * 1000);
 	} else {
 		team.questionsAttempted = ctx.questionNo;
 	}

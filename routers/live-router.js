@@ -67,12 +67,17 @@ router.post('/submit', async (req, res) => {
 	const attempted = req.team.questionsAttempted;
 	if (req.body.questionNo !== attempted) return res.status(420).send('Koi bkl hi hoga');
 	if (req.body.state !== req.team.status) return res.status(420).send('Koi bkl hi hoga');
-	if (attempted >= ques) return res.status(418).send('Completed');
+	if (req.body.state === 'riddle-question') {
+		if (attempted + 1 >= ques) {
+			await dbh.updateTeamStatus({ _id: req.team._id, status: 'completed', questionNo: 6 });
+			return res.status(418).send('Completed');
+		}
+	}
 	if (req.body.state === 'riddle-question') {
 		if (
 			req.team.order.map((o) =>
 				handlerContext.locations.find((l) => l._id === o.location)
-			)[attempted].questions[req.team.order[attempted].question].answer === req.body.answer
+			)[attempted].questions[req.team.order[attempted].question].answer === parseInt(req.body.answer)
 		) {
 			await dbh.updateTeamStatus({ _id: req.team._id, status: 'location-code', questionNo: req.body.questionNo + 1 });
 			return res.status(200).send('correct answer');
