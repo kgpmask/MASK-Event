@@ -307,7 +307,7 @@
         });
         if (localStorage.getItem('encountered-error')) {
             const p = document.querySelector('#instructions p');
-            p.innerHTML = 'You a-hole. You ruined our sleep goddamnit!!! <br> Hit the goddamn button before we smack the shit out of you. (Trust us, we know)';
+            p.innerHTML = 'REFINED !! You a-hole. You ruined our sleep goddamnit!!! <br> Hit the goddamn button before we smack the shit out of you. (Trust us, we know)';
             localStorage.removeItem('encountered-error');
         }
 
@@ -401,7 +401,6 @@
                     }, 2000);
                 }
                 else if ( state === 'riddle-question' ) {
-                    endOfTimeout = new Date(Date.now() + 120 * 1000);
                     const riddleButton = document.getElementById('riddle-submit-button');
                     riddleButton.disabled = true;
                     const messageBox = document.getElementById("message-box");
@@ -409,9 +408,10 @@
                     const messageCover = document.getElementById("message-cover");
                     messageCover.style.display = 'block';
                     state = 'riddle-timeout';
-                    setTimeout(async () => {
+                    return setTimeout(async () => {
                         messageCover.style.display = "none";
                         riddleButton.disabled = false;
+                        endOfTimeout = new Date(Date.now() + 10 * 1000);
                         await renderForm();
                     }, 5000);
                 }

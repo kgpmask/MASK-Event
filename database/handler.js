@@ -209,12 +209,12 @@ async function updateTeamStatus (ctx) {
 	const team = await Team.findById(_id);
 	team.status = status;
 	if (status === 'riddle-timeout') {
-		team.timeout = new Date(Date.now() + 120 * 1000);
+		team.timeout = new Date(Date.now() + (120 + 5) * 1000);
 		setTimeout(async () => {
 			team.status = 'riddle-question';
 			team.timeout = null;
 			await team.save();
-		}, 110 * 1000);
+		}, (115 + 5) * 1000);
 	} else {
 		team.questionsAttempted = ctx.questionNo;
 	}
