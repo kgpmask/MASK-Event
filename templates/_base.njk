@@ -1,6 +1,6 @@
 {% set navlinks = [
 	{ name: 'Information', href: 'information' },
-	{ name: 'Quiz Portal', href: 'live' }
+	{ name: 'Treasure Hunt', href: 'live' }
 ] %}
 {# array elements: { name, href } #}
 
@@ -62,14 +62,8 @@
 							<div style="float:right;" id="dropdown">
 								{% if not loggedIn %}
 									<a href="/login" class="dropbtn {{ 'active-page' if thispage === 'login' }}" target="_self">Login</a>
-									<div class="dropdown-content">
-										<a href="/signup" class="{% if 'register' === thispage %}active-page {% endif %}{% if mongoless %}disabled {% endif %}" target="_self"> Register </a>
-									</div>
 								{% else %}
-									<a href="/profile" class="dropbtn {{ 'active-page' if thispage === 'profile' }}" target="_self" disabled>Profile</a>
-									<div class="dropdown-content">
-											<a href="/logout" class="{% if 'logout' === thispage %}active-page {% endif %}{% if mongoless %}disabled {% endif %}" target="_self">Logout</a>
-									</div>
+									<a href="/logout" class="{% if 'logout' === thispage %}active-page {% endif %}{% if mongoless %}disabled {% endif %}" target="_self">Logout</a>
 								{% endif %}
 							</div>
 						</ul>
@@ -86,13 +80,9 @@
 						<hr class="minor lower-border"/>
 						<a href="/members" target="_self"><div class="lettuce{% if 'members' == thispage %} active-page{% endif %}" id="almost-bottom">Our Members</div></a> #}
 						{% if loggedIn %}
-							<a href="/profile" target="_self"><div class="lettuce{% if 'profile' == thispage %} active-page{% endif %}{% if mongoless %} disabled{% endif %}" id="almost-bottom">Profile</div></a>
-							<hr class="minor lower-border">
-							<a href="/logout" target="_self"><div class="lettuce{% if 'logout' == thispage %} active-page{% endif %}{% if mongoless %} disabled{% endif %}" id="most-bottom"> Logout </div></a>
+							<a href="/logout" target="_self"><div class="lettuce{% if 'logout' == thispage %} active-page{% endif %}{% if mongoless %} disabled{% endif %}"> Logout </div></a>
 						{% else %}
-							<a href="/login" target="_self"><div class="lettuce{% if 'login' == thispage %} active-page{% endif %}{% if mongoless %} disabled{% endif %}" id="almost-bottom"> Login </div></a>
-							<hr class="minor lower-border">
-							<a href="/signup" target="_self"><div class="lettuce{% if 'register' == thispage %} active-page{% endif %}{% if mongoless %} disabled{% endif %}" id="most-bottom"> Register </div></a>
+							<a href="/login" target="_self"><div class="lettuce{% if 'login' == thispage %} active-page{% endif %}{% if mongoless %} disabled{% endif %}"> Login </div></a>
 						{% endif %}
 						<hr class="border-bottom"/>
 					</div>

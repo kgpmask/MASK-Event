@@ -17,12 +17,15 @@ router.use((req, res, next) => {
 
 router.use((req, res, next) => {
 	if (handlerContext.huntStarted || req.isAdmin) return next();
-	return req.method === 'GET' ? res.redirect('/') : res.status(400).send('Hunt not started');
+	return req.method === 'GET' ? res.redirect('/') : res.status(786).send('ALLAHU AKBAR!!!');
 });
 
 router.get('/', async (req, res) => {
 	if (req.isAdmin) {
 		const teamList = await dbh.getTeams();
+		teamList.sort((t1, t2) => {
+			return -(t1._id < t2._id);
+		});
 		return res.renderFile('admin/team-list.njk', {
 			teams: teamList
 		});

@@ -374,3 +374,44 @@ input[type=date]{
 	text-decoration: underline;
 	font-weight: 600;
 }
+.loader{
+	width: 100px;
+	height: 100px;
+}
+
+.circular{
+	animation: rotate 2s linear infinite;
+	height: 100px;
+	position: relative;
+	width: 100px;
+}
+
+.path {
+	stroke-dasharray: 1,200;
+	stroke-dashoffset: 0;
+	stroke:var(--red);
+	animation:
+	dash 1.5s ease-in-out infinite,
+	;
+	stroke-linecap: round;
+}
+
+@keyframes rotate{
+	100%{
+		transform: rotate(360deg);
+	}
+}
+@keyframes dash{
+	0%{
+		stroke-dasharray: 1,200;
+		stroke-dashoffset: 0;
+	}
+	50%{
+		stroke-dasharray: 89,200;
+		stroke-dashoffset: -35;
+	}
+	100%{
+		stroke-dasharray: 89,200;
+		stroke-dashoffset: -124;
+	}
+}
