@@ -4,8 +4,8 @@ router.get(['/home', '/'], (req, res) => {
 	return res.renderFile('info/landing.njk');
 });
 
-router.get('/information', (req, res) => {
-	return res.renderFile('info/information.njk');
+router.get('/instructions', (req, res) => {
+	return res.renderFile('info/instructions.njk');
 });
 
 module.exports = {

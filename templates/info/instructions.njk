@@ -1,0 +1,59 @@
+{% extends '_base.njk' %}
+
+{% set pagetitle = 'Information' %}
+{% set thispage = 'information' %}
+
+{% block pagecontent %}
+	<div id="main-page">
+		<h1> Event Information </h1>
+		<ul>
+			<li> <span style="color: var(--red);">Date/Time:</span> March 17, 2024, 3:00 PM </li>
+			<li> <span style="color: var(--red);">Venue:</span> Technology Students Gymkhana (Front Side) </li>
+			<br/>
+			<li> You must report at TSG before starting; you won&rsquo;t be given extra time if you are late. </li>
+			<li> You are allowed to use a cycle, but no motor vehicle is permitted. </li>
+			<li> At the event&rsquo;s start, you will be given an ID and password to login to the event portal. </li>
+			<li> After logging in, you will see your first question, a riddle pointed towards a particular location, which will differ for each team. </li>
+			<li> At the location in question, some MASK members will be present; you will give your device to them, and they will put the code for that location in it. If you are at the correct location, you will get a riddle to answer; if you are at the wrong location, you will have to think again and go to another location. </li>
+			<li> For these riddles, you will get a drop-down menu which will contain all the options. </li>
+			<li> While answering the riddle, if you answer incorrectly, you will have to wait two minutes to respond again. Keep in mind this is not the case for the location-based riddle. </li>
+			<li> There will be a MASK member roaming around the area of these locations. You will be eligible for additional prizes if you capture a clear picture of that member. To claim it, DM your team name and the photo to Soumil (8697563554). Only the first three teams to claim are eligible for this prize. </li>
+			<li> After you complete the hunt, you have to report back to TSG; only then will you be marked as &lsquo;finished&rsquo;. </li>
+			<li> If any team is found not following the rules, they will be immediately disqualified. </li>
+			<br/>
+		</ul>
+		In case of any doubt, feel free to contact Aman <r>(63773 08533)</r> and Soumil <r>(86975 63554)</r> </li>
+	</div>
+{% endblock %}
+
+{% block customcss %}
+	<style>
+		#main-page {
+			margin: 20px auto;
+			border: solid 2px var(--light-gray);
+			border-radius: 10px;
+			width: calc(min(80vw, 700px + 30vw, 1000px + 20vw));
+			padding: 20px 10px;
+			
+			background-color: var(--abyss);
+		}
+
+		#main-page > h1 {
+			color: var(--red);
+		}
+
+		#main-page > ul {
+			width: 80%;
+			margin: 10px auto;
+		}
+
+		#main-page > ul > li {
+			text-align: left;
+			margin: 5px;
+		}
+
+		r {
+			color: var(--error-red);
+		}
+	</style>
+{% endblock %}

@@ -1,5 +1,5 @@
 {% set navlinks = [
-	{ name: 'Information', href: 'information' },
+	{ name: 'Instructions', href: 'instructions' },
 	{ name: 'Treasure Hunt', href: 'live' }
 ] %}
 {# array elements: { name, href } #}
@@ -74,8 +74,9 @@
 						<hr id="top-line"/>
 						{% for link in navlinks %}
 							<a href="{{ '/' if loop.index0 }}{{ link.href }}" target="_self"><div class="lettuce{% if link.href == thispage %} active-page {% endif %}" >{{ link.name }}</div></a>
-							{% if not loop.last %}<hr class="minor"/>{% endif %}
+							<hr class="minor"/>
 						{% endfor %}
+
 						{# <a href="/about" target="_self"><div class="lettuce{% if 'about' == thispage %} active-page {% endif %}" id="most-bottom">Our Society</div></a>
 						<hr class="minor lower-border"/>
 						<a href="/members" target="_self"><div class="lettuce{% if 'members' == thispage %} active-page{% endif %}" id="almost-bottom">Our Members</div></a> #}
