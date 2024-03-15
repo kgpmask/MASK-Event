@@ -63,7 +63,7 @@
 								{% if not loggedIn %}
 									<a href="/login" class="dropbtn {{ 'active-page' if thispage === 'login' }}" target="_self">Login</a>
 								{% else %}
-									<a href="/logout" class="{% if 'logout' === thispage %}active-page {% endif %}{% if mongoless %}disabled {% endif %}" target="_self">Logout</a>
+									<a href="/logout" class="dropbtn {% if 'logout' === thispage %}'active-page' {% endif %}{% if mongoless %}'disabled' {% endif %}" target="_self">Logout</a>
 								{% endif %}
 							</div>
 						</ul>
