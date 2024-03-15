@@ -12,7 +12,7 @@ const teamSchema = new mongoose.Schema({
 			phone: { type: String, required: true }
 		}
 	],
-	status: { type: String, required: true },
+	status: { type: String, required: true, enum: ['location-code', 'riddle-question', 'riddle-timeout', 'completed'] },
 	questionsAttempted: { type: Number, required: true, default: 0 },
 	order: [
 		{
