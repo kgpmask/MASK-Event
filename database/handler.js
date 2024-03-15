@@ -209,13 +209,13 @@ async function updateTeamStatus (ctx) {
 	const team = await Team.findById(_id);
 	team.status = status;
 	if (status === 'riddle-timeout') {
-		team.timeout = new Date(Date.now() + 120 * 1000);
+		team.timeout = new Date(Date.now() + (120 + 5) * 1000);
 		setTimeout(async () => {
 			team.status = 'riddle-question';
 			team.timeout = null;
 			await team.save();
-		}, 120 * 1000);
-	} else if (status === 'location-code') {
+		}, (115 + 5) * 1000);
+	} else {
 		team.questionsAttempted = ctx.questionNo;
 	}
 	return await team.save();
