@@ -18,20 +18,7 @@ router.get('/edit-team', async (req, res) => {
 	return res.renderFile('admin/team-edit.njk', { team });
 });
 
-router.patch('/edit-team', [
-	body('id')
-		.isNumeric()
-		.trim()
-		.notEmpty().withMessage('No ID Provided'),
-	body('teamName')
-		.trim()
-		.notEmpty().withMessage('No Name Provided')
-], async (req, res) => {
-	const errors = validationResult(req);
-	if (!errors.isEmpty()) {
-		const errorMessages = errors.array().map(error => error.msg);
-		throw new Error(errorMessages[0]);
-	}
+router.patch('/edit-team', async (req, res) => {
 	const team = {
 		id: req.body.id,
 		name: req.body.teamName,
