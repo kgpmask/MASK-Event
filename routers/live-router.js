@@ -91,7 +91,7 @@ router.post('/submit', async (req, res) => {
 		if (
 			req.team.order.map((o) =>
 				handlerContext.locations.find((l) => l._id === o.location)
-			)[attempted].code === req.body.answer
+			)[attempted].code.toLowerCase() === req.body.answer.toLowerCase()
 		) {
 			await dbh.updateTeamStatus({ _id: req.team._id, status: 'riddle-question', questionNo: req.body.questionNo });
 			return res.status(200).send('correct answer');
