@@ -1,11 +1,8 @@
 {% extends '_base.njk' %}
 
 {% set adminlinks = [{
-	href: 'admin/list-users',
-	name: 'Users'
-},{
-	href: 'admin/quiz-master',
-	name: 'Quiz Portal'
+	href: 'live',
+	name: 'Teams'
 }] %}
 
 {% block navbar %}
@@ -25,7 +22,7 @@
 		<div style="height:80px;"></div>
 		<hr id="top-line"/>
 		{% for link in navlinks %}
-			<a href="/admin/{{ link.href }}" target="_self"><div class="lettuce{% if link.href == thispage %} active-page {% endif %}" >{{ link.name }}</div></a>
+			<a href="/{{ link.href }}" target="_self"><div class="lettuce{% if link.href == thispage %} active-page {% endif %}" >{{ link.name }}</div></a>
 			{% if not loop.last %}<hr class="minor"/>{% endif %}
 		{% endfor %}
 	</div>

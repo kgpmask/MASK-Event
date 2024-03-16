@@ -74,9 +74,13 @@
 		async function update() {
             event.preventDefault();
 			const data = getData();
-            console.log(data);
+            updateData = {
+                ...data,
+                id: '{{ team._id }}'
+            }
+            console.log(updateData);
             try {
-                const response = await axios.patch('/admin/edit-team', data);
+                const response = await axios.patch('/admin/edit-team', updateData);
                 if (response.status === 200) {
                     alert('Team updated successfully!');
                     window.location.href = '/live';
