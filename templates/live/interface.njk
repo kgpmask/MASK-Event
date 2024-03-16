@@ -275,7 +275,7 @@
 						<p id="location-question"></p>
 					</div>
 						{{ forms.field('locationcode', 'Location Code') }}
-					<button id="location-submit-button">Submit</button>
+					<button id="location-submit-button" onclick="this.disable = true">Submit</button>
 					{% endcall %}
 				</div>
 				<div id="riddle-form">
@@ -289,7 +289,7 @@
 						<label style="top: -8px;"></label>
 						<select name="riddleanswer" id="riddleanswer" style="height: 40px; font-size: 17px; font-weight: 400;"></select>
 					</div>
-					<button id="riddle-submit-button">Submit</button>
+					<button id="riddle-submit-button" onclick="this.disable = true">Submit</button>
 					{% endcall %}
 				</div>
 			</div>
@@ -596,7 +596,6 @@
 			const response = await axios.post('/live/submit', {state: state, answer: state === 'location-code'? data.locationcode.trim() : data.riddleanswer, questionNo: attempted});
 			if (state === 'location-code') {
 				const locationButton = document.getElementById('location-submit-button');
-				locationButton.disabled = true;
 				const messageBox = document.getElementById("message-box");
 				messageBox.innerHTML = '<h2 class="correct">Correct Location!</h2>';
 				const messageCover = document.getElementById("message-cover");
@@ -610,7 +609,6 @@
 			}
 			else {
 				const riddleButton = document.getElementById('riddle-submit-button');
-				riddleButton.disabled = true;
 				const messageBox = document.getElementById("message-box");
 				messageBox.innerHTML = '<h2 class="correct">Correct Answer!</h2>';
 				const messageCover = document.getElementById("message-cover");
