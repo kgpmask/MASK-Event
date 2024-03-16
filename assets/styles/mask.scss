@@ -31,7 +31,7 @@ body {
 	background-attachment: fixed;
 	text-align: center;
 	color: var(--light-gray);
-	font-family: Ubuntu, Roboto, Arial, Open Sans, sans-serif;
+	font-family: Poppins ,Ubuntu, Roboto, Arial, Open Sans, sans-serif;
 }
 
 div#page-container {
@@ -514,4 +514,9 @@ span.navbar-line {
 	.burger-open>*:not(.plate, .hamburger-menu) {
 		display: none;
 	}
+}
+
+@font-face {
+	font-family: "Poppins";
+	src: url("/assets/Poppins-Light.ttf");
 }
