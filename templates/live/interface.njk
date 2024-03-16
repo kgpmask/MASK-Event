@@ -243,7 +243,7 @@
 				</g>
 				</svg>
             <br/>
-            <p style="font-size: 22px;">You have completed the treasure hunt. Head over to Gymkhana to grab your prizes!</p>
+            <p id="completed" style="font-size: 22px;">You have completed the treasure hunt. Head over to Gymkhana to grab your prizes!</p>
 		</div>  
 		{% endcall %}
 	</div>
@@ -274,7 +274,7 @@
 						<h3>Question</h3>
 						<p id="location-question"></p>
 					</div>
-						{{ forms.field('locationcode', 'Location Code') }}
+						{{ forms.field('locationcode', 'Location Code', autocomplete = false) }}
 					<button id="location-submit-button" onclick="this.disabled = true">Submit</button>
 					{% endcall %}
 				</div>
@@ -485,11 +485,11 @@
 				waiting = true;
 				waitMsg = 'Fetching Locations'
 				wait()
-				document.getElementById('location-question').textContent = await getLocationQuestion();
+				document.getElementById('location-question').innerHTML = await getLocationQuestion();
 				setTimeout(() => {
 					document.getElementById('waiting').style.display = 'none'
 					locationCode.style.display = 'block';
-				}, Math.floor(4 + Math.random()*3) * 1000);
+				}, 1000);
 			} else if (state === 'riddle-question') {
 				waiting = true;
 				waitMsg = 'Fetching Questions'
@@ -497,7 +497,7 @@
 				const riddleQuestion = await getRiddleQuestion();
 				console.log(riddleQuestion);
 				if (riddleQuestion) {
-					document.getElementById('riddle-question').textContent = riddleQuestion.question;
+					document.getElementById('riddle-question').innerHTML = riddleQuestion.question;
 				}
 				document.getElementById('riddleanswer').innerHTML = '<option value="" selected disabled hidden>Choose an answer</option>' + riddleQuestion.keywords.map((keyword, index) => {
 					return `<option value="${ index }">${ keyword }</option>`
@@ -505,7 +505,7 @@
 				setTimeout(() => {
 					document.getElementById('waiting').style.display = 'none'
 					riddleForm.style.display = 'block';
-				}, Math.floor(4 + Math.random()*3) * 1000);
+				}, 1000);
 			} else if (state === 'riddle-timeout') {
 				return await timeout();
 			}
@@ -526,7 +526,7 @@
 		const riddleQuestion = await getRiddleQuestion();
 		console.log(riddleQuestion);
 		if (riddleQuestion) {
-			document.getElementById('riddle-question').textContent = riddleQuestion.question;
+			document.getElementById('riddle-question').innerHTML = riddleQuestion.question;
 		}
 		riddleButton.disabled = true;
 		document.getElementById('riddleanswer').innerHTML = '<option value="" selected disabled hidden>Choose an answer</option>' + riddleQuestion.keywords.map((keyword, index) => {
@@ -578,7 +578,7 @@
 			setTimeout(() => {
 				document.getElementById('waiting').style.display = 'none'
 				document.getElementById('riddle-form').style.display = 'block';
-			}, Math.floor(4 + Math.random()*3) * 1000);
+			}, 1000);
 			await timeout();
 		}
 		else{
@@ -620,11 +620,18 @@
 					document.getElementById('locationcode').value= '';
 					riddleButton.disabled = false;
 					await renderForm();
-				}, 5000);
+				}, 3000);
 			}
 		}
 		catch ( e ) {
-			if (e.response.status === 786) console.log(e.response.data);
+			if (e.response.status === 786) {
+				state='completed';
+				document.getElementById('done').innerHTML = "Event Ended";
+				document.getElementById('completed').innerHTML = "Please head over to TSG";
+				document.querySelector("svg").style.display = "none";
+				document.getElementById('container').style.display = 'none';
+				document.getElementById('done-cover').style.display = 'flex';
+			}
 			else if ( e.response.status === 418 ) {
 				const riddleButton = document.getElementById('riddle-submit-button');
 				riddleButton.disabled = true;
@@ -639,7 +646,7 @@
 					state='completed';
 					document.getElementById('container').style.display = 'none';
 					document.getElementById('done-cover').style.display = 'flex';
-				}, 5000);
+				}, 3000);
 			}
 			else if ( e.response.status === 871 ) {
 				localStorage.setItem('encountered-error', true);
