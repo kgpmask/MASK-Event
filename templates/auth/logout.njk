@@ -9,8 +9,10 @@
 {% block pagecontent %}
 	{% call forms.form() %}
 		{{ forms.heading('h3','Are you sure you want to logout?') }}
-		{{ forms.button('return', 'No, Return to Home', 'back') }}
-		{{ forms.button('logout', 'Yes, Logout', 'logout') }}
+		<div class="buttons">
+			{{ forms.button('submit', 'No, Return to Home', 'login') }}
+			{{ forms.button('submit', 'Yes, logout', 'login') }}
+		</div>
 	{% endcall %}
 
 {% endblock %}
@@ -20,6 +22,9 @@
 	<style>
 		#return {
 			background-color: #1bc90f;
+		}
+		button {
+			width: 189px;
 		}
 	</style>
 {% endblock %}
