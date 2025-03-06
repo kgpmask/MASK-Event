@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Cabin:wght@400;500;700&display=swap');
 :root {
 	--abyss: #060606;
 	--shadow-gray: #1f1f1f;
@@ -31,7 +32,7 @@ body {
 	background-attachment: fixed;
 	text-align: center;
 	color: var(--light-gray);
-	font-family: Poppins ,Ubuntu, Roboto, Arial, Open Sans, sans-serif;
+	font-family: Cabin;
 }
 
 div#page-container {
