@@ -10,6 +10,7 @@
 {% block pagecontent %}
 	{% call forms.form() %}
 		{{ forms.heading('h1','Login') }}
+		{{ forms.description('h2','Kindly login to participate in the hunt ^-^') }}
 		{{ forms.field('username','Team ID')}}
 		{{ forms.field('password','Passcode',type='password')}}
 		{{ forms.button('submit', 'Login', 'login') }}
