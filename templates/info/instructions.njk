@@ -5,13 +5,13 @@
 
 {% block pagecontent %}
 	<div id="main-page">
-		<h1> Event Information </h1>
+		<h1>Event Details</h1>
 		<ul>
 			<li> <span style="color: var(--red);">Date/Time:</span> March 17, 2024, 3:00 PM </li>
 			<li> <span style="color: var(--red);">Venue:</span> Technology Students' Gymkhana (Front Side) </li>
 		</ul>
 		<br>
-		<h2 style="color: var(--red);" >Instructions</h2>
+		<h1>Instructions</h2>
 		<br>
 		<ul>
 			<li> You are requested to report to TSG on time. No extra time will be given for people who join in late. </li>
@@ -42,16 +42,18 @@
 	<style>
 		#main-page {
 			margin: 20px auto;
-			border: solid 2px var(--light-gray);
+			border: 0px;
 			border-radius: 10px;
-			width: calc(min(80vw, 700px + 30vw, 1000px + 20vw));
+			{# width: calc(min(80vw, 700px + 30vw, 1000px + 20vw)); #}
 			padding: 20px 10px;
-			
-			background-color: var(--abyss);
+			background-color: rgba(0,0,0,0);
+			color: white;
 		}
 
 		#main-page > h1 {
-			color: var(--red);
+			color: white;
+			font-size: 50px;
+			margin: 0px;
 		}
 
 		#main-page > ul {
