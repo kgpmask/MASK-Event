@@ -68,17 +68,20 @@ form {
 
 button {
 	align-self: center;
-	margin: 15px 0px;
-	width: 100%;
+	margin-top: 30px;
+	margin-bottom: 15px;
+	width: 143px;
+	height: 40px;
 	background-color: var(--red);
 	color: white;
 	border: 0px;
-	padding: 12px 0;
-	font-size: 18px;
+	font-size: 16px;
 	font-weight: 600;
-	border-radius: 5px;
+	border-radius: 27px;
 	cursor: pointer;
 	transition: 0.3s;
+	-webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 button:hover {
@@ -346,7 +349,7 @@ input[type=date]{
 	padding-left: 10px;
 }
 .field input:focus {
-	border: 1px solid #E43332;
+	border: 1px solid var(--red);
 }
 .datetime input {
 	width: 100%;
