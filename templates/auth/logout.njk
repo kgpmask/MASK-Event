@@ -10,8 +10,8 @@
 	{% call forms.form() %}
 		{{ forms.heading('h3','Are you sure you want to logout?') }}
 		<div class="buttons">
-			{{ forms.button('submit', 'No, Return to Home', 'login') }}
-			{{ forms.button('submit', 'Yes, logout', 'login') }}
+			{{ forms.button('return', 'No, Return to Home', 'back') }}
+			{{ forms.button('logut', 'Yes, logout', 'logout') }}
 		</div>
 	{% endcall %}
 
