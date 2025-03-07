@@ -15,8 +15,12 @@
 	</div>
 	<div id="instructions" style="display: none;">
 		{% call forms.form() %}
-			<p> Click the button to proceed. </p>
-			<button type="button" id="continue" onclick="start()">Continue</button>
+			{# <p> Click the button to proceed. </p> #}
+			{{ forms.heading('h3','Click the button to proceed.') }}
+			{# <button type="button" id="continue" onclick="start()">Continue</button> #}
+			<div class="buttons">
+				{{ forms.button('continue', 'Continue', 'start') }}
+			</div>
 		{% endcall %}
 	</div>
 	{{ loadingscreen('instructions') }}
