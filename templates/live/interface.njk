@@ -357,16 +357,28 @@
 		border-radius: 5px;
 	}
 
+	.incorrect,.correct {
+		height: 218px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 45px;
+		color: red;
+		font-size: 48px;
+	}
+
+	.incorrect > button,.correct > button {
+		background-color: #444444;
+	}
+
 	.correct {
 		color: green;
-		font-size: 50px;
 	}
 
 	.incorrect {
 		color: red;
-		font-size: 50px;
 	}
-
 	#container {
 		margin: auto;
 		width: 350px;
@@ -633,15 +645,25 @@
 			if (state === 'location-code') {
 				const locationButton = document.getElementById('location-submit-button');
 				const messageBox = document.getElementById("message-box");
-				messageBox.innerHTML = '<h2 class="correct">Correct Location!</h2>';
+				messageBox.innerHTML = `
+					<div class="correct">
+						<p>Correcto! ^_^</p>
+						<button id="correct-button" onclick="this.disabled = true">Next -></button>
+					</div>
+				`;
 				const messageCover = document.getElementById("message-cover");
 				messageCover.style.display = 'block';
 				state = 'riddle-question';
-				setTimeout(async () => {
+				/* setTimeout(async () => {
 					messageCover.style.display = "none";
 					locationButton.disabled = false;
 					await renderForm();
-				}, 2000);
+				}, 2000); */
+				document.getElementById("correct-button").addEventListener("click", async function (event) {
+					messageCover.style.display = "none";
+					locationButton.disabled = false;
+					await renderForm();
+				});
 			}
 			else {
 				const riddleButton = document.getElementById('riddle-submit-button');
@@ -693,13 +715,23 @@
 					const locationButton = document.getElementById('location-submit-button');
 					locationButton.disabled = true;
 					const messageBox = document.getElementById("message-box");
-					messageBox.innerHTML = '<h2 class="incorrect">Incorrect Location Code!</h2>';
+					messageBox.innerHTML = `
+						<div class="incorrect">
+							<p>Incorrect! ;-;</p>
+							<button id="incorrect-button" onclick="this.disabled = true">Try Again</button>
+						</div>
+					`;
 					const messageCover = document.getElementById("message-cover");
 					messageCover.style.display = 'block';
-					setTimeout(() => {
+					/* setTimeout(() => {
 						messageCover.style.display = "none";
 						locationButton.disabled = false;
-					}, 2000);
+					}, 2000); */
+					document.getElementById("incorrect-button").addEventListener("click", async function (event) {
+						event.preventDefault();
+						messageCover.style.display = "none";
+						locationButton.disabled = false;
+					});
 				}
 				else if ( state === 'riddle-question' ) {
 					endOfTimeout = new Date(Date.now() + 125 * 1000);
