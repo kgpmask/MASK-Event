@@ -16,7 +16,7 @@
 	<div id="instructions" style="display: none;">
 		{% call forms.form() %}
 			{# <p> Click the button to proceed. </p> #}
-			{{ forms.heading('h3','Click the button to proceed.') }}
+			{{ forms.heading('h4','Click the button to proceed.') }}
 			{# <button type="button" id="continue" onclick="start()">Continue</button> #}
 			<div class="buttons">
 				{{ forms.button('continue', 'Continue', 'start') }}
@@ -256,8 +256,8 @@
 		<div id="interface-container">
 			<h1 class="title">Treasure Hunt</h1>
 			<div class="team-info">
-				<p id="team-id" style="font-size: 25px; font-weight: bold;">Team ID: <span style="font-weight: lighter;">{{ team._id }}</span></p>
-				<p id="team-name" style="font-size: 25px; font-weight: bold;">Team Name: <span style="font-weight: lighter;">{{ team.name }}</span></p>
+				<p id="team-id">Team ID: <span style="font-weight: lighter;">{{ team._id }}</span></p>
+				<p id="team-name">Team Name: <span style="font-weight: lighter;">{{ team.name }}</span></p>
 			</div>
 			<div class="form-box">
 				<div id='waiting'>
@@ -275,11 +275,17 @@
 				<div id="location-code">
 					{% call forms.form() %}
 					<div class="question">
-						<h3>Question</h3>
+						<h3>Question #10</h3>
 						<p id="location-question"></p>
 					</div>
-						{{ forms.field('locationcode', 'Location Code', autocomplete = false) }}
-					<button id="location-submit-button" onclick="this.disabled = true">Submit</button>
+					<div class="form-field">
+						<div style="width: 250px">
+							{{ forms.field('locationcode', 'Location Code', autocomplete = false) }}
+						</div>
+					</div>
+					<div class="buttons">
+						<button id="location-submit-button" onclick="this.disabled = true">Submit</button>
+					</div>
 					{% endcall %}
 				</div>
 				<div id="riddle-form">
@@ -307,6 +313,17 @@
 {% block customcss %}
 <style>
 	
+	.title {
+		font-size: 48px;
+		font-weight: 700;
+	}
+	.team-info {
+		margin-top: 5px;
+		margin-bottom: 30px;
+		color: var(--red);
+		font-weight: 400;
+		font-size: 24px;
+	}
 	#instructions {
 		top: 50%;
 		left: 50%;
@@ -366,18 +383,26 @@
 		transform: translate(-50%, -50%);
 	}
 
-	.team-info {
-		margin-top: 20px;
-	}
-
 	.question {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		padding-bottom: 5px;
 		font-size: 20px;
-		margin-bottom: 30px;
+		{# margin-bottom: 30px; #}
+		color: #FFFFFF;
 	}
 
 	.question h3 {
+		font-size: 48px;
+		font-weight: 700;
 		margin: 0px 0px 10px 0px;
-		color: #8b0000;
+	}
+
+	.question p {
+		padding: 20px 0px 20px 0px;
+		font-weight: 400;
+		font-size: 18px;
 	}
 
 	.form-container {
@@ -385,6 +410,13 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
+	}
+
+	.form-field {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		{# width: 200px; #}
 	}
 
 	#location-form {

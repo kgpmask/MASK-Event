@@ -242,15 +242,18 @@ select>option {
 	box-shadow: 0 0 20px rgba(0, 0, 0, .5);
 	display: flex;
 	box-sizing: border-box;
-	padding: 20px;
+	padding: 20px 0px 20px 0px;
 }
 @media only screen and (max-width: 600px) {
 	.form-container {
-		width: 80vw;
+		width: 85vw;
+	}
+	.form {
+		width: 75vw;
 	}
 }
 .form{
-	width: 280px;
+	// width: 280px;
 	display: flex;
 	flex-direction: column;
 
@@ -351,6 +354,7 @@ input[type=date]{
 	outline:none;
 	border: none;
 	padding-left: 10px;
+	justify-content: center;
 }
 .field input:focus {
 	border: 1px solid var(--red);
