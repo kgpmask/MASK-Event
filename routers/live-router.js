@@ -78,10 +78,10 @@ router.post('/submit', async (req, res) => {
 		}
 	}
 	if (req.body.state === 'riddle-question') {
-		console.log(req.body.answer)
+		console.log(req.body.answer);
 		console.log(req.team.order.map((o) =>
 			handlerContext.locations.find((l) => l._id - 11 === o.location)
-		)[attempted].questions[req.team.order[attempted].question].answer)
+		)[attempted].questions[req.team.order[attempted].question].answer);
 		if (
 			req.team.order.map((o) =>
 				handlerContext.locations.find((l) => l._id - 11 === o.location)
