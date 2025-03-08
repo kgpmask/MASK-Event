@@ -296,7 +296,7 @@
 					</div>
 					{# {{ forms.field('riddleanswer','Answer') }} #}
 					<div class="item select" style="margin: 0;">
-						{# <label style="top: -8px;"></label> #}
+						<label style=""></label>
 						<select name="riddleanswer" id="riddleanswer" style="height: 40px; font-size: 17px; font-weight: 400; padding: 0px 10px; appearance: none;"></select>
 						<div class="dropdown-arrow" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid #ffffff;"></div>
 					</div>
@@ -642,9 +642,10 @@
 
 	async function submit() {
 		const data = getData();
+		console.log(data)
 		try {
 			console.log(data.locationcode.trim());
-			const response = await axios.post('/live/submit', {state: state, answer: state === 'location-code'? data.locationcode.trim() : data.riddleanswer, questionNo: attempted});
+			const response = await axios.post('/live/submit', {state: state, answer: state === 'location-code'? data.locationcode.trim() : ((state === 'riddle-question') ? data.riddleanswer : "blablabla"), questionNo: attempted});
 			if (state === 'location-code') {
 				const locationButton = document.getElementById('location-submit-button');
 				const messageBox = document.getElementById("message-box");
