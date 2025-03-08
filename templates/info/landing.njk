@@ -20,7 +20,7 @@
 			Technology Students' Gymkhana
 		</div>
 		<div id="content">
-			<p class="quote"> Konnichiwa, minna-san!!! </p>
+			<p class="hello"> Konnichiwa, minna-san!!! </p>
 			<p> It's about time we came back with an event. Well, here we are. We welcome you to the second edition of the <span style="color: var(--error-red);">Anime Seekers' Quest</span>, a treasure hunt event across the span of 2.2, just for you guys. </p>
 
 			<h3> What can you expect? </h3>
@@ -79,7 +79,7 @@
 		}
 
 		#location {
-			color: var(--light-gray);
+			color: var(--off-white);
 			font-size: 120%;
 		}
 
@@ -93,123 +93,8 @@
 			initial-value: 100%;
 		}
 
-		@keyframes glow {
-			0% { --brightness: 0%; }
-			1% { --brightness: 0%; }
-			2% { --brightness: 0%; }
-			3% { --brightness: 1%; }
-			4% { --brightness: 2%; }
-			5% { --brightness: 2%; }
-			6% { --brightness: 4%; }
-			7% { --brightness: 5%; }
-			8% { --brightness: 6%; }
-			9% { --brightness: 8%; }
-			10% { --brightness: 10%; }
-			11% { --brightness: 11%; }
-			12% { --brightness: 14%; }
-			13% { --brightness: 16%; }
-			14% { --brightness: 18%; }
-			15% { --brightness: 21%; }
-			16% { --brightness: 23%; }
-			17% { --brightness: 26%; }
-			18% { --brightness: 29%; }
-			19% { --brightness: 32%; }
-			20% { --brightness: 35%; }
-			21% { --brightness: 38%; }
-			22% { --brightness: 41%; }
-			23% { --brightness: 44%; }
-			24% { --brightness: 47%; }
-			25% { --brightness: 50%; }
-			26% { --brightness: 53%; }
-			27% { --brightness: 56%; }
-			28% { --brightness: 59%; }
-			29% { --brightness: 62%; }
-			30% { --brightness: 65%; }
-			31% { --brightness: 68%; }
-			32% { --brightness: 71%; }
-			33% { --brightness: 74%; }
-			34% { --brightness: 77%; }
-			35% { --brightness: 79%; }
-			36% { --brightness: 82%; }
-			37% { --brightness: 84%; }
-			38% { --brightness: 86%; }
-			39% { --brightness: 89%; }
-			40% { --brightness: 90%; }
-			41% { --brightness: 92%; }
-			42% { --brightness: 94%; }
-			43% { --brightness: 95%; }
-			44% { --brightness: 96%; }
-			45% { --brightness: 98%; }
-			46% { --brightness: 98%; }
-			47% { --brightness: 99%; }
-			48% { --brightness: 100%; }
-			49% { --brightness: 100%; }
-			50% { --brightness: 100%; }
-			51% { --brightness: 100%; }
-			52% { --brightness: 100%; }
-			53% { --brightness: 99%; }
-			54% { --brightness: 98%; }
-			55% { --brightness: 98%; }
-			56% { --brightness: 96%; }
-			57% { --brightness: 95%; }
-			58% { --brightness: 94%; }
-			59% { --brightness: 92%; }
-			60% { --brightness: 90%; }
-			61% { --brightness: 89%; }
-			62% { --brightness: 86%; }
-			63% { --brightness: 84%; }
-			64% { --brightness: 82%; }
-			65% { --brightness: 79%; }
-			66% { --brightness: 77%; }
-			67% { --brightness: 74%; }
-			68% { --brightness: 71%; }
-			69% { --brightness: 68%; }
-			70% { --brightness: 65%; }
-			71% { --brightness: 62%; }
-			72% { --brightness: 59%; }
-			73% { --brightness: 56%; }
-			74% { --brightness: 53%; }
-			75% { --brightness: 50%; }
-			76% { --brightness: 47%; }
-			77% { --brightness: 44%; }
-			78% { --brightness: 41%; }
-			79% { --brightness: 38%; }
-			80% { --brightness: 35%; }
-			81% { --brightness: 32%; }
-			82% { --brightness: 29%; }
-			83% { --brightness: 26%; }
-			84% { --brightness: 23%; }
-			85% { --brightness: 21%; }
-			86% { --brightness: 18%; }
-			87% { --brightness: 16%; }
-			88% { --brightness: 14%; }
-			89% { --brightness: 11%; }
-			90% { --brightness: 10%; }
-			91% { --brightness: 8%; }
-			92% { --brightness: 6%; }
-			93% { --brightness: 5%; }
-			94% { --brightness: 4%; }
-			95% { --brightness: 2%; }
-			96% { --brightness: 2%; }
-			97% { --brightness: 1%; }
-			98% { --brightness: 0%; }
-			99% { --brightness: 0%; }
-			100% { --brightness: 0%; }
-		}
-
 		#content {
-			--border-radius: 15px;
-			--border-size: 3px;
-			--border-color: color-mix(in hsl, var(--abyss), var(--red) var(--brightness));
-			--border-bg: conic-gradient(
-				var(--abyss), var(--border-color), 
-				var(--abyss), var(--border-color), 
-				var(--abyss), var(--border-color), 
-				var(--abyss), var(--border-color),
-				var(--abyss)
-			);
 			--padding: 10px;
-
 			position: relative;
 			overflow: hidden;
 			width: calc(min(80vw, 700px + 30vw, 1000px + 20vw));
@@ -218,31 +103,9 @@
 			border-radius: var(--border-radius);
 			display: inline-block;
 			animation: glow 2s ease infinite;
+			color:var(--off-white);
+			font-size: 120%;
 		}
-
-		#content::before {
-			content: '';
-			display: block;
-			background: var(--border-bg);
-			width: calc(min(80vw, 700px + 30vw, 1000px + 20vw) * 1.41421356237);
-			padding-bottom: calc(min(80vw, 700px + 30vw, 1000px + 20vw) * 1.41421356237);
-			position: absolute;
-			left: 50%;
-			top: 50%;
-			transform: translate(-50%, -50%);
-			border-radius: 100%;
-			z-index: -2;
-			animation: spin 2s ease-in-out infinite;
-		  }
-
-		  #content::after{
-			content: '';
-			position: absolute;
-			inset: var(--border-size);
-			background: var(--abyss);
-			z-index: -1;
-			border-radius: calc(var(--border-radius) - var(--border-size));
-		  }
 
 		#content > * {
 			text-align: left;
@@ -256,12 +119,18 @@
 			margin-block-end: 1.5em !important;
 		}
 
-		.quote {
-			color: var(--error-red);
-
+		.hello{
+			color: white;
 			text-align: center !important;
 			font-style: italic;
-			font-size: 120%;
+			font-size: 200%;
+		}
+
+		.quote {
+			color: var(--error-red);
+			text-align: center !important;
+			font-style: italic;
+			font-size: 180%;
 		}
 		
 
@@ -293,17 +162,16 @@
 		}
 
 		.start-quiz-button {
-			border: solid 2px var(--light-gray);
 			border-radius: 10px;
-			padding: 10px;
+			padding: 14px;
 			text-decoration: none;
 			background-color: var(--red);
 			color: var(--off-white);
 		}
 
 		.start-quiz-button:hover {
-			background-color: var(--abyss);
-			color: var(--red);
+			background-color: var(--error-red);
+			color: var(--off-white);
 		}
 	</style>
 {% endblock %}
