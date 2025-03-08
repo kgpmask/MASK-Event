@@ -275,7 +275,7 @@
 				<div id="location-code">
 					{% call forms.form() %}
 					<div class="question">
-						<h3>Question #10</h3>
+						<h3>Question</h3>
 						<p id="location-question"></p>
 					</div>
 					<div class="form-field">
@@ -299,7 +299,9 @@
 						<label style="top: -8px;"></label>
 						<select name="riddleanswer" id="riddleanswer" style="height: 40px; font-size: 17px; font-weight: 400;"></select>
 					</div>
-					<button id="riddle-submit-button" onclick="this.disabled = true">Submit</button>
+					<div class="buttons">
+						<button id="riddle-submit-button" onclick="this.disabled = true">Submit</button>
+					</div>
 					{% endcall %}
 				</div>
 			</div>
@@ -668,17 +670,28 @@
 			else {
 				const riddleButton = document.getElementById('riddle-submit-button');
 				const messageBox = document.getElementById("message-box");
-				messageBox.innerHTML = '<h2 class="correct">Correct Answer!</h2>';
+				messageBox.innerHTML = `
+					<div class="correct">
+						<p>Correcto! ^_^</p>
+						<button id="correct-button-riddle" onclick="this.disabled = true">Next -></button>
+					</div>
+				`;
 				const messageCover = document.getElementById("message-cover");
 				messageCover.style.display = 'block';
 				state = 'location-code';
 				attempted++;
-				setTimeout(async () => {
+				/* setTimeout(async () => {
 					messageCover.style.display = "none";
 					document.getElementById('locationcode').value= '';
 					riddleButton.disabled = false;
 					await renderForm();
-				}, 3000);
+				}, 3000); */
+				document.getElementById("correct-button-riddle").addEventListener("click", async function (event) {
+					messageCover.style.display = "none";
+					document.getElementById('locationcode').value= '';
+					riddleButton.disabled = false;
+					await renderForm()
+				});
 			}
 		}
 		catch ( e ) {
@@ -738,15 +751,25 @@
 					const riddleButton = document.getElementById('riddle-submit-button');
 					riddleButton.disabled = true;
 					const messageBox = document.getElementById("message-box");
-					messageBox.innerHTML = '<h2 class="incorrect">Incorrect Answer!</h2>';
+					messageBox.innerHTML = `
+						<div class="incorrect">
+							<p>Incorrect! ;-;</p>
+							<button id="incorrect-button-riddle" onclick="this.disabled = true">Try Again</button>
+						</div>
+					`;
 					const messageCover = document.getElementById("message-cover");
 					messageCover.style.display = 'block';
 					state = 'riddle-timeout';
-					setTimeout(async () => {
+					/* setTimeout(async () => {
 						messageCover.style.display = "none";
 						riddleButton.disabled = false;
 						await renderForm();
-					}, 5000);
+					}, 5000); */
+					document.getElementById("incorrect-button-riddle").addEventListener("click", async function (event) {
+						messageCover.style.display = "none";
+						riddleButton.disabled = false;
+						await renderForm();
+					});
 				}
 			}
 		}
