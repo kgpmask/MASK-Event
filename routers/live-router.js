@@ -51,7 +51,7 @@ router.post('/get-location-question', (req, res) => {
 	if (attempted >= ques) return res.status(418).send('Completed');
 	return res.send(
 		req.team.order.map((o) =>
-			handlerContext.locations.find((l) => l._id === o.location)
+			handlerContext.locations.find((l) => l._id - 10 === o.location)
 		)[attempted].pointerQuestion[req.team.order[attempted].pointer]
 	);
 });
