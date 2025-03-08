@@ -275,7 +275,7 @@
 				<div id="location-code">
 					{% call forms.form() %}
 					<div class="question">
-						<h3>Question</h3>
+						<h3>Question #{{ team.questionsAttempted + 1}}</h3>
 						<p id="location-question"></p>
 					</div>
 					<div class="form-field">
@@ -291,13 +291,14 @@
 				<div id="riddle-form">
 					{% call forms.form() %}
 					<div class="question">
-						<h3>Question</h3>
+						<h3>Question #{{ team.questionsAttempted + 1}}</h3>
 						<p id="riddle-question"></p>
 					</div>
 					{# {{ forms.field('riddleanswer','Answer') }} #}
 					<div class="item select" style="margin: 0;">
-						<label style="top: -8px;"></label>
-						<select name="riddleanswer" id="riddleanswer" style="height: 40px; font-size: 17px; font-weight: 400;"></select>
+						{# <label style="top: -8px;"></label> #}
+						<select name="riddleanswer" id="riddleanswer" style="height: 40px; font-size: 17px; font-weight: 400; padding: 0px 10px; appearance: none;"></select>
+						<div class="dropdown-arrow" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid #ffffff;"></div>
 					</div>
 					<div class="buttons">
 						<button id="riddle-submit-button" onclick="this.disabled = true">Submit</button>
@@ -707,17 +708,28 @@
 				const riddleButton = document.getElementById('riddle-submit-button');
 				riddleButton.disabled = true;
 				const messageBox = document.getElementById("message-box");
-				messageBox.innerHTML = '<h2 class="correct">Correct Answer!</h2>';
+				messageBox.innerHTML = `
+					<div class="correct">
+						<p>Correcto! ^_^</p>
+						<button id="correct-button" onclick="this.disabled = true">Next -></button>
+					</div>
+				`;
 				const messageCover = document.getElementById("message-cover");
 				messageCover.style.display = 'block';
 				state = 'location-code';
 				attempted++;
-				setTimeout(async () => {
+				/* setTimeout(async () => {
 					messageCover.style.display = "none";
 					state='completed';
 					document.getElementById('container').style.display = 'none';
 					document.getElementById('done-cover').style.display = 'flex';
-				}, 3000);
+				}, 3000); */
+				document.getElementById("correct-button").addEventListener("click", async function (event) {
+					messageCover.style.display = "none";
+					state='completed';
+					document.getElementById('container').style.display = 'none';
+					document.getElementById('done-cover').style.display = 'flex';
+				});
 			}
 			else if ( e.response.status === 871 ) {
 				localStorage.setItem('encountered-error', true);
