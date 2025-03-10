@@ -23,6 +23,7 @@
 * {
 	margin: 0px;
 	padding: 0px;
+	
 }
 
 body {
@@ -34,16 +35,17 @@ body {
 	text-align: center;
 	color: var(--light-gray);
 	font-family: Cabin;
+	background-color: var(--new-black);
 }
 
 div#page-container {
 	position: relative;
 	top: 0px;
-	min-height: 100vh;
+	min-height: 80dvh;
 }
 
 div#content-wrap {
-	padding-bottom: 100px;
+	padding-bottom: 50px;
 }
 
 h1 {
@@ -106,7 +108,7 @@ a:hover {
 /********************************************************/
 
 footer {
-	position: absolute;
+	position: fixed;
 	bottom: 0;
 	left: 0;
 	background-color: var(--shadow-gray);
@@ -317,6 +319,7 @@ span.navbar-line {
 	z-index: 30;
 	height: 80px;
 	width: 100%;
+	display: flex;
 	background-color: var(--new-black);
 }
 
@@ -428,6 +431,7 @@ span.navbar-line {
 	right: 0;
 	width: 100%;
 	height: 100%;
+	flex-direction: column;
 	background: #222;
 	transition: all .3s ease-in-out;
 	transform: translateX(100%);
@@ -436,7 +440,7 @@ span.navbar-line {
 }
 
 .slide {
-	transform: translateX(0);
+	transform: translateX(50%);
 }
 
 .hamburger-menu a {
@@ -464,6 +468,7 @@ span.navbar-line {
 
 #top-line {
 	width: 90%;
+	height: 0px;
 }
 
 .hamburger-menu hr.minor {
@@ -520,18 +525,16 @@ span.navbar-line {
 		display: none;
 	}
 
-	.hamburger-menu,
 	.plate,
 	.plate-bar {
+		display: flex;
+	}
+
+	.hamburger-menu {
 		display: block;
 	}
 
 	.burger-open>*:not(.plate, .hamburger-menu) {
 		display: none;
 	}
-}
-
-@font-face {
-	font-family: "Poppins";
-	src: url("/assets/Poppins-Light.ttf");
 }
