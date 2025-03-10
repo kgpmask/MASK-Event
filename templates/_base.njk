@@ -68,22 +68,41 @@
 							</div>
 						</ul>
 					</div>
-					<div class="plate"><a href="/"><div class="burger-home"><img src="/assets/logo.jpeg" id="burger-logo" alt="Logo"/></div></a><div class="burger"><div class="patty"></div></div></div><hr class="plate-bar"/>
+					<div class="plate">
+						<div class="burger-home">
+							<a href="/">
+								<img src="/assets/logo.jpeg" id="burger-logo" alt="Logo"/>
+							</a>
+						</div>
+						<div class="burger">
+							<div class="patty"></div>
+						</div>
+					</div>
+					<hr class="plate-bar"/>
 					<div class="hamburger-menu">
 						<div style="height:80px;"></div>
 						<hr id="top-line"/>
 						{% for link in navlinks %}
-							<a href="{{ '/' if loop.index0 }}{{ link.href }}" target="_self"><div class="lettuce{% if link.href == thispage %} active-page {% endif %}" >{{ link.name }}</div></a>
+							<a href="{{ '/' if loop.index0 }}{{ link.href }}" target="_self">
+								<div class="lettuce{% if link.href == thispage %} active-page {% endif %}" >
+									{{ link.name }}
+								</div>
+							</a>
 							<hr class="minor"/>
 						{% endfor %}
 
-						{# <a href="/about" target="_self"><div class="lettuce{% if 'about' == thispage %} active-page {% endif %}" id="most-bottom">Our Society</div></a>
-						<hr class="minor lower-border"/>
-						<a href="/members" target="_self"><div class="lettuce{% if 'members' == thispage %} active-page{% endif %}" id="almost-bottom">Our Members</div></a> #}
 						{% if loggedIn %}
-							<a href="/logout" target="_self"><div class="lettuce{% if 'logout' == thispage %} active-page{% endif %}{% if mongoless %} disabled{% endif %}"> Logout </div></a>
+							<a href="/logout" target="_self">
+								<div class="lettuce{% if 'logout' == thispage %} active-page{% endif %}{% if mongoless %} disabled{% endif %}"> 
+									Logout 
+								</div>
+							</a>
 						{% else %}
-							<a href="/login" target="_self"><div class="lettuce{% if 'login' == thispage %} active-page{% endif %}{% if mongoless %} disabled{% endif %}"> Login </div></a>
+							<a href="/login" target="_self">
+								<div class="lettuce{% if 'login' == thispage %} active-page{% endif %}{% if mongoless %} disabled{% endif %}">
+									 Login 
+								</div>
+							</a>
 						{% endif %}
 						<hr class="border-bottom"/>
 					</div>

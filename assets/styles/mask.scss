@@ -17,6 +17,7 @@
 	--red: #d61f35;
 	--error-red: #e84e4f;
 	--light-pink: #f1adad;
+	--new-black: #030303;
 }
 
 * {
@@ -316,14 +317,15 @@ span.navbar-line {
 	z-index: 30;
 	height: 80px;
 	width: 100%;
-	background-color: var(--darker-gray);
+	background-color: var(--new-black);
 }
 
 .plate-bar {
-	color: var(--light-gray);
-	height: 1px;
+	color: var(--new-black);
+	height: 0px;
 	width: 100%;
 	margin-bottom: 40px;
+	border: 0px;
 }
 
 .burger-home {
@@ -333,7 +335,7 @@ span.navbar-line {
 #burger-logo {
 	height: 40px;
 	width: 40px;
-	border-radius: 5px;
+	border-radius: 20px;
 	margin: 10px;
 	float: left;
 	left: 10px;
@@ -349,7 +351,7 @@ span.navbar-line {
 .burger {
 	width: 40px;
 	height: 40px;
-	position: absolute;
+	// position: absolute;
 	top: 15px;
 	right: 15px;
 	cursor: pointer;
@@ -358,6 +360,18 @@ span.navbar-line {
 	padding: 5px 0 5px 10px;
 	border-radius: 5px;
 	transition: 0.5s;
+	position: fixed;
+    // top: 0px;
+    // padding-left: 15px;
+    // padding-right: 15px;
+    // height: 89px;
+    // width: 100%;
+    // background-color: #030303;
+    // display: grid;
+    // grid-auto-flow: column;
+    // align-items: center;
+    // grid-template-columns: 48px 1fr 38px;
+    // z-index: 100;
 }
 
 .burger:hover {
