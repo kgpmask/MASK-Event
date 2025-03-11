@@ -39,14 +39,19 @@ body {
 }
 
 div#page-container {
-	position: relative;
+	// position: relative;
 	top: 0px;
-	min-height: 80dvh;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	min-height: 100dvh;
 }
 
-div#content-wrap {
-	padding-bottom: 50px;
+div#pagecontent {
+	// min-height: 77dvh;
+	padding: 50px 0;
 }
+
 
 h1 {
 	color: var(--white);
@@ -108,14 +113,15 @@ a:hover {
 /********************************************************/
 
 footer {
-	position: fixed;
+	position: relative;
 	bottom: 0;
 	left: 0;
-	background-color: var(--shadow-gray);
+	background-color: var(--red);
+	transition: 0.3s;
 	height: 70px;
 	width: 100%;
 	display: flex;
-	justify-content: flex-end;
+	justify-content: center;
 	z-index: 30;
 }
 
@@ -319,7 +325,7 @@ span.navbar-line {
 	z-index: 30;
 	height: 80px;
 	width: 100%;
-	display: flex;
+	justify-content: space-between;
 	background-color: var(--new-black);
 }
 
@@ -354,7 +360,7 @@ span.navbar-line {
 .burger {
 	width: 40px;
 	height: 40px;
-	// position: absolute;
+	position: relative;
 	top: 15px;
 	right: 15px;
 	cursor: pointer;
@@ -363,7 +369,7 @@ span.navbar-line {
 	padding: 5px 0 5px 10px;
 	border-radius: 5px;
 	transition: 0.5s;
-	position: fixed;
+	// position: fixed;
     // top: 0px;
     // padding-left: 15px;
     // padding-right: 15px;
