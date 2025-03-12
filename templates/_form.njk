@@ -4,6 +4,12 @@
 	</div>
 {% endmacro %}
 
+{% macro description(h, label) %}
+	<div class="description">
+		<{{h}}>{{ label }}</{{h}}>
+	</div>
+{% endmacro %}
+
 {% macro field(id, label, value, type = "text", autocomplete = true) %}
 	<div class="item field" {% if type == 'hidden' %} style="display: none;" {% endif %} >
 		<input type="{{type}}" required id="{{ id }}" {% if value %} value="{{ value }}" {% endif %} {{ 'autocomplete=off' if not autocomplete }}>
@@ -68,7 +74,7 @@
 		<h1 class="heading"> {{ formheading }} </h1>
 	{% endif %}
 	<div class="form-container">
-		<form>
+		<form class="form">
 			{{ caller() }}
 		</form>
 	</div>
@@ -112,6 +118,7 @@
 						break;
 					case 'select':
 						data[e.children[1].id] = e.children[1].value;
+						console.log("DATA: ", data[e.children[1].id]);
 						break;
 				}
 			});

@@ -10,16 +10,21 @@
 {% block pagecontent %}
 	{% call forms.form() %}
 		{{ forms.heading('h1','Login') }}
+		{{ forms.description('h2','Kindly login to participate in the hunt ^-^') }}
 		{{ forms.field('username','Team ID')}}
-		{{ forms.field('password','Passcode',type='password')}}
-		{{ forms.button('submit', 'Login', 'login') }}
+		{{ forms.field('password','User Password',type='password')}}
+		<div class="buttons">
+			{{ forms.button('submit', 'Login', 'login') }}
+		</div>
 	{% endcall %}
 {% endblock %}
 
 {% block customcss %}
 	{{ forms.formCss() }}
 	<style>
-		{# extra css #}
+		.form {
+			width: 280px;
+		}
 	</style>
 {% endblock %}
 

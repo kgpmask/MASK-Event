@@ -49,7 +49,7 @@ label {
 }
 
 .form-container {
-	padding: 23px 25px;
+	// padding: 23px 25px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -65,20 +65,27 @@ form {
 // 	outline: none;
 // 	border: none;
 // }
-
+.buttons {
+	padding-top: 15px;
+	padding-bottom: 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px
+}
 button {
 	align-self: center;
-	margin: 15px 0px;
-	width: 100%;
+	width: 143px;
+	height: 50px;
 	background-color: var(--red);
 	color: white;
 	border: 0px;
-	padding: 12px 0;
-	font-size: 18px;
-	font-weight: 600;
-	border-radius: 5px;
+	font-size: 16px;
+	font-weight: 400;
+	border-radius: 27px;
 	cursor: pointer;
 	transition: 0.3s;
+	-webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 button:hover {
@@ -97,7 +104,7 @@ button:disabled {
 	margin: 10px 4vw;
 }
 
-.heading {
+.heading, .description {
 	margin-block-start: 0.83em;
 	margin-block-end: 0.83em;
 }
@@ -228,38 +235,52 @@ select>option {
 
 .form-container {
 	position: relative;
-	width: 380px;
-	background: transparent;
-	border: 3px solid;
-	border-color: var(--dark-gray);
-	border-top-color: var(--red);
-	border-bottom-color: var(--red);
-	border-top-left-radius: 20px;
-	border-top-right-radius: 5px;
-	border-bottom-left-radius: 5px;
-	border-bottom-right-radius: 20px;
-	backdrop-filter: blur(10px);
+	width: 360px;
+	background: rgba(30, 30, 30, 0.6);
+	border-radius: 10px;
+	backdrop-filter: blur(15px);
 	box-shadow: 0 0 20px rgba(0, 0, 0, .5);
 	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
 	box-sizing: border-box;
-	padding: 20px 1%;
+	padding: 20px 0px 20px 0px;
+}
+@media only screen and (max-width: 600px) {
+	.form-container {
+		width: 85vw;
+	}
+	.form {
+		width: 75vw;
+	}
+}
+.form{
+	// width: 280px;
+	display: flex;
+	flex-direction: column;
+
 }
 .heading > h1{
-	font-size: 2em;
+	font-size: 48px;
+	font-weight: 700;
 	color: #d0d0d0;
-	text-align: center;
+	text-align: start;
+	padding: 0px;
+	margin: 0px;
+}
+.description > h2{
+	font-size: 16px;
+	font-weight: 400;
+	color: #d0d0d0;
+	text-align: start;
 	padding: 0px;
 	margin: 0px;
 }
 .field{
 	position: relative;
 	width: 100%;
-	height: 50px;
-	border-bottom: 2px solid var(--error-red);
-	margin: 15px 0px;
+	height: 48px;
+	border: 1px solid #444444;
+	border-radius: 5px;
+	margin: 5px 0px;
 	display: grid;
 	grid-template-columns: 1fr;
 	grid-template-areas: 'one';
@@ -291,13 +312,12 @@ input[type=date]{
 	text-align: left;
 	position: absolute;
 	top: 30%;
-	left:0%;
+	left:10px;
 	font-size: 1em;
-	color: var(--off-white);
-	font-weight: 500;
+	color: #6b6b6b;
+	font-weight: 400;
 	pointer-events: none;
 	transition: .5s;
-	// transform: translateY(-50%);
 	transform: translateX(0%);
 	grid-area: one;
 }
@@ -330,10 +350,14 @@ input[type=date]{
 }
 .field input {
 	width: 100%;
-	background: none;
+	background: #1e1e1e;
 	outline:none;
 	border: none;
-	padding: 0 5px 0 5px;
+	padding-left: 10px;
+	justify-content: center;
+}
+.field input:focus {
+	border: 1px solid var(--red);
 }
 .datetime input {
 	width: 100%;
