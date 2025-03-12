@@ -523,4 +523,13 @@ span.navbar-line {
 	.burger-open>*:not(.plate, .hamburger-menu, footer) {
 		display: none;
 	}
+
+	.footer-open {
+		position: absolute;
+		bottom: 0;
+	}
+
+	.container-open {
+		margin-bottom: 70px;
+	}
 }
