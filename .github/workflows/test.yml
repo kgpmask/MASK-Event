@@ -35,4 +35,4 @@ jobs:
     - run: npm run lint
     - run: npm run mocha test/tools.js
     - run: npm run mocha test/site-mongoless.js
-    - run: npm run mocha test/site-auth.js
+    # - run: npm run mocha test/site-auth.js

@@ -62,8 +62,8 @@ router.post('/get-riddle-question', (req, res) => {
 	const location = req.team.order.map((o) => handlerContext.locations.find((l) => l._id - 11 === o.location))[attempted];
 	return res.send({
 		question: location.questions[req.team.order[attempted].question].question,
-		keywords: location.keywords
-		// keywords: location.keywords.slice( 4*req.team.order[attempted].question,4*(req.team.order[attempted].question+1))
+		// keywords: location.keywords
+		keywords: location.keywords.slice(4 * req.team.order[attempted].question, 4 * (req.team.order[attempted].question + 1))
 	});
 });
 
