@@ -121,7 +121,7 @@ footer {
 	width: 100%;
 	display: flex;
 	justify-content: center;
-	z-index: 28;
+	z-index: 30;
 }
 
 #footer-logo {
@@ -520,7 +520,7 @@ span.navbar-line {
 		display: block;
 	}
 
-	.burger-open>*:not(.plate, .hamburger-menu) {
+	.burger-open>*:not(.plate, .hamburger-menu, footer) {
 		display: none;
 	}
 }
