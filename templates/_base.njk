@@ -107,10 +107,20 @@
 				</div>
 				
 				<script>
+					let open = 0;
 					document.querySelector('.burger').addEventListener('click', function () {
+						open = (open + 1) % 2;
 						this.classList.toggle('open');
 						document.querySelector('.hamburger-menu').classList.toggle('slide');
-						// document.querySelector('#content-wrap').classList.toggle('burger-open');
+						if (open === 1) {
+							setTimeout (() => {
+								document.querySelector('#page-container').classList.toggle('burger-open');
+								document.querySelector('#interface-container').classList.toggle('burger-open');
+							}, 300);
+						} else {
+							document.querySelector('#page-container').classList.toggle('burger-open');
+							document.querySelector('#interface-container').classList.toggle('burger-open');
+						}		
 					});
 				</script>
 			{% endblock %}
