@@ -182,7 +182,7 @@ async function getLocations () {
 }
 
 async function getTeams () {
-	return await Team.find({ isAdmin: [undefined, false] }).lean();
+	return await Team.find({ isAdmin: [undefined, false], _id: { $gte: 8000, $lte: 9000 } }).lean();
 }
 
 async function getTeamById (_id) {

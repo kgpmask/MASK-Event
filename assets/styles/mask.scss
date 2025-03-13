@@ -423,7 +423,7 @@ span.navbar-line {
 	text-align: left;
 	font-size: 20px;
 	z-index: 29;
-	-webkit-tap-highlight-color: var(--dark-red);
+	-webkit-tap-highlight-color: rgba($color: #ce0e0e, $alpha: 0.5);
 }
 
 .slide {
@@ -450,7 +450,7 @@ span.navbar-line {
 }
 
 .hamburger-menu hr:not(.border-bottom) {
-	margin: auto;
+	margin: 0 4.5%;
 }
 
 #top-line {
@@ -462,8 +462,7 @@ span.navbar-line {
 	background-color: var(--tinted-gray);
 	border-color: var(--tinted-gray);
 	color: var(--tinted-gray);
-	margin-left: 5.5%;
-	margin-right: 10%;
+	margin: 0 4.5%;
 }
 
 .hamburger-menu #most-bottom {
@@ -521,7 +520,16 @@ span.navbar-line {
 		display: block;
 	}
 
-	.burger-open>*:not(.plate, .hamburger-menu) {
+	.burger-open>*:not(.plate, .hamburger-menu, footer) {
 		display: none;
+	}
+
+	.footer-open {
+		position: absolute;
+		bottom: 0;
+	}
+
+	.container-open {
+		margin-bottom: 70px;
 	}
 }
