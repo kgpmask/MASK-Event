@@ -280,7 +280,7 @@
 					</div>
 					<div class="form-field">
 						<div style="width: 250px">
-							{{ forms.field('locationcode', 'Location Code', autocomplete = false, type='password') }}
+							{{ forms.field('locationcode', 'Location Code', autocomplete = false) }}
 						</div>
 					</div>
 					<div class="buttons">
@@ -629,6 +629,7 @@
 	async function submit() {
 		const data = getData();
 		console.log(data)
+		document.getElementById('locationcode').value = '';
 		try {
 			console.log(data.locationcode.trim());
 			const response = await axios.post('/live/submit', {state: state, answer: state === 'location-code'? data.locationcode.trim() : ((state === 'riddle-question') ? data.riddleanswer : "blablabla"), questionNo: attempted});
