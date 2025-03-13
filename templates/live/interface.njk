@@ -275,7 +275,7 @@
 				<div id="location-code">
 					{% call forms.form() %}
 					<div class="question">
-						<h3 id="question-title"></h3>
+						<h3 class="question-title"></h3>
 						<p id="location-question"></p>
 					</div>
 					<div class="form-field">
@@ -291,7 +291,7 @@
 				<div id="riddle-form">
 					{% call forms.form() %}
 					<div class="question">
-						<h3 id="question-title"></h3>
+						<h3 class="question-title"></h3>
 						<p id="riddle-question"></p>
 					</div>
 					{# {{ forms.field('riddleanswer','Answer') }} #}
@@ -510,7 +510,10 @@
 		
 		// locationCode.style.display = state === 'location-code' ? 'block' : 'none';
 		// riddleForm.style.display = ['riddle-question', 'riddle-timeout'].find((e) => e === state) ? 'block' : 'none';
-		document.getElementById('question-title').innerHTML = 'Question #' + (attempted + 1);
+		let titles = document.getElementsByClassName('question-title');
+		for (let i = 0; i < titles.length; i++) {
+			titles[i].innerHTML = 'Question #' + (attempted + 1);
+		}
 		messageBox.innerHTML = '';
 		messageCover.style.display = 'none';
 			if (state === 'completed') {
