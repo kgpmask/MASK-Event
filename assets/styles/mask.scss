@@ -524,12 +524,21 @@ span.navbar-line {
 		display: none;
 	}
 
-	.footer-open {
-		position: absolute;
+	.fake-footer, .fake-footer-open {
+		position: fixed;
 		bottom: 0;
+		bottom: 0;
+		left: 0;
+		background-color: var(--red);
+		transition: 0.3s;
+		height: 70px;
+		width: 100%;
+		display: none;
+		justify-content: center;
+		z-index: 30;
 	}
 
-	.container-open {
-		margin-bottom: 70px;
+	.fake-footer-open {
+		display: flex;
 	}
 }

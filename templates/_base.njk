@@ -47,7 +47,7 @@
 	</head>
 	<body>
 		{# <div style="max-height:0;max-width:0;overflow:hidden"><input autofocus/></div> #}
-		<div id="page-container">
+		<div id="page-container" class="hi">
 			{% block navbar %}
 				<div class="navbar-full">
 					<ul>
@@ -105,26 +105,6 @@
 					{% endif %}
 					{# <hr class="border-bottom"/> #}
 				</div>
-				
-				<script>
-					let open = 0;
-					document.querySelector('.burger').addEventListener('click', function () {
-						open = (open + 1) % 2;
-						this.classList.toggle('open');
-						document.querySelector('.hamburger-menu').classList.toggle('slide');
-						document.querySelector('footer').classList.toggle('footer-open');
-						document.querySelector('#interface-container').classList.toggle('container-open');
-						if (open === 1) {
-							setTimeout (() => {
-								document.querySelector('#page-container').classList.toggle('burger-open');
-								document.querySelector('#interface-container').classList.toggle('burger-open');
-							}, 300);
-						} else {
-							document.querySelector('#page-container').classList.toggle('burger-open');
-							document.querySelector('#interface-container').classList.toggle('burger-open');
-						}		
-					});
-				</script>
 			{% endblock %}
 			<div id="pagecontent">
 				{% block pagecontent %}
@@ -132,10 +112,7 @@
 				{% endblock %}
 			</div>
 			{% block footer %}
-				<footer>
-					{# <a id="footer-logo" href="/"><img src="/assets/logo.jpeg" alt="MASK"/></a>
-					<a href="/" id="footer-name"><p>Manga and Anime<br/>Society Kharagpur</p></a>
-					<div id="contact-us"><span class="float-middle">Find us!</span></div> #}
+				<footer id="footer" class="footer">
 					<a href="https://www.youtube.com/@maskiitkgp" target="_blank" target="_self" class="social-link"><img class="social-icon" src="/assets/icons/youtube.png" alt="Youtube"/></a>
 					<a href="https://www.instagram.com/maskiitkgp" target="_blank" target="_self" class="social-link"><img class="social-icon" src="/assets/icons/instagram.png" alt="Instagram"/></a>
 					<a href="https://www.facebook.com/maskiitkgp" target="_blank" target="_self" class="social-link"><img class="social-icon" src="/assets/icons/facebook.png" alt="Facebook"/></a>
@@ -149,5 +126,35 @@
 				</script>
 			{% endblock %}
 		</div>
+		<div id="fake-footer" class="fake-footer">
+			<a href="https://www.youtube.com/@maskiitkgp" target="_blank" target="_self" class="social-link"><img class="social-icon" src="/assets/icons/youtube.png" alt="Youtube"/></a>
+			<a href="https://www.instagram.com/maskiitkgp" target="_blank" target="_self" class="social-link"><img class="social-icon" src="/assets/icons/instagram.png" alt="Instagram"/></a>
+			<a href="https://www.facebook.com/maskiitkgp" target="_blank" target="_self" class="social-link"><img class="social-icon" src="/assets/icons/facebook.png" alt="Facebook"/></a>
+			<a href="mailto:maskiitkgp@gmail.com" target="_blank" target="_self" class="social-link"><img class="social-icon" id="gmail" src="/assets/icons/gmail.png" alt="Gmail"/></a>
+			<a href="https://github.com/kgpmask/MASK" target="_blank" target="_self" class="social-link"><img class="social-icon" src="/assets/icons/github.png" alt="GitHub"></a>
+		</div>
+		<script>
+			let open = 0;
+			document.querySelector('.burger').addEventListener('click', function () {
+				open = (open + 1) % 2;
+				this.classList.toggle('open');
+				document.querySelector('.hamburger-menu').classList.toggle('slide');
+				document.getElementById('fake-footer').classList.toggle('fake-footer');
+				document.getElementById('fake-footer').classList.toggle('fake-footer-open');
+				if (open === 1) {
+					setTimeout (() => {
+						document.getElementById('page-container').classList.toggle('burger-open');
+						if (!!document.getElementById('interface-container') !== false) {
+							document.getElementById('interface-container').classList.toggle('burger-open');
+						}
+					}, 300);
+				} else {
+					document.getElementById('page-container').classList.toggle('burger-open');
+					if (!!document.getElementById('interface-container') !== false) {
+						document.getElementById('interface-container').classList.toggle('burger-open');
+					}
+				}
+			});
+		</script>
 	</body>
 </html>
