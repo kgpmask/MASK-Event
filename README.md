@@ -233,13 +233,13 @@ Your PR will be approved when two of the following conditions are met:
 
 ## Credits  
 ### Team Head  
-- [Vidunram A R](https://github.com/Goose-Of-War)
+- [Ankan Saha](https://github.com/Goose-Of-War)
 ### Team Members  
-- [Ankan Saha](https://github.com/ItsAnkan)
-- [Dishant Bothra](https://github.com/DishantB0411)
-- [Jai Sachdev](https://github.com/SachdevJai)
-- [Sahil Patel](https://github.com/Symbiot01)
 - [Sharanya Chakraborty](https://github.com/destryptor)
+- [Arnab Jena](https://github.com/arnabara4)
+- [Animesh Raj](https://github.com/wildcraft958)
+- [Tadi Joshua Raj](https://github.com/Jx-ls)
+- [Uday Kalyan S](https://github.com/uday-kalyan-s)
 ### Content
-- Aman Tater
+- Dalli Manideep
 > _will be added as they contribute_
