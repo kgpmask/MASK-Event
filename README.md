@@ -233,7 +233,7 @@ Your PR will be approved when two of the following conditions are met:
 
 ## Credits  
 ### Team Head  
-- [Ankan Saha](https://github.com/Goose-Of-War)
+- [Ankan Saha](https://github.com/ItsAnkan)
 ### Team Members  
 - [Sharanya Chakraborty](https://github.com/destryptor)
 - [Arnab Jena](https://github.com/arnabara4)
