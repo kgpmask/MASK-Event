@@ -51,7 +51,7 @@ router.post('/get-location-question', (req, res) => {
 	if (attempted >= ques) return res.status(418).send('Completed');
 	return res.send(
 		req.team.order.map((o) =>
-			handlerContext.locations.find((l) => l._id - 11 === o.location)
+			handlerContext.locations.find((l) => l._id - 20 === o.location)
 		)[attempted].pointerQuestion[req.team.order[attempted].pointer]
 	);
 });
@@ -59,9 +59,10 @@ router.post('/get-location-question', (req, res) => {
 router.post('/get-riddle-question', (req, res) => {
 	const attempted = req.team.questionsAttempted;
 	if (attempted >= ques) return res.status(418).send('Completed');
-	const location = req.team.order.map((o) => handlerContext.locations.find((l) => l._id - 11 === o.location))[attempted];
+	const location = req.team.order.map((o) => handlerContext.locations.find((l) => l._id - 20 === o.location))[attempted];
+	const qs = req.team.order[attempted].question;
 	return res.send({
-		question: location.questions[req.team.order[attempted].question].question,
+		question: location.questions[qs].question,
 		// keywords: location.keywords
 		keywords: location.keywords.slice(4 * req.team.order[attempted].question, 4 * (req.team.order[attempted].question + 1))
 	});
@@ -78,13 +79,9 @@ router.post('/submit', async (req, res) => {
 		}
 	}
 	if (req.body.state === 'riddle-question') {
-		console.log(req.body.answer);
-		console.log(req.team.order.map((o) =>
-			handlerContext.locations.find((l) => l._id - 11 === o.location)
-		)[attempted].questions[req.team.order[attempted].question].answer);
 		if (
 			req.team.order.map((o) =>
-				handlerContext.locations.find((l) => l._id - 11 === o.location)
+				handlerContext.locations.find((l) => l._id - 20 === o.location)
 			)[attempted].questions[req.team.order[attempted].question].answer === parseInt(req.body.answer)
 		) {
 			await dbh.updateTeamStatus({ _id: req.team._id, status: 'location-code', questionNo: req.body.questionNo + 1 });
@@ -95,7 +92,7 @@ router.post('/submit', async (req, res) => {
 	} else if (req.body.state === 'location-code') {
 		if (
 			req.team.order.map((o) =>
-				handlerContext.locations.find((l) => l._id - 11 === o.location)
+				handlerContext.locations.find((l) => l._id - 20 === o.location)
 			)[attempted].code.toLowerCase() === req.body.answer.toLowerCase()
 		) {
 			await dbh.updateTeamStatus({ _id: req.team._id, status: 'riddle-question', questionNo: req.body.questionNo });
