@@ -7,9 +7,9 @@ const teamSchema = new mongoose.Schema({
 	password: { type: String, requred: true },
 	members: [
 		{
-			name: { type: String, required: true },
-			email: { type: String, required: true },
-			phone: { type: String, required: true }
+			name: { type: String},
+			email: { type: String},
+			phone: { type: String}
 		}
 	],
 	status: { type: String, required: true, enum: ['location-code', 'riddle-question', 'riddle-timeout', 'completed'] },
