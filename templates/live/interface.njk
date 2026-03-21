@@ -500,7 +500,6 @@
 	}
 
 	async function renderForm() {
-		console.log(state);
 		const locationCode = document.getElementById('location-code');
 		const riddleForm = document.getElementById('riddle-form');
 		const messageBox = document.getElementById("message-box");
@@ -525,7 +524,8 @@
 				waiting = true;
 				waitMsg = 'Fetching Locations'
 				wait()
-				document.getElementById('location-question').innerHTML = await getLocationQuestion();
+				const question = await getLocationQuestion();
+				document.getElementById('location-question').innerHTML = question.replace(/\n/g, "<br>");
 				setTimeout(() => {
 					document.getElementById('waiting').style.display = 'none'
 					locationCode.style.display = 'block';
@@ -537,7 +537,7 @@
 				const riddleQuestion = await getRiddleQuestion();
 				console.log(riddleQuestion);
 				if (riddleQuestion) {
-					document.getElementById('riddle-question').innerHTML = riddleQuestion.question;
+					document.getElementById('riddle-question').innerHTML = riddleQuestion.question.replace(/\n/g, "<br>");
 				}
 				document.getElementById('riddleanswer').innerHTML = '<option value="" selected disabled hidden>Choose an answer</option>' + riddleQuestion.keywords.map((keyword, index) => {
 					return `<option value="${ index }">${ keyword }</option>`
